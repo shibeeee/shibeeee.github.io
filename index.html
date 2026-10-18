@@ -427,7 +427,7 @@
 
     /* Mascot buddy in the corner */
     #buddy {
-      position: fixed; right: 18px; bottom: 44px; z-index: 40;
+      position: fixed; right: 18px; bottom: 40px; z-index: 40;
       display: flex; align-items: flex-end; gap: 6px; pointer-events: none;
     }
     #buddy > * { pointer-events: auto; }
@@ -435,9 +435,9 @@
       position: relative; padding: 0; border: 0; background: none; cursor: pointer;
       animation: bob 3.2s ease-in-out infinite;
     }
-    #buddy-figure img { display: block; height: 210px; width: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55)); }
+    #buddy-figure img { display: block; height: 220px; width: auto; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
     #buddy-figure.hop { animation: hop 0.45s ease-out; }
-    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes bob { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-2px); } }
     @keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
     #buddy-hide {
       position: absolute; top: 0; right: 0; width: 20px; height: 20px; padding: 0;
@@ -448,7 +448,7 @@
     }
     #buddy:hover #buddy-hide, #buddy-hide:focus-visible { opacity: 1; }
     #buddy-bubble {
-      position: relative; max-width: 230px; margin-bottom: 150px; padding: 9px 12px;
+      position: relative; max-width: 230px; margin-bottom: 160px; padding: 9px 12px;
       font-size: 13px; line-height: 1.4; color: #1e2a35; text-shadow: none;
       background: linear-gradient(to bottom, #ffffff, #e6f2fb);
       border: 1px solid #7da2ce; border-radius: 10px;
@@ -481,6 +481,8 @@
       .shot { width: 320px; }
       .project h3 { font-size: 18.5px; }
       .gadget svg { width: 160px; height: 160px; }
+      #buddy-figure img { height: 300px; }
+      #buddy-bubble { max-width: 260px; margin-bottom: 220px; font-size: 14px; }
     }
 
     /* Narrow screens: menu sits above the content */
@@ -504,8 +506,8 @@
       .gadget { display: none; }
       .counter { grid-column: 1 / -1; }
       #buddy { right: 6px; }
-      #buddy-figure img { height: 120px; }
-      #buddy-bubble { max-width: 190px; margin-bottom: 84px; font-size: 12.5px; }
+      #buddy-figure img { height: 130px; }
+      #buddy-bubble { max-width: 190px; margin-bottom: 96px; font-size: 12.5px; }
       #buddy-hide { opacity: 1; }
       .task { width: 46px; }
     }
@@ -744,7 +746,7 @@
     </div>
 
     <footer id="footer">
-      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels
+      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
     </footer>
   </div>
 
@@ -1113,7 +1115,7 @@
 
     // Mascot in the corner: says hi, and a new line each time you click her.
     // Set this to { name, src, alt } to switch her on.
-    var MASCOT = null;
+    var MASCOT = { name: "nanami madobe", src: "images/nanami.webp", alt: "nanami madobe waving hello" };
     (function () {
       if (!MASCOT) return;
       var buddy = document.getElementById("buddy"), fig = document.getElementById("buddy-figure"),
@@ -1121,20 +1123,24 @@
       try { if (sessionStorage.getItem("buddy-hidden") === "1") return; } catch (e) {}
       document.getElementById("buddy-name").textContent = MASCOT.name;
       var img = document.getElementById("buddy-img");
-      img.src = MASCOT.src;
       img.alt = MASCOT.alt;
+      // Fetch her picture after the rest of the page so she never slows it down
+      if (document.readyState === "complete") img.src = MASCOT.src;
+      else window.addEventListener("load", function () { img.src = MASCOT.src; });
 
       var hour = new Date().getHours();
-      var hello = hour < 5 ? "up late? me too. welcome!" : hour < 12 ? "good morning! welcome to shibeeee's homepage ✿"
-        : hour < 18 ? "hi hi! welcome to shibeeee's homepage ✿" : "good evening! welcome to shibeeee's homepage ✿";
+      var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi hi! " : "good evening! ")
+        + "i'm nanami, welcome to shibeeee's homepage ✿";
       var lines = [
         "psst, the start button down there actually works",
+        "windows 7 was the best one, right? ...right??",
         "tab to sheet turns songsterr tabs into real sheet music. pretty cool right?",
         "playing word hunt? pigeon pal finds every single word",
         "don't forget to sign the guestbook :)",
         "you can grab shibeeee's 88x31 button under “link to me”",
         "the menu on the left lights up as you scroll. i like watching it",
-        "click the little strip at the far right of the taskbar to zoom back to the top!"
+        "click the little strip at the far right of the taskbar to zoom back to the top!",
+        "you can turn on sounds with the speaker down by the clock ♪"
       ];
       var next = 0, timer;
       function say(msg) {
