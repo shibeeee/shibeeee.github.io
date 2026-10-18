@@ -1071,7 +1071,7 @@
         { title: "local forecast – elevator", file: "music/local-forecast-elevator.mp3" },
         { title: "lobby time", file: "music/lobby-time.mp3" }
       ];
-      var audio = new Audio(), index = 0, wanted = true, volume = 0.2, muted = false, gain = null, fadeTimer;
+      var audio = new Audio(), index = 0, wanted = true, volume = 0.2, muted = false, gain = null, fadeTimer, current = 0;
       audio.preload = "none";
       try {
         wanted = localStorage.getItem("music") !== "off";
@@ -1086,22 +1086,25 @@
         try {
           var c = audioCtx();
           gain = c.createGain();
-          gain.gain.value = 0;
+          gain.gain.setValueAtTime(0, c.currentTime);
           c.createMediaElementSource(audio).connect(gain).connect(c.destination);
           audio.volume = 1; // the gain node does the volume from here on
         } catch (e) { gain = null; }
       }
-      // Glide to a share of the chosen volume (1 = full, 0 = silent) over some seconds
-      function level(share, seconds) {
+      // Glide to a share of the chosen volume (1 = full, 0 = silent) over some seconds.
+      // We keep track of the level ourselves: Firefox reports gain.value as 1 until audio starts,
+      // which made the fade-in run backwards (loud, then quiet).
+      function level(share, seconds, from) {
         var target = muted ? 0 : volume * share;
         if (gain) {
           var t = audioCtx().currentTime, g = gain.gain;
           g.cancelScheduledValues(t);
-          g.setValueAtTime(g.value, t);
+          g.setValueAtTime(from == null ? current : from, t);
           g.linearRampToValueAtTime(target, t + Math.max(seconds, 0.02));
         } else {
           audio.volume = target;
         }
+        current = target;
       }
 
       var playBtn = document.getElementById("play"), name = document.getElementById("track-name"),
@@ -1127,8 +1130,8 @@
         if (!audio.src) load(index);
         clearTimeout(fadeTimer);
         hookUp();
-        if (gain) { gain.gain.cancelScheduledValues(0); gain.gain.value = 0; }
-        audio.play().then(function () { setButton(true); level(1, fadeSeconds || 0.4); }).catch(function () { setButton(false); });
+        level(0, 0.02, 0); // silent until the fade-in starts
+        audio.play().then(function () { setButton(true); level(1, fadeSeconds || 0.4, 0); }).catch(function () { setButton(false); });
       }
       function pause() { clearTimeout(fadeTimer); audio.pause(); setButton(false); }
       function remember(on) { wanted = on; try { localStorage.setItem("music", on ? "on" : "off"); } catch (e) {} }
