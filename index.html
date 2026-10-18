@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shibeeee's homepage ✦ websites, games &amp; tools</title>
   <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
+  <link rel="preload" href="images/grass.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
+  <link rel="preconnect" href="https://api.github.com" crossorigin>
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -26,7 +29,7 @@
     /* Wallpaper on its own fixed layer (background-attachment: fixed misbehaves on phones) */
     body::before {
       content: ""; position: fixed; inset: 0; z-index: -1;
-      background: url("images/grass.jpg") center center / cover no-repeat;
+      background: url("images/grass.webp") center center / cover no-repeat;
     }
     a { color: #3cda56; text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -35,7 +38,7 @@
     [hidden] { display: none !important; }
     :focus-visible { outline: 2px solid #57fa6f; outline-offset: 2px; }
 
-    #site { max-width: 980px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.35s ease-out both; }
+    #site { max-width: 1280px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.25s ease-out both; }
     @keyframes win-open { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
     html.splash #site { animation: none; opacity: 0; }
 
@@ -108,7 +111,6 @@
       border-right: 1px solid #3b3b3b; border-bottom: 1px solid #3b3b3b;
       border-bottom-right-radius: 3px;
       box-shadow: rgba(0, 0, 0, 0.4) 0 14px 28px, rgba(0, 0, 0, 0.4) 0 10px 10px;
-      -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
     }
 
     /* Glossy black title bars */
@@ -139,7 +141,7 @@
     .banner {
       position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px;
       min-height: 200px; padding: 20px 28px;
-      background: #2a3a10 url("images/banner.jpg") center / cover no-repeat;
+      background: #2a3a10 url("images/banner.webp") center / cover no-repeat;
       border: 1px solid #707070; overflow: hidden;
     }
     .banner::after {
@@ -381,7 +383,7 @@
       align-items: center; justify-content: center; gap: 16px;
       background: radial-gradient(ellipse at 50% 115%, #5cc0ff 0, #1f78d6 30%, #0d469c 60%, #062457 100%);
       color: #fff; cursor: pointer;
-      transition: opacity 0.6s;
+      transition: opacity 0.4s;
     }
     #splash::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -400,6 +402,28 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     #splash-text { position: relative; font-size: 40px; font-weight: 300; text-shadow: 0 0 18px rgba(160, 225, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4); }
+
+    /* Sound toggles */
+    .sound-toggle {
+      display: flex; align-items: center; justify-content: center; gap: 6px; width: 93%; margin: 1px auto;
+      font: inherit; font-size: 12.5px; color: #eee; cursor: pointer; text-shadow: 0 0 3px #000;
+      border: 1px solid #0f0f0f; border-radius: 5px; padding: 2px 0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.15) 20%, rgba(92, 92, 92, 0.15) 60%, rgba(0, 0, 0, 0.3) 60%, rgba(41, 41, 41, 0.3) 100%);
+    }
+    .sound-toggle[aria-pressed="true"] {
+      color: #57fa6f;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 40%, rgba(29, 73, 23, 0.3) 40%, rgba(43, 240, 36, 0.7) 100%);
+    }
+    .sound-toggle svg, #tray-sound svg { width: 18px; height: 18px; }
+    #tray-sound {
+      display: grid; place-items: center; width: 28px; height: 28px; margin-left: auto; padding: 0;
+      background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer;
+    }
+    #tray-sound:hover { border-color: rgba(255, 255, 255, 0.35); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04)); }
+    #tray-sound + .tray { margin-left: 0; }
+    .snd-off { display: none; }
+    [aria-pressed="false"] .snd-on { display: none; }
+    [aria-pressed="false"] .snd-off { display: inline; }
 
     /* Mascot buddy in the corner */
     #buddy {
@@ -439,6 +463,26 @@
     #buddy-bubble span { text-shadow: none; }
     #buddy-name { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; color: #1c6fb5; }
 
+    /* Big monitors: a little more room and slightly bigger text */
+    @media (min-width: 1500px) {
+      body { font-size: 15px; }
+      #site { margin-top: 32px; }
+      #menu { width: 220px; }
+      .nav-group a { font-size: 13.5px; padding: 2px 0; }
+      .nav-title { font-size: 14px; height: 21px; }
+      .header-title { font-size: 34px; }
+      .header-motto { font-size: 16px; }
+      #logo { width: 72px; height: 72px; }
+      .bar { font-size: 17px; }
+      h2.bar { font-size: 15.5px; }
+      .banner { min-height: 240px; padding: 26px 36px; }
+      .banner-title { font-size: 56px; }
+      .banner .tile { width: 66px; height: 66px; }
+      .shot { width: 320px; }
+      .project h3 { font-size: 18.5px; }
+      .gadget svg { width: 160px; height: 160px; }
+    }
+
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -473,9 +517,9 @@
     }
   </style>
   <script>
-    // Show the welcome screen once per visit (skipped for reduced motion)
+    // Show the welcome screen on someone's first visit only (skipped for reduced motion)
     try {
-      if (!sessionStorage.getItem("welcomed") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!localStorage.getItem("welcomed") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
         document.documentElement.classList.add("splash");
       }
     } catch (e) {}
@@ -513,6 +557,8 @@
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
       <linearGradient id="g-book" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fb6ff"/><stop offset="1" stop-color="#1c5cb8"/></linearGradient>
       <symbol id="i-book" viewBox="0 0 24 24"><rect x="4" y="2.5" width="15" height="19" rx="1.5" fill="url(#g-book)" stroke="#123f80" stroke-width="0.8"/><rect x="17" y="3.5" width="3" height="17" rx="0.8" fill="#f4f4f4" stroke="#8a8a8a" stroke-width="0.5"/><path d="M7 7h8M7 10h8M7 13h5" stroke="#fff" stroke-width="1.3" opacity="0.85"/><path d="m13 20 7.5-7.5 1.6 1.6L14.6 21.6 12.5 22z" fill="#ffcf4a" stroke="#8a5a00" stroke-width="0.6"/></symbol>
+      <symbol id="i-speaker-on" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z" fill="#e8eef3" stroke="#5b6f7d" stroke-width="0.9" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="#7fd8ff" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-speaker-off" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z" fill="#e8eef3" stroke="#5b6f7d" stroke-width="0.9" stroke-linejoin="round"/><path d="m15.5 9.5 5 5m0-5-5 5" stroke="#ff6b5a" stroke-width="2" stroke-linecap="round"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
     </defs>
   </svg>
@@ -568,6 +614,11 @@
           <div class="odometer" id="odometer" aria-label="visitor count"></div>
           <span class="counter-note" id="counter-note">counting...</span>
         </div>
+
+        <div class="nav-group">
+          <span class="nav-title">options</span>
+          <button class="sound-toggle" type="button" aria-pressed="false"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg><span class="snd-on">sounds on</span><span class="snd-off">sounds off</span></button>
+        </div>
       </aside>
 
       <main id="content">
@@ -598,7 +649,7 @@
 
         <div class="glass">
           <div class="box project">
-            <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.jpg" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
+            <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.webp" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
             <div class="project-info">
               <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a><span class="kind">music</span></h3>
               <p>turn any songsterr tab into sheet music you can print: regular notation, tab, or both. you can also listen along, loop the tricky parts, slow things down, and fix notes yourself.</p>
@@ -612,7 +663,7 @@
 
         <div class="glass">
           <div class="box project">
-            <a class="shot" href="https://shibeeee.github.io/pidgeon-pal/"><img src="images/pigeon-pal.jpg" width="560" height="350" alt="pigeon pal's list of games" loading="lazy"></a>
+            <a class="shot" href="https://shibeeee.github.io/pidgeon-pal/"><img src="images/pigeon-pal.webp" width="560" height="350" alt="pigeon pal's list of games" loading="lazy"></a>
             <div class="project-info">
               <h3><span class="tile"><svg aria-hidden="true"><use href="#i-pp"/></svg></span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a><span class="kind">games</span></h3>
               <p>a little helper for gamepigeon games. it shows you the best move, finds every word in word hunt and anagrams, figures out where the ships are hiding in sea battle, and lets you practice against a really good bot. works offline too.</p>
@@ -731,6 +782,7 @@
     <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
     <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
     <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
+    <button id="tray-sound" class="sound-toggle-tray" type="button" aria-pressed="false" aria-label="sounds" title="sounds on/off"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg></button>
     <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
     <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
   </nav>
@@ -858,6 +910,63 @@
         });
     })();
 
+    // Little UI sounds, made on the fly with Web Audio (no files to download). Off until you turn them on.
+    var sfx = (function () {
+      var on = false, ctx = null;
+      try { on = localStorage.getItem("sounds") === "1"; } catch (e) {}
+      function tone(freq, start, length, opts) {
+        opts = opts || {};
+        var t = ctx.currentTime + start, osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = opts.type || "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        if (opts.to) osc.frequency.exponentialRampToValueAtTime(opts.to, t + length);
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(opts.volume || 0.08, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t); osc.stop(t + length + 0.05);
+      }
+      var sounds = {
+        click: function () { tone(1500, 0, 0.05, { to: 900, volume: 0.04 }); },
+        open: function () { tone(660, 0, 0.18, { type: "triangle", volume: 0.06 }); tone(990, 0.06, 0.25, { type: "triangle", volume: 0.05 }); },
+        close: function () { tone(990, 0, 0.12, { type: "triangle", volume: 0.05 }); tone(660, 0.05, 0.18, { type: "triangle", volume: 0.04 }); },
+        ding: function () { tone(1047, 0, 0.6, { volume: 0.08 }); tone(1568, 0.08, 0.7, { volume: 0.05 }); },
+        oops: function () { tone(220, 0, 0.18, { type: "square", volume: 0.03 }); tone(196, 0.12, 0.22, { type: "square", volume: 0.03 }); },
+        pop: function () { tone(500, 0, 0.12, { to: 1100, volume: 0.07 }); },
+        hello: function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, i * 0.11, 0.9 - i * 0.1, { type: "triangle", volume: 0.05 }); }); },
+        bye: function () { [1047, 784, 659, 523].forEach(function (f, i) { tone(f, i * 0.13, 0.8, { type: "triangle", volume: 0.05 }); }); }
+      };
+      function play(name) {
+        if (!on) return;
+        try {
+          ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+          if (ctx.state === "suspended") ctx.resume();
+          sounds[name]();
+        } catch (e) {}
+      }
+      function sync() {
+        document.querySelectorAll(".sound-toggle, #tray-sound").forEach(function (b) { b.setAttribute("aria-pressed", String(on)); });
+      }
+      function toggle() {
+        on = !on;
+        try { localStorage.setItem("sounds", on ? "1" : "0"); } catch (e) {}
+        sync();
+        play("hello");
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        sync();
+        document.querySelectorAll(".sound-toggle, #tray-sound").forEach(function (b) {
+          b.addEventListener("click", function (e) { e.stopPropagation(); toggle(); });
+        });
+        // A soft click for every other button and link
+        document.addEventListener("click", function (e) {
+          var el = e.target.closest("a, button");
+          if (el && !el.matches("#start-orb, #shutdown, .sound-toggle, #tray-sound, #buddy-figure, #gb-form button")) play("click");
+        }, true);
+      });
+      return play;
+    })();
+
     // Visitor counter and guestbook live on a small Cloudflare Worker (worker/worker.js)
     var API = "https://shibeeee-homepage.mrshibe.workers.dev/api";
 
@@ -945,12 +1054,13 @@
         })
           .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (res) {
-            if (!res.ok) { status.textContent = res.d.error || "something went wrong, try again"; return; }
+            if (!res.ok) { status.textContent = res.d.error || "something went wrong, try again"; sfx("oops"); return; }
+            sfx("ding");
             if (res.d.entry) list.prepend(entry(res.d.entry, true));
             form.elements.namedItem("message").value = "";
             status.textContent = "thanks for signing! :)";
           })
-          .catch(function () { status.textContent = "couldn't reach the guestbook, try again in a bit"; })
+          .catch(function () { status.textContent = "couldn't reach the guestbook, try again in a bit"; sfx("oops"); })
           .then(function () { button.disabled = false; });
       });
       load();
@@ -962,6 +1072,7 @@
           splash = document.getElementById("splash"), splashText = document.getElementById("splash-text");
 
       function setMenu(open) {
+        if (open === menu.hidden) sfx(open ? "open" : "close");
         menu.hidden = !open;
         orb.setAttribute("aria-expanded", String(open));
       }
@@ -981,17 +1092,19 @@
           site.style.animation = "none";
           void site.offsetWidth; // restart the window-open animation
           site.style.animation = "";
-        }, 600);
+        }, 400);
       }
       splash.addEventListener("click", hideSplash);
       if (document.documentElement.classList.contains("splash")) {
-        try { sessionStorage.setItem("welcomed", "1"); } catch (e) {}
-        setTimeout(hideSplash, 1700);
+        try { localStorage.setItem("welcomed", "1"); } catch (e) {}
+        setTimeout(hideSplash, 1100);
       }
 
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
         splashText.textContent = "see you later!";
+        sfx("bye");
+        setTimeout(function () { sfx("hello"); }, 1700);
         splash.classList.add("show");
         setTimeout(function () { splashText.textContent = "welcome back"; }, 1600);
         setTimeout(hideSplash, 2600);
@@ -1034,6 +1147,7 @@
       fig.addEventListener("click", function (e) {
         if (e.target.id === "buddy-hide") return;
         fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop");
+        sfx("pop");
         var visitors = document.getElementById("visitor-no").textContent;
         var msg = lines[next % lines.length];
         if (next === 2 && visitors) msg = "fun fact: you're visitor #" + visitors + "!";
@@ -1052,7 +1166,7 @@
 
       buddy.hidden = false;
       // Wait for the welcome screen to finish before saying hi
-      setTimeout(function () { say(hello); }, document.documentElement.classList.contains("splash") ? 2600 : 900);
+      setTimeout(function () { say(hello); }, document.documentElement.classList.contains("splash") ? 1800 : 900);
     })();
 
     // Old-web trick: the tab title calls you back when you switch away

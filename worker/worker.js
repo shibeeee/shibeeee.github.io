@@ -108,6 +108,56 @@ function clean(text, max, multiline) {
   return text.trim().slice(0, max);
 }
 
+// Guestbook filter -----------------------------------------------------------
+// Words that get a message rejected. Matched as whole words after undoing the
+// usual tricks (leetspeak, accents, repeated letters), so "class" or "Scunthorpe"
+// still get through.
+const BLOCKED_WORDS = [
+  "fuck", "fucking", "fucker", "fucked", "fuk", "fck", "shit", "shitty", "bullshit", "bitch", "bitches",
+  "cunt", "dick", "dicks", "cock", "cocks", "pussy", "asshole", "ass", "bastard", "whore", "slut", "twat",
+  "wanker", "porn", "porno", "nude", "nudes", "penis", "vagina", "boobs", "tits", "cum", "dildo", "rape",
+  "rapist", "kys", "nazi", "hitler", "retard", "retarded", "fag", "fags", "kike", "chink", "spic", "gook",
+  "tranny", "coon", "wetback", "beaner", "dyke",
+];
+// Slurs bad enough to catch even when spaced out ("n i g g e r") or hidden in
+// longer words. Only long, unambiguous ones belong here.
+const BLOCKED_ANYWHERE = ["nigger", "nigga", "faggot", "killyourself", "retarded"];
+
+const LEET = { "0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "7": "t", "8": "b", "@": "a", "$": "s", "!": "i", "|": "i", "+": "t" };
+
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFKD").replace(/[̀-ͯ]/g, "") // é -> e
+    .replace(/[0134578@$!|+]/g, (c) => LEET[c]);
+}
+
+const collapse = (word) => word.replace(/(.)\1+/g, "$1"); // fuuuck -> fuck
+const BLOCKED_SET = new Set(BLOCKED_WORDS);
+// Collapsed spellings too, minus the ones that collapse into normal words (ass -> as, coon -> con)
+const COLLAPSED_SET = new Set(BLOCKED_WORDS.map(collapse).filter((w) => !["as", "con", "bobs", "gok"].includes(w)));
+const isBlocked = (w) => BLOCKED_SET.has(w) || COLLAPSED_SET.has(collapse(w));
+const LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+(\.|\s*(\(dot\)|\[dot\])\s*)(com|net|org|io|ru|xyz|top|ly|gg|co|info|biz|site|online|link|click|shop|app|me|tk|cn)\b)/i;
+
+// Returns a friendly reason when the text isn't allowed, otherwise null.
+function filterReason(text) {
+  if (LINK.test(text)) return "no links in the guestbook please!";
+  const plain = normalize(text);
+  const words = plain.split(/[^a-z]+/).filter(Boolean);
+  if (words.some(isBlocked)) return "let's keep it friendly! try different words :)";
+  // Single letters spaced out: "f u c k" -> "fuck"
+  const joined = plain.replace(/\b([a-z])[^a-z]+(?=[a-z]\b)/g, "$1");
+  if (joined.split(/[^a-z]+/).some(isBlocked)) return "let's keep it friendly! try different words :)";
+  const squashed = plain.replace(/[^a-z]/g, "");
+  if (BLOCKED_ANYWHERE.some((w) => squashed.includes(w))) return "let's keep it friendly! try different words :)";
+  return null;
+}
+
+// Tone down keyboard mashing: "!!!!!!!!!!" -> "!!!", "aaaaaaaaaa" -> "aaaaa"
+function tidy(text) {
+  return text.replace(/([^\w\s])\1{3,}/g, "$1$1$1").replace(/(\w)\1{5,}/g, "$1$1$1$1$1");
+}
+
 // Hash the IP so rate limits work without storing anyone's address.
 async function visitorId(request) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
@@ -150,9 +200,11 @@ export default {
       }
       // Bots fill in every field; people never see this one
       if (body.website) return json(request, { entry: null });
-      const name = clean(body.name, NAME_MAX, false);
-      const message = clean(body.message, MESSAGE_MAX, true);
+      const name = tidy(clean(body.name, NAME_MAX, false));
+      const message = tidy(clean(body.message, MESSAGE_MAX, true));
       if (!name || !message) return json(request, { error: "add your name and a message first" }, 400);
+      const reason = filterReason(name) || filterReason(message);
+      if (reason) return json(request, { error: reason }, 400);
       const result = await store.post(name, message, await visitorId(request));
       return json(request, result, result.error ? 429 : 200);
     }
