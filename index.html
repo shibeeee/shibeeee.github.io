@@ -587,10 +587,8 @@
     }
   </style>
   <script>
-    // "Click to enter" screen, once per visit. The click is what lets the music start right away.
-    try {
-      if (!sessionStorage.getItem("entered")) document.documentElement.classList.add("splash");
-    } catch (e) {}
+    // "Click to enter" screen on every page load. The click is what lets the music start right away.
+    document.documentElement.classList.add("splash");
   </script>
 </head>
 <body id="top">
@@ -1320,7 +1318,6 @@
       function enter() {
         if (!gateOpen) return;
         gateOpen = false;
-        try { sessionStorage.setItem("entered", "1"); } catch (e) {}
         splash.classList.add("entering");
         setInert(false);
         window.music.start();
