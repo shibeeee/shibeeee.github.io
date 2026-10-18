@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shibeeee's homepage</title>
-  <meta name="description" content="Websites, games and little tools made by shibeeee: Tab to Sheet, Pigeon Pal and Remap.">
+  <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
   <link rel="icon" href="images/button.svg">
   <style>
     * { box-sizing: border-box; }
@@ -168,7 +168,19 @@
 
     /* Project entries */
     .project { display: flex; gap: 14px; align-items: flex-start; }
-    .project h3 { margin: 0; font-size: 17px; font-weight: 600; }
+    .project-info { flex: 1; min-width: 0; }
+    .project h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 17px; font-weight: 600; }
+    .project h3 .tile { width: 30px; height: 30px; border-radius: 7px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); }
+    .project h3 .tile::after { border-radius: 6px 6px 50% 50%; }
+    .shot {
+      display: block; flex: none; width: 250px; padding: 4px;
+      background: linear-gradient(to bottom, rgba(120, 120, 120, 0.35), rgba(39, 39, 39, 0.2));
+      border: 1px solid rgba(236, 242, 249, 0.5); border-radius: 4px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      transition: transform 0.3s;
+    }
+    .shot:hover { transform: scale(1.03); }
+    .shot img { display: block; width: 100%; height: auto; border: 1px solid #707070; }
     .project .kind { margin-left: 6px; font-size: 12px; color: #9a9a9a; }
     .project p { margin-top: 3px; }
     .buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -200,6 +212,11 @@
       background: #0c0c0c; border: 1px solid #555; padding: 4px 6px;
     }
 
+    /* Vista-style sidebar clock */
+    .gadget { margin: 14px auto 0; text-align: center; }
+    .gadget svg { display: block; width: 140px; height: 140px; margin: 0 auto; filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.7)); }
+    .gadget span { display: block; margin-top: 4px; font-size: 12px; color: #c9c9c9; }
+
     #footer {
       margin-top: 14px; text-align: center; font-size: 12px; color: #e8e8e8;
       text-shadow: 0 0 4px #000, 0 0 2px #000;
@@ -221,11 +238,14 @@
       #content { border-left: 1px solid #3b3b3b; }
       .banner { flex-direction: column; align-items: flex-start; min-height: 0; padding: 18px; }
       .banner-title { font-size: 34px; }
-      .project .tile { width: 48px; height: 48px; border-radius: 11px; }
+      .project { flex-direction: column; }
+      .shot { width: 100%; }
+      .project > .tile { width: 48px; height: 48px; border-radius: 11px; }
+      .gadget { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      #logo, .nav-group a, .banner-icons a { transition: none; }
+      #logo, .nav-group a, .banner-icons a, .shot { transition: none; }
     }
   </style>
 </head>
@@ -240,6 +260,9 @@
       <linearGradient id="g-roof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a4a"/><stop offset="1" stop-color="#c2380c"/></linearGradient>
       <linearGradient id="g-arrow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6f37a"/><stop offset="1" stop-color="#2f9a12"/></linearGradient>
       <linearGradient id="g-star" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset="1" stop-color="#f0a800"/></linearGradient>
+
+      <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
+      <linearGradient id="g-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6e6"/><stop offset="0.45" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#151515"/><stop offset="1" stop-color="#8a8a8a"/></linearGradient>
 
       <symbol id="i-tts" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-tts)"/><g stroke="#fff" stroke-width="1.2" opacity="0.5"><path d="M5 10h22M5 14h22M5 18h22M5 22h22"/></g><circle cx="13" cy="20" r="3" fill="#fff"/><path d="M15.6 20V8.5" stroke="#fff" stroke-width="1.8"/></symbol>
       <symbol id="i-pp" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="url(#g-pp)"/><path d="M17 43.5c0-11.3 8.6-20.5 19.5-20.5 5.6 0 9.6 2.4 11.8 5.6l6.2-.6-4.4 5.4c-.3 10.4-8.3 18.1-18.6 18.1H25l-6 5v-13z" fill="#fff"/><circle cx="41.5" cy="30.5" r="2.5" fill="#0a7cff"/></symbol>
@@ -257,36 +280,50 @@
 
   <div id="site">
     <header id="header">
-      <a href="./" title="Back to home"><svg id="logo" aria-label="shibeeee"><use href="#i-orb"/></svg></a>
+      <a href="./" title="back to home"><svg id="logo" aria-label="shibeeee"><use href="#i-orb"/></svg></a>
       <div>
         <span class="header-title">shibeeee's homepage</span>
-        <span class="header-motto">Websites, games and little tools I've made!</span>
+        <span class="header-motto">websites, games and little tools i've made</span>
       </div>
     </header>
 
     <div id="frame">
       <aside id="menu">
-        <nav class="nav-group" aria-label="This page">
-          <span class="nav-title">Main</span>
-          <a href="#top" class="active"><svg aria-hidden="true"><use href="#i-home"/></svg>Home</a>
-          <a href="#websites"><svg aria-hidden="true"><use href="#i-globe"/></svg>Websites</a>
-          <a href="#downloads"><svg aria-hidden="true"><use href="#i-download"/></svg>Downloads</a>
-          <a href="#updates"><svg aria-hidden="true"><use href="#i-star"/></svg>Updates</a>
-          <a href="#linkme"><svg aria-hidden="true"><use href="#i-link"/></svg>Link to me</a>
+        <nav class="nav-group" aria-label="this page">
+          <span class="nav-title">main</span>
+          <a href="#top" class="active"><svg aria-hidden="true"><use href="#i-home"/></svg>home</a>
+          <a href="#websites"><svg aria-hidden="true"><use href="#i-globe"/></svg>websites</a>
+          <a href="#downloads"><svg aria-hidden="true"><use href="#i-download"/></svg>downloads</a>
+          <a href="#updates"><svg aria-hidden="true"><use href="#i-star"/></svg>updates</a>
+          <a href="#linkme"><svg aria-hidden="true"><use href="#i-link"/></svg>link to me</a>
         </nav>
-        <nav class="nav-group" aria-label="My websites">
-          <span class="nav-title">My Sites</span>
-          <a href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg>Tab to Sheet</a>
-          <a href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg>Pigeon Pal</a>
+        <nav class="nav-group" aria-label="my websites">
+          <span class="nav-title">my sites</span>
+          <a href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg>tab to sheet</a>
+          <a href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg>pigeon pal</a>
         </nav>
-        <nav class="nav-group" aria-label="Elsewhere">
-          <span class="nav-title">Elsewhere</span>
-          <a href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+        <nav class="nav-group" aria-label="elsewhere">
+          <span class="nav-title">elsewhere</span>
+          <a href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg>github<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
         </nav>
+
+        <div class="gadget" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="58" fill="url(#g-rim)"/>
+            <circle cx="60" cy="60" r="51" fill="url(#g-face)" stroke="#2a2a2a" stroke-width="1"/>
+            <g id="clock-ticks" stroke="#444"></g>
+            <line id="hand-h" x1="60" y1="64" x2="60" y2="34" stroke="#1b1b1b" stroke-width="4" stroke-linecap="round"/>
+            <line id="hand-m" x1="60" y1="66" x2="60" y2="20" stroke="#1b1b1b" stroke-width="2.6" stroke-linecap="round"/>
+            <line id="hand-s" x1="60" y1="70" x2="60" y2="16" stroke="#d42a1e" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="3.5" fill="#1b1b1b" stroke="#d42a1e" stroke-width="1.2"/>
+            <ellipse cx="60" cy="36" rx="40" ry="22" fill="#fff" opacity="0.35"/>
+          </svg>
+          <span id="clock-date"></span>
+        </div>
       </aside>
 
       <main id="content">
-        <h1 class="bar">Welcome!</h1>
+        <h1 class="bar">welcome!</h1>
 
         <div class="glass">
           <div class="banner">
@@ -295,31 +332,31 @@
               <span class="banner-sub">websites ~ games ~ tools</span>
             </div>
             <div class="banner-icons">
-              <a class="tile" style="--r:-6deg" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="Tab to Sheet"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
-              <a class="tile" style="--r:4deg" href="https://shibeeee.github.io/pidgeon-pal/" title="Pigeon Pal"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
-              <a class="tile" style="--r:-3deg" href="https://github.com/shibeeee/remap-with-AHK" title="Remap"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
+              <a class="tile" style="--r:-6deg" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="tab to sheet"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
+              <a class="tile" style="--r:4deg" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
+              <a class="tile" style="--r:-3deg" href="https://github.com/shibeeee/remap-with-AHK" title="remap"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
             </div>
           </div>
         </div>
 
         <div class="glass">
           <div class="box">
-            <p>Hi, welcome to my little corner of the internet! This is where I keep everything I've made: a couple of <a href="#websites">websites</a> you can use right in your browser, plus some <a href="#downloads">downloads</a>.</p>
-            <p>Everything here is free, and the code for all of it is on my <a href="https://github.com/shibeeee">GitHub</a>. Pick something from the menu or scroll down to see it all. Have fun!</p>
+            <p>hi, welcome to my little corner of the internet! this is where i keep everything i've made: a couple of <a href="#websites">websites</a> you can use right in your browser, plus some <a href="#downloads">downloads</a>.</p>
+            <p>it's all free, and the code is on my <a href="https://github.com/shibeeee">github</a> if you want to poke around. pick something from the menu or just scroll down. have fun!</p>
           </div>
         </div>
 
-        <h2 class="bar" id="websites">My Websites</h2>
+        <h2 class="bar" id="websites">my websites</h2>
 
         <div class="glass">
           <div class="box project">
-            <span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span>
-            <div>
-              <h3><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">Tab to Sheet</a><span class="kind">Music</span></h3>
-              <p>Turn any Songsterr tab into printable sheet music: standard notation, tablature, or both. Listen along, practice with a loop and a speed trainer, edit the notes, and download as Guitar Pro or MIDI.</p>
+            <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.jpg" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
+            <div class="project-info">
+              <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a><span class="kind">music</span></h3>
+              <p>turn any songsterr tab into sheet music you can print: regular notation, tab, or both. you can also listen along, loop the tricky parts, slow things down, and fix notes yourself.</p>
               <div class="buttons">
-                <a class="btn go" href="https://shibeeee.github.io/songsterr-to-sheet-music/">Open the website &raquo;</a>
-                <a class="btn" href="https://github.com/shibeeee/songsterr-to-sheet-music">Source code</a>
+                <a class="btn go" href="https://shibeeee.github.io/songsterr-to-sheet-music/">open it &raquo;</a>
+                <a class="btn" href="https://github.com/shibeeee/songsterr-to-sheet-music">source code</a>
               </div>
             </div>
           </div>
@@ -327,60 +364,103 @@
 
         <div class="glass">
           <div class="box project">
-            <span class="tile"><svg aria-hidden="true"><use href="#i-pp"/></svg></span>
-            <div>
-              <h3><a href="https://shibeeee.github.io/pidgeon-pal/">Pigeon Pal</a><span class="kind">Games</span></h3>
-              <p>A friendly coach for GamePigeon games. It shows the best move, finds every word in Word Hunt and Anagrams, tells you where the enemy ships are hiding, and lets you practice against a strong computer. Works offline once loaded.</p>
+            <a class="shot" href="https://shibeeee.github.io/pidgeon-pal/"><img src="images/pigeon-pal.jpg" width="560" height="350" alt="pigeon pal's list of games" loading="lazy"></a>
+            <div class="project-info">
+              <h3><span class="tile"><svg aria-hidden="true"><use href="#i-pp"/></svg></span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a><span class="kind">games</span></h3>
+              <p>a little helper for gamepigeon games. it shows you the best move, finds every word in word hunt and anagrams, figures out where the ships are hiding in sea battle, and lets you practice against a really good bot. works offline too.</p>
               <div class="buttons">
-                <a class="btn go" href="https://shibeeee.github.io/pidgeon-pal/">Play it &raquo;</a>
-                <a class="btn" href="https://github.com/shibeeee/pidgeon-pal">Source code</a>
+                <a class="btn go" href="https://shibeeee.github.io/pidgeon-pal/">play it &raquo;</a>
+                <a class="btn" href="https://github.com/shibeeee/pidgeon-pal">source code</a>
               </div>
             </div>
           </div>
         </div>
 
-        <h2 class="bar" id="downloads">Downloads</h2>
+        <h2 class="bar" id="downloads">downloads</h2>
 
         <div class="glass">
           <div class="box project">
             <span class="tile"><svg aria-hidden="true"><use href="#i-rm"/></svg></span>
-            <div>
-              <h3><a href="https://github.com/shibeeee/remap-with-AHK">Remap</a><span class="kind">Windows</span></h3>
-              <p>A small key remapper for Windows, built on AutoHotkey v2. Remaps live in profiles that only switch on while one of their programs is the window you're in. Comes with a fix for playing Hotline Miami on a laptop.</p>
+            <div class="project-info">
+              <h3><a href="https://github.com/shibeeee/remap-with-AHK">remap</a><span class="kind">windows</span></h3>
+              <p>a small key remapper for windows, made with autohotkey. you set up profiles that only kick in while a certain program is open. comes with a fix for playing hotline miami on a laptop.</p>
               <div class="buttons">
-                <a class="btn go" href="https://github.com/shibeeee/remap-with-AHK">Get it on GitHub &raquo;</a>
+                <a class="btn go" href="https://github.com/shibeeee/remap-with-AHK">get it on github &raquo;</a>
               </div>
             </div>
           </div>
         </div>
 
-        <h2 class="bar" id="updates">Latest Updates</h2>
+        <h2 class="bar" id="updates">latest updates</h2>
 
         <div class="glass">
           <div class="box">
             <ul class="updates">
-              <li><time datetime="2026-10-18">Oct 18, 2026</time><span>This homepage is open!</span></li>
-              <li><time datetime="2026-10-18">Oct 18, 2026</time><span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">Tab to Sheet</a> updated</span></li>
-              <li><time datetime="2026-10-07">Oct 7, 2026</time><span><a href="https://shibeeee.github.io/pidgeon-pal/">Pigeon Pal</a> updated</span></li>
-              <li><time datetime="2026-09-17">Sep 17, 2026</time><span><a href="https://github.com/shibeeee/remap-with-AHK">Remap</a> updated</span></li>
+              <li><time datetime="2026-10-18">oct 18, 2026</time><span>made this homepage!</span></li>
+              <li><time datetime="2026-10-18">oct 18, 2026</time><span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a> got an update</span></li>
+              <li><time datetime="2026-10-07">oct 7, 2026</time><span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a> got an update</span></li>
+              <li><time datetime="2026-09-17">sep 17, 2026</time><span><a href="https://github.com/shibeeee/remap-with-AHK">remap</a> got an update</span></li>
             </ul>
           </div>
         </div>
 
-        <h2 class="bar" id="linkme">Link to me!</h2>
+        <h2 class="bar" id="linkme">link to me!</h2>
 
         <div class="glass">
-          <div class="box linkme">
-            <img src="images/button.svg" width="88" height="31" alt="shibeeee homepage button">
-            <textarea readonly aria-label="HTML code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.svg" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
+          <div class="box">
+            <p>got a site too? feel free to grab my button:</p>
+            <div class="linkme" style="margin-top: 8px">
+              <img src="images/button.svg" width="88" height="31" alt="shibeeee's homepage button">
+              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.svg" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
+            </div>
           </div>
         </div>
       </main>
     </div>
 
     <footer id="footer">
-      &copy; 2026 shibeeee &middot; Hosted on <a href="https://pages.github.com/">GitHub Pages</a> &middot; Background photos by <a href="https://www.pexels.com/@jplenio/">Johannes Plenio</a> on Pexels
+      &copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels
     </footer>
   </div>
+
+  <script>
+    // Sidebar clock
+    (function () {
+      var ns = "http://www.w3.org/2000/svg", ticks = document.getElementById("clock-ticks");
+      for (var i = 0; i < 60; i++) {
+        var big = i % 5 === 0, l = document.createElementNS(ns, "line");
+        l.setAttribute("x1", 60); l.setAttribute("x2", 60);
+        l.setAttribute("y1", 11); l.setAttribute("y2", big ? 18 : 14);
+        l.setAttribute("stroke-width", big ? 2 : 0.8);
+        l.setAttribute("transform", "rotate(" + i * 6 + " 60 60)");
+        ticks.appendChild(l);
+      }
+      var h = document.getElementById("hand-h"), m = document.getElementById("hand-m"),
+          s = document.getElementById("hand-s"), date = document.getElementById("clock-date");
+      function tick() {
+        var d = new Date(), sec = d.getSeconds(), min = d.getMinutes() + sec / 60, hr = d.getHours() % 12 + min / 60;
+        h.setAttribute("transform", "rotate(" + hr * 30 + " 60 60)");
+        m.setAttribute("transform", "rotate(" + min * 6 + " 60 60)");
+        s.setAttribute("transform", "rotate(" + sec * 6 + " 60 60)");
+        date.textContent = d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }).toLowerCase();
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    // Light up the menu button for the section on screen
+    (function () {
+      var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]'));
+      var sections = links.map(function (a) { return a.hash === "#top" ? null : document.querySelector(a.hash); });
+      function update() {
+        var current = 0;
+        sections.forEach(function (el, i) { if (el && el.getBoundingClientRect().top < 140) current = i; });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = links.length - 1;
+        links.forEach(function (a, i) { a.classList.toggle("active", i === current); });
+      }
+      window.addEventListener("scroll", update, { passive: true });
+      update();
+    })();
+  </script>
 </body>
 </html>
