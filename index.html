@@ -12,9 +12,13 @@
   <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="theme-color" content="#1f3a12">
+  <link rel="canonical" href="https://shibeeee.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shibeeee.github.io/">
   <meta property="og:title" content="shibeeee's homepage">
   <meta property="og:description" content="websites, games and little tools i've made">
   <meta property="og:image" content="https://shibeeee.github.io/images/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -553,6 +557,44 @@
       #buddy-bubble { max-width: 260px; margin-bottom: 220px; font-size: 14px; }
     }
 
+    /* Phone menu button (hidden on bigger screens) */
+    #menu-toggle {
+      display: none; align-items: center; gap: 6px; margin-left: auto; height: 32px; padding: 0 12px; cursor: pointer;
+      font: inherit; font-size: 13.5px; color: #fff; text-shadow: 0 0 3px #000;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0, rgba(117, 117, 117, 0.25) 20%, rgba(92, 92, 92, 0.25) 50%, rgba(0, 0, 0, 0.4) 50%, rgba(60, 60, 60, 0.4) 100%);
+      border: 1px solid #0f0f0f; border-radius: 5px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    #menu-toggle svg { width: 12px; height: 12px; transition: transform 0.2s; }
+    #menu-toggle[aria-expanded="true"] { color: #57fa6f; }
+    #menu-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+    /* Start menu search */
+    #start-search {
+      width: 100%; margin-top: 6px; padding: 5px 8px;
+      font: inherit; font-size: 12.5px; color: #1e1e1e;
+      background: #fff; border: 1px solid #9fb3c6; border-radius: 3px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+    #start-search::placeholder { color: #8a8a8a; font-style: italic; }
+    #start-search:focus { outline: none; border-color: #3d8de0; box-shadow: 0 0 0 2px rgba(61, 141, 224, 0.25); }
+    .start-empty { padding: 6px 8px; font-size: 12.5px; color: #6d6d6d; text-shadow: none; }
+
+    /* Desktop shortcuts on the wallpaper (only when there's room beside the page) */
+    #desktop { display: none; position: fixed; left: 12px; top: 18px; z-index: 1; flex-direction: column; gap: 6px; width: 96px; }
+    @media (min-width: 1560px) { #desktop { display: flex; } }
+    .desk-icon {
+      display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px;
+      color: #fff; font-size: 12px; line-height: 1.25; text-align: center;
+      text-shadow: 0 1px 2px #000, 0 0 5px #000;
+      border: 1px solid transparent; border-radius: 3px;
+    }
+    .desk-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6)); }
+    .desk-icon:hover, .desk-icon:focus-visible {
+      text-decoration: none; outline: none;
+      background: linear-gradient(to bottom, rgba(190, 225, 255, 0.4), rgba(120, 180, 240, 0.25));
+      border-color: rgba(200, 230, 255, 0.75);
+    }
+
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -565,6 +607,9 @@
         width: auto; border-bottom-left-radius: 0; box-shadow: none;
         display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px;
       }
+      #menu:not(.open) { display: none; }
+      #menu-toggle { display: inline-flex; }
+      #content { border-top: 1px solid #3b3b3b; }
       #content { border-left: 1px solid #3b3b3b; }
       .banner { flex-direction: column; align-items: flex-start; min-height: 0; padding: 18px; }
       .banner-title { font-size: 34px; }
@@ -637,6 +682,14 @@
     </defs>
   </svg>
 
+  <nav id="desktop" aria-label="desktop shortcuts">
+    <a class="desk-icon" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg><span>tab to sheet</span></a>
+    <a class="desk-icon" href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg><span>pigeon pal</span></a>
+    <a class="desk-icon" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap</span></a>
+    <a class="desk-icon" href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg><span>guestbook</span></a>
+    <a class="desk-icon" href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg><span>github</span></a>
+  </nav>
+
   <div id="site">
     <header id="header">
       <a href="./" title="back to home"><svg id="logo" aria-label="shibeeee"><use href="#i-orb"/></svg></a>
@@ -644,6 +697,7 @@
         <span class="header-title">shibeeee's homepage</span>
         <span class="header-motto">websites, games and little tools i've made</span>
       </div>
+      <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">menu <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </header>
 
     <div id="frame">
@@ -844,6 +898,8 @@
       <a class="prog" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap<small>key remapper for windows</small></span></a>
       <div class="start-sep"></div>
       <a class="prog" href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg><span>guestbook<small>leave a message</small></span></a>
+      <div class="start-empty" hidden>nothing found :(</div>
+      <input id="start-search" type="search" placeholder="search programs and pages" aria-label="search the start menu" autocomplete="off">
     </div>
     <div class="start-places">
       <div class="start-pic"><svg aria-hidden="true"><use href="#i-orb"/></svg></div>
@@ -1304,10 +1360,31 @@
       var orb = document.getElementById("start-orb"), menu = document.getElementById("start"),
           splash = document.getElementById("splash"), splashText = document.getElementById("splash-text");
 
+      var search = document.getElementById("start-search"), empty = menu.querySelector(".start-empty");
+      var items = Array.prototype.slice.call(menu.querySelectorAll(".prog, .place"));
+      function filter() {
+        var q = search.value.trim().toLowerCase(), any = false;
+        items.forEach(function (el) {
+          var hit = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
+          el.hidden = !hit; any = any || hit;
+        });
+        menu.querySelector(".start-sep").hidden = !!q;
+        empty.hidden = any;
+      }
+      search.addEventListener("input", filter);
+      search.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        var first = items.filter(function (el) { return !el.hidden; })[0];
+        if (first) first.click();
+      });
+
       function setMenu(open) {
         if (open === menu.hidden) sfx(open ? "open" : "close");
         menu.hidden = !open;
         orb.setAttribute("aria-expanded", String(open));
+        if (!open && search.value) { search.value = ""; filter(); }
+        // jump straight into the search box, but not on phones (it would pop up the keyboard)
+        if (open && matchMedia("(pointer: fine)").matches) search.focus();
       }
       orb.addEventListener("click", function (e) { e.stopPropagation(); setMenu(menu.hidden); });
       menu.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); e.stopPropagation(); });
@@ -1345,7 +1422,7 @@
         if (gateOpen && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); }
       });
       // Everything behind the gate is out of reach until you enter
-      var behind = ["site", "taskbar", "buddy", "start"].map(function (id) { return document.getElementById(id); });
+      var behind = ["site", "taskbar", "buddy", "start", "desktop"].map(function (id) { return document.getElementById(id); });
       function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
       if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
@@ -1386,10 +1463,12 @@
         "playing word hunt? pigeon pal finds every single word",
         "don't forget to sign the guestbook :)",
         "you can grab shibeeee's 88x31 button under “link to me”",
-        "the menu on the left lights up as you scroll. i like watching it",
+        "the menu lights up as you scroll. i like watching it",
+        "on a big screen there are desktop icons on the left, just like windows 7!",
         "click the little strip at the far right of the taskbar to zoom back to the top!",
         "too loud? the speaker down by the clock mutes everything ♪",
-        "like the music? you can skip songs in the little player on the left ♪"
+        "like the music? you can skip songs in the little player in the menu ♪",
+        "try typing in the start menu, it can search!"
       ];
       var next = 0, timer;
       function say(msg) {
@@ -1409,6 +1488,28 @@
         say(msg);
       });
       fig.addEventListener("animationend", function () { fig.classList.remove("hop"); });
+
+      // Point out the guestbook the first time it scrolls into view
+      if ("IntersectionObserver" in window) {
+        var gbSeen = new IntersectionObserver(function (entries) {
+          if (!entries[0].isIntersecting || document.documentElement.classList.contains("splash")) return;
+          gbSeen.disconnect();
+          say("ooh, the guestbook! leave a little message ✿");
+        }, { threshold: 1 });
+        gbSeen.observe(document.getElementById("guestbook"));
+      }
+      // Check in once if you've been away for a while
+      var idle, checkedIn = false;
+      function resetIdle() {
+        clearTimeout(idle);
+        if (!checkedIn) idle = setTimeout(function () {
+          if (document.documentElement.classList.contains("splash")) return resetIdle();
+          checkedIn = true;
+          say("still there? i'll keep the music going for you ♪");
+        }, 90000);
+      }
+      ["scroll", "click", "keydown", "pointermove"].forEach(function (ev) { window.addEventListener(ev, resetIdle, { passive: true }); });
+      resetIdle();
       document.getElementById("buddy-close").addEventListener("click", function () {
         clearTimeout(timer);
         bubble.hidden = true;
@@ -1421,6 +1522,22 @@
       } else {
         setTimeout(function () { say(hello); }, 900);
       }
+    })();
+
+    // Phones: the sidebar folds away behind a "menu" button
+    (function () {
+      var btn = document.getElementById("menu-toggle"), side = document.getElementById("menu");
+      btn.addEventListener("click", function () {
+        var open = !side.classList.contains("open");
+        side.classList.toggle("open", open);
+        btn.setAttribute("aria-expanded", String(open));
+      });
+      side.addEventListener("click", function (e) {
+        if (e.target.closest("a") && side.classList.contains("open")) {
+          side.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
     })();
 
     // Old-web trick: the tab title calls you back when you switch away
