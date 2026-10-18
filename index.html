@@ -3,9 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>shibeeee's homepage</title>
+  <title>shibeeee's homepage ✦ websites, games &amp; tools</title>
   <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
-  <link rel="icon" href="images/button.svg">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="theme-color" content="#1f3a12">
+  <meta property="og:title" content="shibeeee's homepage">
+  <meta property="og:description" content="websites, games and little tools i've made">
+  <meta property="og:image" content="https://shibeeee.github.io/images/banner.jpg">
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -395,6 +401,44 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     #splash-text { position: relative; font-size: 40px; font-weight: 300; text-shadow: 0 0 18px rgba(160, 225, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4); }
 
+    /* Mascot buddy in the corner */
+    #buddy {
+      position: fixed; right: 18px; bottom: 44px; z-index: 40;
+      display: flex; align-items: flex-end; gap: 6px; pointer-events: none;
+    }
+    #buddy > * { pointer-events: auto; }
+    #buddy-figure {
+      position: relative; padding: 0; border: 0; background: none; cursor: pointer;
+      animation: bob 3.2s ease-in-out infinite;
+    }
+    #buddy-figure img { display: block; height: 210px; width: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55)); }
+    #buddy-figure.hop { animation: hop 0.45s ease-out; }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
+    #buddy-hide {
+      position: absolute; top: 0; right: 0; width: 20px; height: 20px; padding: 0;
+      font: 13px/18px Tahoma, sans-serif; color: #fff; cursor: pointer; opacity: 0;
+      background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f);
+      border: 1px solid rgba(0, 0, 0, 0.6); border-radius: 3px;
+      transition: opacity 0.2s;
+    }
+    #buddy:hover #buddy-hide, #buddy-hide:focus-visible { opacity: 1; }
+    #buddy-bubble {
+      position: relative; max-width: 230px; margin-bottom: 150px; padding: 9px 12px;
+      font-size: 13px; line-height: 1.4; color: #1e2a35; text-shadow: none;
+      background: linear-gradient(to bottom, #ffffff, #e6f2fb);
+      border: 1px solid #7da2ce; border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 #fff;
+      animation: pop 0.3s ease-out;
+    }
+    #buddy-bubble::after {
+      content: ""; position: absolute; right: -9px; bottom: 18px;
+      border: 9px solid transparent; border-right: 0; border-left-color: #e6f2fb;
+      filter: drop-shadow(1px 0 0 #7da2ce);
+    }
+    #buddy-bubble span { text-shadow: none; }
+    #buddy-name { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; color: #1c6fb5; }
+
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -415,12 +459,16 @@
       .project > .tile { width: 48px; height: 48px; border-radius: 11px; }
       .gadget { display: none; }
       .counter { grid-column: 1 / -1; }
+      #buddy { right: 6px; }
+      #buddy-figure img { height: 120px; }
+      #buddy-bubble { max-width: 190px; margin-bottom: 84px; font-size: 12.5px; }
+      #buddy-hide { opacity: 1; }
       .task { width: 46px; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       #logo, .nav-group a, .banner-icons a, .shot { transition: none; }
-      #site, #start, .gb-entry.new { animation: none; }
+      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble { animation: none; }
       .digit span { transition: none; }
     }
   </style>
@@ -668,6 +716,14 @@
       <button id="shutdown" type="button">shut down</button>
     </div>
   </div>
+
+  <aside id="buddy" aria-label="site mascot" hidden>
+    <div id="buddy-bubble" role="status" hidden><span id="buddy-name"></span><span id="buddy-text"></span></div>
+    <button id="buddy-figure" type="button" aria-label="talk to the mascot">
+      <img id="buddy-img" alt="">
+      <span id="buddy-hide" role="button" tabindex="0" aria-label="hide the mascot" title="hide">&times;</span>
+    </button>
+  </aside>
 
   <nav id="taskbar" aria-label="taskbar">
     <button id="start-orb" type="button" aria-label="start menu" aria-expanded="false" aria-controls="start"><svg aria-hidden="true"><use href="#i-orb"/></svg></button>
@@ -939,6 +995,71 @@
         splash.classList.add("show");
         setTimeout(function () { splashText.textContent = "welcome back"; }, 1600);
         setTimeout(hideSplash, 2600);
+      });
+    })();
+
+    // Mascot in the corner: says hi, and a new line each time you click her.
+    // Set this to { name, src, alt } to switch her on.
+    var MASCOT = null;
+    (function () {
+      if (!MASCOT) return;
+      var buddy = document.getElementById("buddy"), fig = document.getElementById("buddy-figure"),
+          bubble = document.getElementById("buddy-bubble"), text = document.getElementById("buddy-text");
+      try { if (sessionStorage.getItem("buddy-hidden") === "1") return; } catch (e) {}
+      document.getElementById("buddy-name").textContent = MASCOT.name;
+      var img = document.getElementById("buddy-img");
+      img.src = MASCOT.src;
+      img.alt = MASCOT.alt;
+
+      var hour = new Date().getHours();
+      var hello = hour < 5 ? "up late? me too. welcome!" : hour < 12 ? "good morning! welcome to shibeeee's homepage ✿"
+        : hour < 18 ? "hi hi! welcome to shibeeee's homepage ✿" : "good evening! welcome to shibeeee's homepage ✿";
+      var lines = [
+        "psst, the start button down there actually works",
+        "tab to sheet turns songsterr tabs into real sheet music. pretty cool right?",
+        "playing word hunt? pigeon pal finds every single word",
+        "don't forget to sign the guestbook :)",
+        "you can grab shibeeee's 88x31 button under “link to me”",
+        "the menu on the left lights up as you scroll. i like watching it",
+        "click the little strip at the far right of the taskbar to zoom back to the top!"
+      ];
+      var next = 0, timer;
+      function say(msg) {
+        text.textContent = msg;
+        bubble.hidden = false;
+        bubble.style.animation = "none"; void bubble.offsetWidth; bubble.style.animation = "";
+        clearTimeout(timer);
+        timer = setTimeout(function () { bubble.hidden = true; }, 9000);
+      }
+      fig.addEventListener("click", function (e) {
+        if (e.target.id === "buddy-hide") return;
+        fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop");
+        var visitors = document.getElementById("visitor-no").textContent;
+        var msg = lines[next % lines.length];
+        if (next === 2 && visitors) msg = "fun fact: you're visitor #" + visitors + "!";
+        next++;
+        say(msg);
+      });
+      fig.addEventListener("animationend", function () { fig.classList.remove("hop"); });
+      function hide(e) {
+        e.stopPropagation();
+        buddy.hidden = true;
+        try { sessionStorage.setItem("buddy-hidden", "1"); } catch (err) {}
+      }
+      var x = document.getElementById("buddy-hide");
+      x.addEventListener("click", hide);
+      x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hide(e); } });
+
+      buddy.hidden = false;
+      // Wait for the welcome screen to finish before saying hi
+      setTimeout(function () { say(hello); }, document.documentElement.classList.contains("splash") ? 2600 : 900);
+    })();
+
+    // Old-web trick: the tab title calls you back when you switch away
+    (function () {
+      var title = document.title;
+      document.addEventListener("visibilitychange", function () {
+        document.title = document.hidden ? "come back soon! \u2661" : title;
       });
     })();
 
