@@ -29,7 +29,9 @@
     [hidden] { display: none !important; }
     :focus-visible { outline: 2px solid #57fa6f; outline-offset: 2px; }
 
-    #site { max-width: 980px; margin: 24px auto 40px; padding: 0 16px; }
+    #site { max-width: 980px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.35s ease-out both; }
+    @keyframes win-open { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+    html.splash #site { animation: none; opacity: 0; }
 
     /* Header ------------------------------------------------------------- */
     #header {
@@ -192,7 +194,10 @@
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0, rgba(117, 117, 117, 0.25) 20%, rgba(92, 92, 92, 0.25) 50%, rgba(0, 0, 0, 0.4) 50%, rgba(60, 60, 60, 0.4) 100%);
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
-    .btn:hover { text-decoration: none; filter: brightness(1.25); }
+    .btn { transition: filter 0.2s, box-shadow 0.2s; }
+    .btn:hover { text-decoration: none; filter: brightness(1.25); box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), 0 0 8px rgba(255, 255, 255, 0.25); }
+    .btn.go:hover { box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), 0 0 10px rgba(87, 250, 111, 0.55); }
+    .btn:disabled { opacity: 0.5; cursor: default; filter: none; box-shadow: none; }
     .btn.go {
       color: #fff;
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 45%, rgba(29, 73, 23, 0.5) 45%, rgba(43, 200, 36, 0.85) 100%);
@@ -233,6 +238,163 @@
     }
     #footer a { color: #8cf59a; }
 
+    /* Visitor counter */
+    .counter { margin: 10px 0 0; }
+    .odometer { display: flex; justify-content: center; gap: 2px; padding: 6px 0 4px; }
+    .digit {
+      width: 17px; height: 26px; overflow: hidden;
+      background: linear-gradient(to bottom, #3a3a3a 0, #111 50%, #000 51%, #1a1a1a 100%);
+      border: 1px solid #5a5a5a; border-radius: 3px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+    .digit span {
+      display: block; font: bold 17px/26px Consolas, "Lucida Console", monospace; color: #57fa6f; text-align: center;
+      text-shadow: 0 0 6px rgba(87, 250, 111, 0.6);
+      transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .counter-note { display: block; text-align: center; font-size: 11.5px; color: #9a9a9a; }
+
+    /* Guestbook */
+    .gb-form { display: grid; gap: 6px; margin-top: 10px; }
+    .gb-form input, .gb-form textarea {
+      width: 100%; padding: 5px 7px; font: inherit; color: #eee;
+      background: #0c0c0c; border: 1px solid #555; border-radius: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .gb-form textarea { height: 76px; resize: vertical; }
+    .gb-form input:focus, .gb-form textarea:focus { outline: none; border-color: #57fa6f; box-shadow: 0 0 6px rgba(87, 250, 111, 0.4); }
+    .gb-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .gb-status { font-size: 12.5px; color: #c9c9c9; }
+    .gb-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .gb-entry {
+      margin-top: 8px; padding: 7px 10px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 4px;
+    }
+    .gb-entry.new { animation: pop 0.4s ease-out; }
+    @keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(0.97); } to { opacity: 1; transform: none; } }
+    .gb-head { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: #9a9a9a; }
+    .gb-head strong { font-size: 13.5px; font-weight: 600; color: #57fa6f; text-shadow: 0 0 3px #000; }
+    .gb-msg { margin-top: 2px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .gb-more { margin-top: 10px; }
+
+    /* Taskbar */
+    #taskbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+      display: flex; align-items: center; gap: 2px; height: 40px; padding-left: 4px;
+      background: linear-gradient(to bottom, rgba(70, 95, 120, 0.55) 0, rgba(25, 40, 55, 0.7) 50%, rgba(10, 18, 28, 0.82) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 -2px 12px rgba(0, 0, 0, 0.45);
+      -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
+    }
+    #start-orb {
+      flex: none; width: 46px; height: 46px; margin: -8px 6px 0 2px; padding: 0;
+      background: none; border: 0; cursor: pointer; border-radius: 50%;
+      transition: filter 0.25s, transform 0.25s;
+    }
+    #start-orb svg { width: 100%; height: 100%; display: block; }
+    #start-orb:hover, #start-orb[aria-expanded="true"] { filter: brightness(1.2) drop-shadow(0 0 8px #8dff6f); }
+    #start-orb:active { transform: scale(0.94); }
+    .task {
+      position: relative; display: grid; place-items: center; width: 54px; height: 36px;
+      border: 1px solid transparent; border-radius: 3px;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .task svg { width: 26px; height: 26px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
+    .task:hover {
+      text-decoration: none; border-color: rgba(255, 255, 255, 0.4);
+      background: radial-gradient(ellipse at 50% 100%, var(--glow) 0, transparent 75%), linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 6px rgba(0, 0, 0, 0.4);
+    }
+    .tray {
+      margin-left: auto; padding: 0 12px; text-align: center;
+      font-size: 12px; line-height: 1.3; color: #fff; text-shadow: 0 0 4px #000;
+    }
+    #show-desktop {
+      align-self: stretch; width: 14px; padding: 0; cursor: pointer;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04));
+      border: 0; border-left: 1px solid rgba(255, 255, 255, 0.35);
+      transition: background 0.2s;
+    }
+    #show-desktop:hover { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15)); }
+
+    /* Start menu */
+    #start {
+      position: fixed; left: 4px; bottom: 42px; z-index: 60;
+      display: flex; gap: 8px; width: 420px; max-width: calc(100vw - 8px); padding: 8px;
+      background: linear-gradient(to bottom, rgba(70, 95, 120, 0.8), rgba(18, 28, 42, 0.92));
+      border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 8px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 10px 30px rgba(0, 0, 0, 0.65);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+      animation: start-open 0.18s ease-out;
+    }
+    @keyframes start-open { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .start-programs {
+      flex: 1.25; min-width: 0; padding: 6px;
+      background: #fff; border: 1px solid #6f87a3; border-radius: 4px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    }
+    .prog {
+      display: flex; align-items: center; gap: 9px; padding: 4px 8px; margin-bottom: 2px;
+      color: #1e1e1e; font-size: 13px; text-shadow: none;
+      border: 1px solid transparent; border-radius: 3px;
+    }
+    .prog:hover { text-decoration: none; background: linear-gradient(to bottom, #f2f9ff, #d6ebfb); border-color: #7da2ce; }
+    .prog svg { width: 32px; height: 32px; flex: none; }
+    .prog small { display: block; color: #6d6d6d; font-size: 11px; }
+    .start-programs span { text-shadow: none; }
+    .start-sep { height: 1px; margin: 6px 4px; background: linear-gradient(to right, transparent, #c8d3df, transparent); }
+    .start-places { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .start-pic {
+      align-self: center; width: 54px; height: 54px; margin: -26px 0 6px; padding: 3px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .start-pic svg { width: 100%; height: 100%; display: block; }
+    .place {
+      display: block; padding: 4px 10px; margin-bottom: 1px;
+      color: #fff; font-size: 13px; border: 1px solid transparent; border-radius: 3px;
+    }
+    .place:hover {
+      text-decoration: none; border-color: rgba(255, 255, 255, 0.35);
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+    }
+    #shutdown {
+      align-self: flex-end; margin-top: auto; height: 24px; padding: 0 12px; cursor: pointer;
+      font: inherit; font-size: 12.5px; color: #fff; text-shadow: 0 0 3px #000;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08) 50%, rgba(0, 0, 0, 0.25) 51%, rgba(255, 255, 255, 0.1));
+      border: 1px solid rgba(0, 0, 0, 0.6); border-radius: 3px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+    #shutdown:hover { background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f); }
+
+    /* Sign-in style welcome screen */
+    #splash {
+      position: fixed; inset: 0; z-index: 100; display: none;
+      align-items: center; justify-content: center; gap: 16px;
+      background: radial-gradient(ellipse at 50% 115%, #5cc0ff 0, #1f78d6 30%, #0d469c 60%, #062457 100%);
+      color: #fff; cursor: pointer;
+      transition: opacity 0.6s;
+    }
+    #splash::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 18% at 30% 72%, rgba(255, 255, 255, 0.16), transparent 70%),
+        radial-gradient(ellipse 50% 12% at 70% 80%, rgba(160, 230, 255, 0.18), transparent 70%);
+    }
+    html.splash #splash, #splash.show { display: flex; }
+    #splash.out { opacity: 0; }
+    .spinner {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(160, 230, 255, 0.7), #fff);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #splash-text { position: relative; font-size: 40px; font-weight: 300; text-shadow: 0 0 18px rgba(160, 225, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4); }
+
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -252,14 +414,31 @@
       .shot { width: 100%; }
       .project > .tile { width: 48px; height: 48px; border-radius: 11px; }
       .gadget { display: none; }
+      .counter { grid-column: 1 / -1; }
+      .task { width: 46px; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       #logo, .nav-group a, .banner-icons a, .shot { transition: none; }
+      #site, #start, .gb-entry.new { animation: none; }
+      .digit span { transition: none; }
     }
   </style>
+  <script>
+    // Show the welcome screen once per visit (skipped for reduced motion)
+    try {
+      if (!sessionStorage.getItem("welcomed") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("splash");
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body id="top">
+  <div id="splash" role="presentation">
+    <div class="spinner"></div>
+    <span id="splash-text">welcome</span>
+  </div>
+
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="g-tts" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a66"/><stop offset="1" stop-color="#121216"/></linearGradient>
@@ -284,6 +463,8 @@
       <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7z" fill="url(#g-star)" stroke="#a86a00" stroke-width="0.8" stroke-linejoin="round"/></symbol>
       <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" fill="none" stroke="#8fd3ff" stroke-width="2.4" stroke-linecap="round"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" fill="none" stroke="#5ee04a" stroke-width="2.4" stroke-linecap="round"/></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
+      <linearGradient id="g-book" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fb6ff"/><stop offset="1" stop-color="#1c5cb8"/></linearGradient>
+      <symbol id="i-book" viewBox="0 0 24 24"><rect x="4" y="2.5" width="15" height="19" rx="1.5" fill="url(#g-book)" stroke="#123f80" stroke-width="0.8"/><rect x="17" y="3.5" width="3" height="17" rx="0.8" fill="#f4f4f4" stroke="#8a8a8a" stroke-width="0.5"/><path d="M7 7h8M7 10h8M7 13h5" stroke="#fff" stroke-width="1.3" opacity="0.85"/><path d="m13 20 7.5-7.5 1.6 1.6L14.6 21.6 12.5 22z" fill="#ffcf4a" stroke="#8a5a00" stroke-width="0.6"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
     </defs>
   </svg>
@@ -306,6 +487,7 @@
           <a href="#downloads"><svg aria-hidden="true"><use href="#i-download"/></svg>downloads</a>
           <a href="#more" hidden><svg aria-hidden="true"><use href="#i-github"/></svg>more projects</a>
           <a href="#updates"><svg aria-hidden="true"><use href="#i-star"/></svg>updates</a>
+          <a href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg>guestbook</a>
           <a href="#linkme"><svg aria-hidden="true"><use href="#i-link"/></svg>link to me</a>
         </nav>
         <nav class="nav-group" aria-label="my websites" id="nav-sites">
@@ -331,6 +513,12 @@
             <ellipse cx="60" cy="36" rx="40" ry="22" fill="#fff" opacity="0.35"/>
           </svg>
           <span id="clock-date"></span>
+        </div>
+
+        <div class="nav-group counter">
+          <span class="nav-title">visitors</span>
+          <div class="odometer" id="odometer" aria-label="visitor count"></div>
+          <span class="counter-note" id="counter-note">counting...</span>
         </div>
       </aside>
 
@@ -423,6 +611,25 @@
           </div>
         </div>
 
+        <h2 class="bar" id="guestbook">guestbook</h2>
+
+        <div class="glass">
+          <div class="box">
+            <p>thanks for stopping by! leave a little message if you want :)</p>
+            <form class="gb-form" id="gb-form" autocomplete="off">
+              <input id="gb-name" name="name" maxlength="32" placeholder="your name" aria-label="your name" required>
+              <textarea id="gb-message" name="message" maxlength="500" placeholder="say hi!" aria-label="your message" required></textarea>
+              <div class="gb-trap" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+              <div class="gb-row">
+                <button class="btn go" type="submit">sign the guestbook &raquo;</button>
+                <span class="gb-status" id="gb-status" role="status"></span>
+              </div>
+            </form>
+            <div id="gb-list"></div>
+            <button class="btn gb-more" id="gb-more" type="button" hidden>show older messages</button>
+          </div>
+        </div>
+
         <h2 class="bar" id="linkme">link to me!</h2>
 
         <div class="glass">
@@ -438,9 +645,39 @@
     </div>
 
     <footer id="footer">
-      &copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels
+      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels
     </footer>
   </div>
+
+  <div id="start" hidden>
+    <div class="start-programs">
+      <a class="prog" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg><span>tab to sheet<small>sheet music from songsterr tabs</small></span></a>
+      <a class="prog" href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg><span>pigeon pal<small>help with gamepigeon games</small></span></a>
+      <a class="prog" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap<small>key remapper for windows</small></span></a>
+      <div class="start-sep"></div>
+      <a class="prog" href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg><span>guestbook<small>leave a message</small></span></a>
+    </div>
+    <div class="start-places">
+      <div class="start-pic"><svg aria-hidden="true"><use href="#i-orb"/></svg></div>
+      <a class="place" href="#top">shibeeee</a>
+      <a class="place" href="#websites">websites</a>
+      <a class="place" href="#downloads">downloads</a>
+      <a class="place" href="#updates">updates</a>
+      <a class="place" href="#linkme">link to me</a>
+      <a class="place" href="https://github.com/shibeeee">github</a>
+      <button id="shutdown" type="button">shut down</button>
+    </div>
+  </div>
+
+  <nav id="taskbar" aria-label="taskbar">
+    <button id="start-orb" type="button" aria-label="start menu" aria-expanded="false" aria-controls="start"><svg aria-hidden="true"><use href="#i-orb"/></svg></button>
+    <a class="task" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="tab to sheet" style="--glow: rgba(210, 210, 230, 0.6)"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
+    <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
+    <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
+    <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
+    <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
+    <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
+  </nav>
 
   <script>
     // Sidebar clock
@@ -462,6 +699,8 @@
         m.setAttribute("transform", "rotate(" + min * 6 + " 60 60)");
         s.setAttribute("transform", "rotate(" + sec * 6 + " 60 60)");
         date.textContent = d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }).toLowerCase();
+        document.getElementById("tray-time").textContent = d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }).toLowerCase();
+        document.getElementById("tray-date").textContent = d.toLocaleDateString();
       }
       tick();
       setInterval(tick, 1000);
@@ -561,6 +800,146 @@
         .catch(function () {
           if (cached) render(cached.repos); // stale copy beats nothing; otherwise the built-in list stays
         });
+    })();
+
+    // Visitor counter and guestbook live on a small Cloudflare Worker (worker/worker.js)
+    var API = "https://shibeeee-homepage.mrshibe.workers.dev/api";
+
+    (function () {
+      var odo = document.getElementById("odometer"), note = document.getElementById("counter-note");
+      function show(n) {
+        var text = String(n).padStart(6, "0");
+        odo.replaceChildren();
+        text.split("").forEach(function (ch) {
+          var digit = document.createElement("div"), col = document.createElement("span");
+          digit.className = "digit";
+          col.textContent = "0123456789".split("").join("\n");
+          col.style.whiteSpace = "pre";
+          digit.appendChild(col);
+          odo.appendChild(digit);
+          requestAnimationFrame(function () { requestAnimationFrame(function () {
+            col.style.transform = "translateY(" + (-26 * Number(ch)) + "px)";
+          }); });
+        });
+        note.textContent = "people stopped by";
+        document.getElementById("visitor-no").textContent = Number(n).toLocaleString();
+        document.getElementById("visitor-line").hidden = false;
+      }
+      show(0);
+      note.textContent = "counting...";
+      document.getElementById("visitor-line").hidden = true;
+
+      // Count each browser once per visit, not every refresh
+      var counted = false;
+      try { counted = sessionStorage.getItem("counted") === "1"; } catch (e) {}
+      fetch(API + (counted ? "/stats" : "/visit"), { method: counted ? "GET" : "POST" })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (d) {
+          try { sessionStorage.setItem("counted", "1"); } catch (e) {}
+          show(d.visits);
+        })
+        .catch(function () { note.textContent = "counter is napping"; });
+    })();
+
+    (function () {
+      var form = document.getElementById("gb-form"), status = document.getElementById("gb-status"),
+          list = document.getElementById("gb-list"), more = document.getElementById("gb-more"), oldest = 0;
+
+      function entry(e, isNew) {
+        var box = document.createElement("div"), head = document.createElement("div"),
+            name = document.createElement("strong"), when = document.createElement("time"), msg = document.createElement("p");
+        box.className = "gb-entry" + (isNew ? " new" : "");
+        head.className = "gb-head";
+        msg.className = "gb-msg";
+        name.textContent = e.name;
+        when.dateTime = new Date(e.time).toISOString();
+        when.textContent = new Date(e.time).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+        msg.textContent = e.message;
+        head.append(name, when);
+        box.append(head, msg);
+        return box;
+      }
+      function load() {
+        more.disabled = true;
+        fetch(API + "/guestbook" + (oldest ? "?before=" + oldest : ""))
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (d) {
+            d.entries.forEach(function (e) { list.appendChild(entry(e)); oldest = e.id; });
+            if (!oldest) status.textContent = "no messages yet, be the first!";
+            more.hidden = !d.more;
+            more.disabled = false;
+          })
+          .catch(function () {
+            if (oldest) { more.disabled = false; return; }
+            status.textContent = "the guestbook is taking a nap right now, try again later!";
+            Array.prototype.forEach.call(form.elements, function (el) { el.disabled = true; });
+          });
+      }
+      more.addEventListener("click", load);
+
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var button = form.querySelector("button");
+        button.disabled = true;
+        status.textContent = "sending...";
+        fetch(API + "/guestbook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: form.elements.namedItem("name").value, message: form.elements.namedItem("message").value, website: form.elements.namedItem("website").value })
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (res) {
+            if (!res.ok) { status.textContent = res.d.error || "something went wrong, try again"; return; }
+            if (res.d.entry) list.prepend(entry(res.d.entry, true));
+            form.elements.namedItem("message").value = "";
+            status.textContent = "thanks for signing! :)";
+          })
+          .catch(function () { status.textContent = "couldn't reach the guestbook, try again in a bit"; })
+          .then(function () { button.disabled = false; });
+      });
+      load();
+    })();
+
+    // Taskbar, start menu and the welcome screen
+    (function () {
+      var orb = document.getElementById("start-orb"), menu = document.getElementById("start"),
+          splash = document.getElementById("splash"), splashText = document.getElementById("splash-text");
+
+      function setMenu(open) {
+        menu.hidden = !open;
+        orb.setAttribute("aria-expanded", String(open));
+      }
+      orb.addEventListener("click", function (e) { e.stopPropagation(); setMenu(menu.hidden); });
+      menu.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); e.stopPropagation(); });
+      document.addEventListener("click", function () { setMenu(false); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+      document.getElementById("show-desktop").addEventListener("click", function () { window.scrollTo({ top: 0 }); });
+
+      var site = document.getElementById("site");
+      function hideSplash() {
+        if (!splash.classList.contains("show") && !document.documentElement.classList.contains("splash")) return;
+        splash.classList.add("out");
+        setTimeout(function () {
+          splash.classList.remove("show", "out");
+          document.documentElement.classList.remove("splash");
+          site.style.animation = "none";
+          void site.offsetWidth; // restart the window-open animation
+          site.style.animation = "";
+        }, 600);
+      }
+      splash.addEventListener("click", hideSplash);
+      if (document.documentElement.classList.contains("splash")) {
+        try { sessionStorage.setItem("welcomed", "1"); } catch (e) {}
+        setTimeout(hideSplash, 1700);
+      }
+
+      document.getElementById("shutdown").addEventListener("click", function () {
+        setMenu(false);
+        splashText.textContent = "see you later!";
+        splash.classList.add("show");
+        setTimeout(function () { splashText.textContent = "welcome back"; }, 1600);
+        setTimeout(hideSplash, 2600);
+      });
     })();
 
     // Light up the menu button for the section on screen

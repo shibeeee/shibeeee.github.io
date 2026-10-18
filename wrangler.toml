@@ -1,0 +1,16 @@
+# Cloudflare Worker for the visitor counter and guestbook (worker/worker.js).
+# Works with Cloudflare's Git integration (root directory "/", deploy command
+# "npx wrangler deploy"). The homepage expects it at
+# https://shibeeee-homepage.mrshibe.workers.dev, so keep the name as is.
+name = "shibeeee-homepage"
+main = "worker/worker.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "STORE"
+class_name = "Store"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Store"]
