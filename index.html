@@ -26,6 +26,7 @@
     a:hover { text-decoration: underline; }
     a, p, span, li { text-shadow: 0 0 3px #000; }
     p { margin: 0; }
+    [hidden] { display: none !important; }
     :focus-visible { outline: 2px solid #57fa6f; outline-offset: 2px; }
 
     #site { max-width: 980px; margin: 24px auto 40px; padding: 0 16px; }
@@ -203,6 +204,15 @@
     .updates li:last-child { border-bottom: 0; }
     .updates time { flex: none; width: 92px; color: #9a9a9a; font-size: 13px; }
 
+    /* Repos pulled from GitHub */
+    .repo { padding: 8px 2px; border-bottom: 1px dotted #4b4b4b; }
+    .repo:first-child { padding-top: 0; }
+    .repo:last-child { border-bottom: 0; padding-bottom: 0; }
+    .repo h3 { margin: 0; font-size: 15px; font-weight: 600; }
+    .repo p { margin-top: 2px; }
+    .repo .meta { margin-top: 2px; font-size: 12px; color: #9a9a9a; }
+    .repo .buttons { margin-top: 6px; }
+
     /* Link to me */
     .linkme { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
     .linkme img { display: block; image-rendering: auto; }
@@ -294,13 +304,15 @@
           <a href="#top" class="active"><svg aria-hidden="true"><use href="#i-home"/></svg>home</a>
           <a href="#websites"><svg aria-hidden="true"><use href="#i-globe"/></svg>websites</a>
           <a href="#downloads"><svg aria-hidden="true"><use href="#i-download"/></svg>downloads</a>
+          <a href="#more" hidden><svg aria-hidden="true"><use href="#i-github"/></svg>more projects</a>
           <a href="#updates"><svg aria-hidden="true"><use href="#i-star"/></svg>updates</a>
           <a href="#linkme"><svg aria-hidden="true"><use href="#i-link"/></svg>link to me</a>
         </nav>
-        <nav class="nav-group" aria-label="my websites">
+        <nav class="nav-group" aria-label="my websites" id="nav-sites">
           <span class="nav-title">my sites</span>
           <a href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg>tab to sheet</a>
           <a href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg>pigeon pal</a>
+          <!-- other GitHub Pages sites get added here automatically -->
         </nav>
         <nav class="nav-group" aria-label="elsewhere">
           <span class="nav-title">elsewhere</span>
@@ -391,11 +403,18 @@
           </div>
         </div>
 
+        <h2 class="bar" id="more" hidden>more projects</h2>
+
+        <div class="glass" hidden>
+          <div class="box" id="more-list"></div>
+        </div>
+
         <h2 class="bar" id="updates">latest updates</h2>
 
         <div class="glass">
           <div class="box">
-            <ul class="updates">
+            <!-- refreshed from GitHub when the page loads; this list is the fallback -->
+            <ul class="updates" id="updates-list">
               <li><time datetime="2026-10-18">oct 18, 2026</time><span>made this homepage!</span></li>
               <li><time datetime="2026-10-18">oct 18, 2026</time><span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a> got an update</span></li>
               <li><time datetime="2026-10-07">oct 7, 2026</time><span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a> got an update</span></li>
@@ -448,17 +467,114 @@
       setInterval(tick, 1000);
     })();
 
+    // Pull my repos from GitHub so new projects and updates show up on their own
+    (function () {
+      var USER = "shibeeee", HOME_REPO = "shibeeee.github.io";
+      // Repos that already have their own hand-made card above
+      var FEATURED = { "songsterr-to-sheet-music": "tab to sheet", "pidgeon-pal": "pigeon pal", "remap-with-ahk": "remap" };
+
+      function niceName(r) {
+        var key = r.name.toLowerCase();
+        if (key === HOME_REPO) return "this homepage";
+        return FEATURED[key] || key.replace(/[-_]+/g, " ");
+      }
+      function siteUrl(r) {
+        if (r.has_pages) return "https://" + USER + ".github.io/" + r.name + "/";
+        if (r.homepage && /^https:\/\//.test(r.homepage)) return r.homepage;
+        return null;
+      }
+      function day(iso) {
+        return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+      }
+      function el(tag, props, kids) {
+        var e = document.createElement(tag);
+        for (var k in props) e[k] = props[k];
+        (kids || []).forEach(function (c) { e.append(c); });
+        return e;
+      }
+      function link(r) {
+        return el("a", { href: siteUrl(r) || r.html_url, textContent: niceName(r) });
+      }
+
+      function render(repos) {
+        repos = repos.filter(function (r) { return !r.fork && !r.archived && r.size > 0; });
+        repos.sort(function (a, b) { return b.pushed_at.localeCompare(a.pushed_at); });
+
+        // Latest updates
+        var list = document.getElementById("updates-list");
+        list.replaceChildren.apply(list, repos.slice(0, 5).map(function (r) {
+          var isNew = r.created_at.slice(0, 10) === r.pushed_at.slice(0, 10), text;
+          if (r.name.toLowerCase() === HOME_REPO) {
+            text = el("span", { textContent: isNew ? "made this homepage!" : "this homepage got an update" });
+          } else {
+            text = isNew ? el("span", {}, ["new project: ", link(r), "!"]) : el("span", {}, [link(r), " got an update"]);
+          }
+          return el("li", {}, [el("time", { dateTime: r.pushed_at, textContent: day(r.pushed_at) }), text]);
+        }));
+
+        // Everything without its own card
+        var others = repos.filter(function (r) {
+          var key = r.name.toLowerCase();
+          return !FEATURED[key] && key !== HOME_REPO;
+        });
+        if (!others.length) return;
+        var box = document.getElementById("more-list"), nav = document.getElementById("nav-sites");
+        box.replaceChildren.apply(box, others.map(function (r) {
+          var site = siteUrl(r), buttons = [];
+          if (site) buttons.push(el("a", { className: "btn go", href: site, innerHTML: "visit site &raquo;" }));
+          buttons.push(el("a", { className: "btn", href: r.html_url, textContent: "source code" }));
+          var meta = [r.language ? r.language.toLowerCase() : null, "updated " + day(r.pushed_at)].filter(Boolean).join(" · ");
+          if (r.has_pages) {
+            nav.append(el("a", { href: site }, [svgUse("i-globe"), niceName(r)]));
+          }
+          return el("div", { className: "repo" }, [
+            el("h3", {}, [link(r)]),
+            el("p", { textContent: r.description || "no description yet" }),
+            el("div", { className: "meta", textContent: meta }),
+            el("div", { className: "buttons" }, buttons)
+          ]);
+        }));
+        document.getElementById("more").hidden = false;
+        box.parentNode.hidden = false;
+        document.querySelector('#menu a[href="#more"]').hidden = false;
+        window.dispatchEvent(new Event("repos-loaded"));
+      }
+      function svgUse(id) {
+        var ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, "svg"), use = document.createElementNS(ns, "use");
+        svg.setAttribute("aria-hidden", "true");
+        use.setAttribute("href", "#" + id);
+        svg.appendChild(use);
+        return svg;
+      }
+
+      // Keep a copy for half an hour so repeat visits don't use up GitHub's rate limit
+      var CACHE = "gh-repos", cached = null;
+      try { cached = JSON.parse(localStorage.getItem(CACHE)); } catch (e) {}
+      if (cached && Date.now() - cached.time < 30 * 60 * 1000) { render(cached.repos); return; }
+
+      fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=pushed")
+        .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(function (repos) {
+          try { localStorage.setItem(CACHE, JSON.stringify({ time: Date.now(), repos: repos })); } catch (e) {}
+          render(repos);
+        })
+        .catch(function () {
+          if (cached) render(cached.repos); // stale copy beats nothing; otherwise the built-in list stays
+        });
+    })();
+
     // Light up the menu button for the section on screen
     (function () {
-      var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]'));
-      var sections = links.map(function (a) { return a.hash === "#top" ? null : document.querySelector(a.hash); });
       function update() {
+        var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]:not([hidden])'));
+        var sections = links.map(function (a) { return a.hash === "#top" ? null : document.querySelector(a.hash); });
         var current = 0;
         sections.forEach(function (el, i) { if (el && el.getBoundingClientRect().top < 140) current = i; });
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = links.length - 1;
         links.forEach(function (a, i) { a.classList.toggle("active", i === current); });
       }
       window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("repos-loaded", update);
       update();
     })();
   </script>
