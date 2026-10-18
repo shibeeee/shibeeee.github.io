@@ -392,6 +392,44 @@
         radial-gradient(ellipse 50% 12% at 70% 80%, rgba(160, 230, 255, 0.18), transparent 70%);
     }
     html.splash #splash, #splash.show { display: flex; }
+    .loading { position: relative; display: flex; align-items: center; gap: 16px; }
+    .gate { position: relative; display: none; flex-direction: column; align-items: center; gap: 14px; }
+    html.splash #splash:not(.entering) .gate { display: flex; }
+    html.splash #splash:not(.entering) .loading { display: none; }
+    #splash:not(.entering) { cursor: default; }
+    .user-tile {
+      width: 136px; height: 136px; padding: 6px; border-radius: 10px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.12) 51%, rgba(255, 255, 255, 0.4));
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 6px 22px rgba(0, 20, 60, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+      animation: tile-in 0.5s ease-out both;
+    }
+    .user-tile img {
+      display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 6%;
+      border-radius: 5px; border: 1px solid rgba(0, 40, 90, 0.5);
+      background: radial-gradient(circle at 50% 30%, #bfe9ff, #3ba3f0 60%, #0b5bb5);
+    }
+    @keyframes tile-in { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: none; } }
+    .gate-name { font-size: 26px; font-weight: 300; text-shadow: 0 0 12px rgba(160, 225, 255, 0.8), 0 2px 3px rgba(0, 0, 0, 0.4); }
+    #enter-btn {
+      display: flex; align-items: center; gap: 14px; height: 40px; padding: 0 5px 0 22px; cursor: pointer;
+      font: inherit; font-size: 17px; color: #fff; text-shadow: 0 1px 2px rgba(0, 30, 70, 0.6);
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.05) 51%, rgba(255, 255, 255, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.75); border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0, 20, 60, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      transition: box-shadow 0.2s, transform 0.1s;
+      animation: tile-in 0.5s 0.15s ease-out both;
+    }
+    #enter-btn:hover { box-shadow: 0 4px 16px rgba(0, 20, 60, 0.5), 0 0 16px rgba(170, 230, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+    #enter-btn:active { transform: translateY(1px); }
+    #enter-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 3px; border-radius: 6px; }
+    .enter-arrow {
+      display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+      background: radial-gradient(circle at 50% 28%, #bfe9ff 0, #3ba3f0 35%, #0b5bb5 75%, #063a80 100%);
+      border: 1px solid #06305e; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+    .enter-arrow svg { width: 18px; height: 18px; }
+    .gate-hint { font-size: 13px; opacity: 0.8; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
     #splash.out { opacity: 0; }
     .spinner {
       width: 30px; height: 30px; border-radius: 50%;
@@ -539,24 +577,30 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       #logo, .nav-group a, .banner-icons a, .shot { transition: none; }
-      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble { animation: none; }
+      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn { animation: none; }
       .digit span { transition: none; }
       .lcd.scroll span { animation: none; padding-left: 0; }
     }
   </style>
   <script>
-    // Show the welcome screen on someone's first visit only (skipped for reduced motion)
+    // "Click to enter" screen, once per visit. The click is what lets the music start right away.
     try {
-      if (!localStorage.getItem("welcomed") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        document.documentElement.classList.add("splash");
-      }
+      if (!sessionStorage.getItem("entered")) document.documentElement.classList.add("splash");
     } catch (e) {}
   </script>
 </head>
 <body id="top">
-  <div id="splash" role="presentation">
-    <div class="spinner"></div>
-    <span id="splash-text">welcome</span>
+  <div id="splash">
+    <div class="gate" role="dialog" aria-label="welcome to shibeeee's homepage">
+      <div class="user-tile"><img src="images/nanami.webp" alt=""></div>
+      <span class="gate-name">shibeeee</span>
+      <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h12M12 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+      <span class="gate-hint">best with sound on ♪</span>
+    </div>
+    <div class="loading">
+      <div class="spinner"></div>
+      <span id="splash-text">welcome</span>
+    </div>
   </div>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1002,7 +1046,7 @@
         // A soft click for every other button and link
         document.addEventListener("click", function (e) {
           var el = e.target.closest("a, button");
-          if (el && !el.matches("#start-orb, #shutdown, .sound-toggle, #tray-sound, #buddy-figure, #gb-form button, .player-controls button")) play("click");
+          if (el && !el.matches("#start-orb, #shutdown, .sound-toggle, #tray-sound, #buddy-figure, #gb-form button, .player-controls button, #enter-btn")) play("click");
         }, true);
       });
       return play;
@@ -1012,9 +1056,9 @@
     // (browsers don't allow sound before that) unless the visitor paused it last time.
     window.music = (function () {
       var tracks = [
+        { title: "bossa antigua", file: "music/bossa-antigua.mp3" },
         { title: "local forecast – elevator", file: "music/local-forecast-elevator.mp3" },
-        { title: "lobby time", file: "music/lobby-time.mp3" },
-        { title: "bossa antigua", file: "music/bossa-antigua.mp3" }
+        { title: "lobby time", file: "music/lobby-time.mp3" }
       ];
       var audio = new Audio(), index = 0, wanted = true, volume = 0.35;
       audio.preload = "none";
@@ -1065,13 +1109,15 @@
       function firstTouch(e) {
         document.removeEventListener("pointerdown", firstTouch, true);
         document.removeEventListener("keydown", firstTouch, true);
-        if (wanted && audio.paused && !e.target.closest("#player")) play();
+        if (wanted && audio.paused && !e.target.closest("#player, #splash")) play();
       }
       document.addEventListener("pointerdown", firstTouch, true);
       document.addEventListener("keydown", firstTouch, true);
 
       return {
         setMuted: function (m) { audio.muted = m; },
+        // the "click to enter" button starts the first song
+        start: function () { load(0); remember(true); play(); },
         // fade out for "shut down", then pick back up for "welcome back"
         fadeOut: function () {
           if (audio.paused) return false;
@@ -1214,11 +1260,24 @@
           site.style.animation = "";
         }, 400);
       }
-      splash.addEventListener("click", hideSplash);
-      if (document.documentElement.classList.contains("splash")) {
-        try { localStorage.setItem("welcomed", "1"); } catch (e) {}
-        setTimeout(hideSplash, 1100);
+      var gateOpen = document.documentElement.classList.contains("splash");
+      function enter() {
+        if (!gateOpen) return;
+        gateOpen = false;
+        try { sessionStorage.setItem("entered", "1"); } catch (e) {}
+        splash.classList.add("entering");
+        window.music.start();
+        sfx("hello");
+        setTimeout(function () {
+          hideSplash();
+          setTimeout(function () { splash.classList.remove("entering"); window.dispatchEvent(new Event("site-entered")); }, 400);
+        }, 900);
       }
+      splash.addEventListener("click", function () { if (gateOpen) enter(); else hideSplash(); });
+      document.addEventListener("keydown", function (e) {
+        if (gateOpen && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); }
+      });
+      if (gateOpen) document.getElementById("enter-btn").focus();
 
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
@@ -1287,7 +1346,11 @@
 
       buddy.hidden = false;
       // Wait for the welcome screen to finish before saying hi
-      setTimeout(function () { say(hello); }, document.documentElement.classList.contains("splash") ? 1800 : 900);
+      if (document.documentElement.classList.contains("splash")) {
+        window.addEventListener("site-entered", function () { setTimeout(function () { say(hello); }, 500); }, { once: true });
+      } else {
+        setTimeout(function () { say(hello); }, 900);
+      }
     })();
 
     // Old-web trick: the tab title calls you back when you switch away
