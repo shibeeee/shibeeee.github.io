@@ -439,14 +439,6 @@
     #buddy-figure.hop { animation: hop 0.45s ease-out; }
     @keyframes bob { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-2px); } }
     @keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
-    #buddy-hide {
-      position: absolute; top: 0; right: 0; width: 20px; height: 20px; padding: 0;
-      font: 13px/18px Tahoma, sans-serif; color: #fff; cursor: pointer; opacity: 0;
-      background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f);
-      border: 1px solid rgba(0, 0, 0, 0.6); border-radius: 3px;
-      transition: opacity 0.2s;
-    }
-    #buddy:hover #buddy-hide, #buddy-hide:focus-visible { opacity: 1; }
     #buddy-bubble {
       position: relative; max-width: 230px; margin-bottom: 160px; padding: 9px 12px;
       font-size: 13px; line-height: 1.4; color: #1e2a35; text-shadow: none;
@@ -461,6 +453,12 @@
       filter: drop-shadow(1px 0 0 #7da2ce);
     }
     #buddy-bubble span { text-shadow: none; }
+    #buddy-close {
+      float: right; width: 18px; height: 18px; margin: -3px -5px 2px 6px; padding: 0;
+      font: 14px/16px Tahoma, sans-serif; color: #5b6f7d; cursor: pointer;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    #buddy-close:hover { color: #fff; border-color: rgba(0, 0, 0, 0.5); background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f); }
     #buddy-name { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; color: #1c6fb5; }
 
     /* Big monitors: a little more room and slightly bigger text */
@@ -508,7 +506,6 @@
       #buddy { right: 6px; }
       #buddy-figure img { height: 130px; }
       #buddy-bubble { max-width: 190px; margin-bottom: 96px; font-size: 12.5px; }
-      #buddy-hide { opacity: 1; }
       .task { width: 46px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -619,7 +616,7 @@
 
         <div class="nav-group">
           <span class="nav-title">options</span>
-          <button class="sound-toggle" type="button" aria-pressed="false"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg><span class="snd-on">sounds on</span><span class="snd-off">sounds off</span></button>
+          <button class="sound-toggle" type="button" aria-pressed="true"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg><span class="snd-on">sounds on</span><span class="snd-off">sounds off</span></button>
         </div>
       </aside>
 
@@ -771,10 +768,9 @@
   </div>
 
   <aside id="buddy" aria-label="site mascot" hidden>
-    <div id="buddy-bubble" role="status" hidden><span id="buddy-name"></span><span id="buddy-text"></span></div>
+    <div id="buddy-bubble" role="status" hidden><button id="buddy-close" type="button" aria-label="close the speech bubble" title="close">&times;</button><span id="buddy-name"></span><span id="buddy-text"></span></div>
     <button id="buddy-figure" type="button" aria-label="talk to the mascot">
       <img id="buddy-img" alt="">
-      <span id="buddy-hide" role="button" tabindex="0" aria-label="hide the mascot" title="hide">&times;</span>
     </button>
   </aside>
 
@@ -784,7 +780,7 @@
     <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
     <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
     <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
-    <button id="tray-sound" class="sound-toggle-tray" type="button" aria-pressed="false" aria-label="sounds" title="sounds on/off"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg></button>
+    <button id="tray-sound" class="sound-toggle-tray" type="button" aria-pressed="true" aria-label="sounds" title="sounds on/off"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg></button>
     <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
     <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
   </nav>
@@ -912,10 +908,10 @@
         });
     })();
 
-    // Little UI sounds, made on the fly with Web Audio (no files to download). Off until you turn them on.
+    // Little UI sounds, made on the fly with Web Audio (no files to download). On unless you turn them off.
     var sfx = (function () {
-      var on = false, ctx = null;
-      try { on = localStorage.getItem("sounds") === "1"; } catch (e) {}
+      var on = true, ctx = null;
+      try { on = localStorage.getItem("sounds") !== "0"; } catch (e) {}
       function tone(freq, start, length, opts) {
         opts = opts || {};
         var t = ctx.currentTime + start, osc = ctx.createOscillator(), gain = ctx.createGain();
@@ -1120,7 +1116,6 @@
       if (!MASCOT) return;
       var buddy = document.getElementById("buddy"), fig = document.getElementById("buddy-figure"),
           bubble = document.getElementById("buddy-bubble"), text = document.getElementById("buddy-text");
-      try { if (sessionStorage.getItem("buddy-hidden") === "1") return; } catch (e) {}
       document.getElementById("buddy-name").textContent = MASCOT.name;
       var img = document.getElementById("buddy-img");
       img.alt = MASCOT.alt;
@@ -1151,7 +1146,6 @@
         timer = setTimeout(function () { bubble.hidden = true; }, 9000);
       }
       fig.addEventListener("click", function (e) {
-        if (e.target.id === "buddy-hide") return;
         fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop");
         sfx("pop");
         var visitors = document.getElementById("visitor-no").textContent;
@@ -1161,14 +1155,10 @@
         say(msg);
       });
       fig.addEventListener("animationend", function () { fig.classList.remove("hop"); });
-      function hide(e) {
-        e.stopPropagation();
-        buddy.hidden = true;
-        try { sessionStorage.setItem("buddy-hidden", "1"); } catch (err) {}
-      }
-      var x = document.getElementById("buddy-hide");
-      x.addEventListener("click", hide);
-      x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hide(e); } });
+      document.getElementById("buddy-close").addEventListener("click", function () {
+        clearTimeout(timer);
+        bubble.hidden = true;
+      });
 
       buddy.hidden = false;
       // Wait for the welcome screen to finish before saying hi
