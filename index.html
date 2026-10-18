@@ -273,6 +273,8 @@
     .gb-form input:focus, .gb-form textarea:focus { outline: none; border-color: #57fa6f; box-shadow: 0 0 6px rgba(87, 250, 111, 0.4); }
     .gb-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .gb-status { font-size: 12.5px; color: #c9c9c9; }
+    .gb-count { margin-left: auto; order: 3; font-size: 11.5px; color: #9a9a9a; }
+    .gb-count.full { color: #ffb05a; }
     .gb-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     .gb-entry {
       margin-top: 8px; padding: 7px 10px;
@@ -473,6 +475,8 @@
     .lcd span { display: inline-block; text-shadow: 0 0 5px rgba(87, 250, 111, 0.6); }
     .lcd.scroll span { padding-left: 100%; animation: lcd-scroll 12s linear infinite; }
     @keyframes lcd-scroll { to { transform: translateX(-100%); } }
+    .track-bar { height: 3px; margin: -2px 5px 4px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; }
+    .track-bar span { display: block; width: 0; height: 100%; background: linear-gradient(to right, #2bc41f, #8dff6f); box-shadow: 0 0 4px #57fa6f; }
     .player-controls { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 2px 0 4px; }
     .player-controls button {
       display: grid; place-items: center; padding: 0; cursor: pointer; border-radius: 50%;
@@ -569,9 +573,9 @@
       .project > .tile { width: 48px; height: 48px; border-radius: 11px; }
       .gadget { display: none; }
       .counter, .player { grid-column: 1 / -1; }
-      #buddy { right: 6px; }
-      #buddy-figure img { height: 130px; }
-      #buddy-bubble { max-width: 190px; margin-bottom: 96px; font-size: 12.5px; }
+      #buddy { right: 2px; }
+      #buddy-figure img { height: 96px; }
+      #buddy-bubble { max-width: 180px; margin-bottom: 70px; font-size: 12.5px; }
       .task { width: 46px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -675,7 +679,8 @@
             <button id="play" type="button" aria-label="play music" title="play / pause"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15L20 12z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg></button>
             <button id="next" type="button" aria-label="next song" title="next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5h3v14h-3zM4 5v14l11-7z"/></svg></button>
           </div>
-          <label class="volume">vol<input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" aria-label="music volume"></label>
+          <div class="track-bar" aria-hidden="true"><span id="track-progress"></span></div>
+          <label class="volume">vol<input id="volume" type="range" min="0" max="1" step="0.05" value="0.2" aria-label="music volume"></label>
         </div>
 
         <div class="gadget" aria-hidden="true">
@@ -694,7 +699,7 @@
 
         <div class="nav-group counter">
           <span class="nav-title">visitors</span>
-          <div class="odometer" id="odometer" aria-label="visitor count"></div>
+          <div class="odometer" id="odometer" role="img" aria-label="visitor count loading"></div>
           <span class="counter-note" id="counter-note">counting...</span>
         </div>
 
@@ -805,6 +810,7 @@
               <div class="gb-trap" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
               <div class="gb-row">
                 <button class="btn go" type="submit">sign the guestbook &raquo;</button>
+                <span class="gb-count" id="gb-count" aria-hidden="true">0/500</span>
                 <span class="gb-status" id="gb-status" role="status"></span>
               </div>
             </form>
@@ -994,6 +1000,13 @@
         });
     })();
 
+    // One shared Web Audio context for the effects and the music, made on the first click
+    function audioCtx() {
+      var c = window.__actx || (window.__actx = new (window.AudioContext || window.webkitAudioContext)());
+      if (c.state === "suspended") c.resume();
+      return c;
+    }
+
     // Little UI sounds, made on the fly with Web Audio (no files to download). On unless you turn them off.
     var sfx = (function () {
       var on = true, ctx = null;
@@ -1023,8 +1036,7 @@
       function play(name) {
         if (!on) return;
         try {
-          ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
-          if (ctx.state === "suspended") ctx.resume();
+          ctx = audioCtx();
           sounds[name]();
         } catch (e) {}
       }
@@ -1052,26 +1064,51 @@
       return play;
     })();
 
-    // Background music: a little media player in the sidebar. Starts on the first click anywhere
-    // (browsers don't allow sound before that) unless the visitor paused it last time.
+    // Background music: a little media player in the sidebar. The "click to enter" button starts it,
+    // or the first click anywhere on later page loads (browsers don't allow sound before a click).
+    // Volume goes through Web Audio because iPhones ignore audio.volume.
     window.music = (function () {
       var tracks = [
         { title: "bossa antigua", file: "music/bossa-antigua.mp3" },
         { title: "local forecast – elevator", file: "music/local-forecast-elevator.mp3" },
         { title: "lobby time", file: "music/lobby-time.mp3" }
       ];
-      var audio = new Audio(), index = 0, wanted = true, volume = 0.35;
+      var audio = new Audio(), index = 0, wanted = true, volume = 0.2, muted = false, gain = null, fadeTimer;
       audio.preload = "none";
       try {
         wanted = localStorage.getItem("music") !== "off";
         var v = parseFloat(localStorage.getItem("music-volume"));
         if (!isNaN(v)) volume = v;
-        audio.muted = localStorage.getItem("sounds") === "0";
+        muted = localStorage.getItem("sounds") === "0";
       } catch (e) {}
-      audio.volume = volume;
+
+      // Route the song through a gain node once (needs a click first, so this runs inside play())
+      function hookUp() {
+        if (gain) return;
+        try {
+          var c = audioCtx();
+          gain = c.createGain();
+          gain.gain.value = 0;
+          c.createMediaElementSource(audio).connect(gain).connect(c.destination);
+          audio.volume = 1; // the gain node does the volume from here on
+        } catch (e) { gain = null; }
+      }
+      // Glide to a share of the chosen volume (1 = full, 0 = silent) over some seconds
+      function level(share, seconds) {
+        var target = muted ? 0 : volume * share;
+        if (gain) {
+          var t = audioCtx().currentTime, g = gain.gain;
+          g.cancelScheduledValues(t);
+          g.setValueAtTime(g.value, t);
+          g.linearRampToValueAtTime(target, t + Math.max(seconds, 0.02));
+        } else {
+          audio.volume = target;
+        }
+      }
 
       var playBtn = document.getElementById("play"), name = document.getElementById("track-name"),
-          lcd = document.getElementById("lcd"), slider = document.getElementById("volume");
+          lcd = document.getElementById("lcd"), slider = document.getElementById("volume"),
+          bar = document.getElementById("track-progress");
       slider.value = volume;
 
       function show() {
@@ -1088,11 +1125,14 @@
         audio.src = tracks[index].file;
         show();
       }
-      function play() {
+      function play(fadeSeconds) {
         if (!audio.src) load(index);
-        audio.play().then(function () { setButton(true); }).catch(function () { setButton(false); });
+        clearTimeout(fadeTimer);
+        hookUp();
+        if (gain) { gain.gain.cancelScheduledValues(0); gain.gain.value = 0; }
+        audio.play().then(function () { setButton(true); level(1, fadeSeconds || 0.4); }).catch(function () { setButton(false); });
       }
-      function pause() { audio.pause(); setButton(false); }
+      function pause() { clearTimeout(fadeTimer); audio.pause(); setButton(false); }
       function remember(on) { wanted = on; try { localStorage.setItem("music", on ? "on" : "off"); } catch (e) {} }
 
       playBtn.addEventListener("click", function () {
@@ -1102,34 +1142,36 @@
       document.getElementById("prev").addEventListener("click", function () { load(index - 1); remember(true); play(); });
       audio.addEventListener("ended", function () { load(index + 1); play(); });
       slider.addEventListener("input", function () {
-        audio.volume = parseFloat(slider.value);
+        volume = parseFloat(slider.value);
+        level(1, 0.05);
         try { localStorage.setItem("music-volume", slider.value); } catch (e) {}
       });
+      audio.addEventListener("timeupdate", function () {
+        if (audio.duration) bar.style.width = (100 * audio.currentTime / audio.duration) + "%";
+      });
 
+      // A finished click (not just a touch-down) is what iPhones accept as permission to play sound
       function firstTouch(e) {
-        document.removeEventListener("pointerdown", firstTouch, true);
+        document.removeEventListener("click", firstTouch, true);
         document.removeEventListener("keydown", firstTouch, true);
-        if (wanted && audio.paused && !e.target.closest("#player, #splash")) play();
+        if (wanted && audio.paused && !e.target.closest("#player, #splash")) play(3);
       }
-      document.addEventListener("pointerdown", firstTouch, true);
+      document.addEventListener("click", firstTouch, true);
       document.addEventListener("keydown", firstTouch, true);
 
       return {
-        setMuted: function (m) { audio.muted = m; },
-        // the "click to enter" button starts the first song
-        start: function () { load(0); remember(true); play(); },
+        setMuted: function (m) { muted = m; audio.muted = m; level(1, 0.1); },
+        // the "click to enter" button starts the first song, fading in softly
+        start: function () { load(0); remember(true); play(3); },
         // fade out for "shut down", then pick back up for "welcome back"
         fadeOut: function () {
           if (audio.paused) return false;
-          var start = audio.volume, step = 0;
-          var t = setInterval(function () {
-            step++;
-            audio.volume = Math.max(0, start * (1 - step / 10));
-            if (step >= 10) { clearInterval(t); audio.pause(); audio.volume = start; }
-          }, 80);
+          level(0, 0.8);
+          clearTimeout(fadeTimer);
+          fadeTimer = setTimeout(function () { audio.pause(); setButton(false); }, 850);
           return true;
         },
-        resume: function () { play(); }
+        resume: function () { play(1.5); }
       };
     })();
 
@@ -1144,6 +1186,7 @@
         text.split("").forEach(function (ch) {
           var digit = document.createElement("div"), col = document.createElement("span");
           digit.className = "digit";
+          digit.setAttribute("aria-hidden", "true");
           col.textContent = "0123456789".split("").join("\n");
           col.style.whiteSpace = "pre";
           digit.appendChild(col);
@@ -1153,6 +1196,7 @@
           }); });
         });
         note.textContent = "people stopped by";
+        odo.setAttribute("aria-label", Number(n).toLocaleString() + " visitors");
         document.getElementById("visitor-no").textContent = Number(n).toLocaleString();
         document.getElementById("visitor-line").hidden = false;
       }
@@ -1208,6 +1252,15 @@
       }
       more.addEventListener("click", load);
 
+      // Remember the name for next time, and count characters as you type
+      var nameField = form.elements.namedItem("name"), msgField = form.elements.namedItem("message"),
+          count = document.getElementById("gb-count");
+      try { nameField.value = localStorage.getItem("gb-name") || ""; } catch (e) {}
+      msgField.addEventListener("input", function () {
+        count.textContent = msgField.value.length + "/500";
+        count.classList.toggle("full", msgField.value.length >= 450);
+      });
+
       form.addEventListener("submit", function (ev) {
         ev.preventDefault();
         var button = form.querySelector("button");
@@ -1223,7 +1276,10 @@
             if (!res.ok) { status.textContent = res.d.error || "something went wrong, try again"; sfx("oops"); return; }
             sfx("ding");
             if (res.d.entry) list.prepend(entry(res.d.entry, true));
-            form.elements.namedItem("message").value = "";
+            msgField.value = "";
+            count.textContent = "0/500";
+            count.classList.remove("full");
+            try { localStorage.setItem("gb-name", nameField.value); } catch (e) {}
             status.textContent = "thanks for signing! :)";
           })
           .catch(function () { status.textContent = "couldn't reach the guestbook, try again in a bit"; sfx("oops"); })
@@ -1266,6 +1322,7 @@
         gateOpen = false;
         try { sessionStorage.setItem("entered", "1"); } catch (e) {}
         splash.classList.add("entering");
+        setInert(false);
         window.music.start();
         sfx("hello");
         setTimeout(function () {
@@ -1277,7 +1334,10 @@
       document.addEventListener("keydown", function (e) {
         if (gateOpen && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); }
       });
-      if (gateOpen) document.getElementById("enter-btn").focus();
+      // Everything behind the gate is out of reach until you enter
+      var behind = ["site", "taskbar", "buddy", "start"].map(function (id) { return document.getElementById(id); });
+      function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
+      if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
