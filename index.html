@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shibeeee's homepage | websites, games &amp; tools</title>
   <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
-  <link rel="preload" href="images/grass.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="preload" href="images/nanami-tile.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="preload" href="images/grass.webp" as="image" type="image/webp">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
   <link rel="preconnect" href="https://api.github.com" crossorigin>
   <link rel="icon" href="images/favicon.png" sizes="64x64" type="image/png">
@@ -380,7 +381,7 @@
       align-items: center; justify-content: center; gap: 16px;
       background: radial-gradient(ellipse at 50% 115%, #5cc0ff 0, #1f78d6 30%, #0d469c 60%, #062457 100%);
       color: #fff; cursor: pointer;
-      transition: opacity 0.4s;
+      transition: opacity 0.3s;
     }
     #splash::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -402,7 +403,7 @@
       animation: tile-in 0.5s ease-out both;
     }
     .user-tile img {
-      display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 6%;
+      display: block; width: 100%; height: 100%; object-fit: cover;
       border-radius: 5px; border: 1px solid rgba(0, 40, 90, 0.5);
       background: radial-gradient(circle at 50% 30%, #bfe9ff, #3ba3f0 60%, #0b5bb5);
     }
@@ -426,7 +427,6 @@
       border: 1px solid #06305e; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
     .enter-arrow svg { width: 18px; height: 18px; }
-    .gate-hint { font-size: 13px; opacity: 0.8; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
     #splash.out { opacity: 0; }
     .spinner {
       width: 30px; height: 30px; border-radius: 50%;
@@ -559,6 +559,25 @@
     #start-search:focus { outline: none; border-color: #3d8de0; box-shadow: 0 0 0 2px rgba(61, 141, 224, 0.25); }
     .start-empty { padding: 6px 8px; font-size: 12.5px; color: #6d6d6d; text-shadow: none; }
 
+    /* Easter eggs */
+    .egg-bubble {
+      position: fixed; bottom: -90px; z-index: 45; pointer-events: none; border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95) 0 7%, rgba(255, 255, 255, 0) 16%),
+        radial-gradient(circle at 50% 50%, rgba(180, 235, 255, 0) 55%, rgba(200, 245, 255, 0.35) 72%, rgba(255, 255, 255, 0.75) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      animation: egg-rise linear both;
+    }
+    @keyframes egg-rise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      10% { opacity: 0.9; }
+      50% { transform: translate(-20px, -60vh); }
+      100% { transform: translate(15px, -125vh); opacity: 0.9; }
+    }
+    #logo.spin { animation: earth-spin 1.2s cubic-bezier(0.3, 0, 0.2, 1); }
+    @keyframes earth-spin { to { transform: rotate(720deg); } }
+    .gadget svg { cursor: pointer; }
+
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -591,7 +610,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       #logo, .nav-group a, .shot { transition: none; }
-      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn { animation: none; }
+      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn, #logo.spin { animation: none; }
       .digit span { transition: none; }
       .lcd.scroll span { animation: none; padding-left: 0; }
     }
@@ -604,10 +623,9 @@
 <body id="top">
   <div id="splash">
     <div class="gate" role="dialog" aria-label="welcome to shibeeee's homepage">
-      <div class="user-tile"><img src="images/nanami.webp" alt=""></div>
+      <div class="user-tile"><img src="images/nanami-tile.webp" width="124" height="124" alt="" fetchpriority="high"></div>
       <span class="gate-name">shibeeee</span>
       <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12h12M12.5 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
-      <span class="gate-hint">this site plays music, so turn your sound on</span>
     </div>
     <div class="loading">
       <div class="spinner"></div>
@@ -634,7 +652,7 @@
 
   <div id="site">
     <header id="header">
-      <a href="./" title="back to home"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibeeee"></a>
+      <a href="#top" title="back to the top"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibeeee"></a>
       <div>
         <span class="header-title">shibeeee's homepage</span>
         <span class="header-motto">websites, games and little tools i've made</span>
@@ -646,13 +664,13 @@
       <aside id="menu">
         <nav class="nav-group" aria-label="this page">
           <span class="nav-title">main</span>
-          <a href="#top" class="active"><img src="images/icons/home.png" width="20" height="20" alt="">home</a>
-          <a href="#websites"><img src="images/icons/websites.png" width="20" height="20" alt="">websites</a>
-          <a href="#downloads"><img src="images/icons/downloads.png" width="20" height="20" alt="">downloads</a>
-          <a href="#more" hidden><img src="images/icons/projects.png" width="20" height="20" alt="">more projects</a>
-          <a href="#updates"><img src="images/icons/updates.png" width="20" height="20" alt="">updates</a>
-          <a href="#guestbook"><img src="images/icons/guestbook.png" width="20" height="20" alt="">guestbook</a>
-          <a href="#linkme"><img src="images/icons/link.png" width="20" height="20" alt="">link to me</a>
+          <a href="#top" class="active"><img src="images/icons/home.webp" width="20" height="20" alt="">home</a>
+          <a href="#websites"><img src="images/icons/websites.webp" width="20" height="20" alt="">websites</a>
+          <a href="#downloads"><img src="images/icons/downloads.webp" width="20" height="20" alt="">downloads</a>
+          <a href="#more" hidden><img src="images/icons/projects.webp" width="20" height="20" alt="">more projects</a>
+          <a href="#updates"><img src="images/icons/updates.webp" width="20" height="20" alt="">updates</a>
+          <a href="#guestbook"><img src="images/icons/guestbook.webp" width="20" height="20" alt="">guestbook</a>
+          <a href="#linkme"><img src="images/icons/link.webp" width="20" height="20" alt="">link to me</a>
         </nav>
         <nav class="nav-group" aria-label="elsewhere">
           <span class="nav-title">elsewhere</span>
@@ -801,7 +819,7 @@
           <div class="box">
             <p>got a site too? feel free to grab my button:</p>
             <div class="linkme" style="margin-top: 8px">
-              <img src="images/button.png" width="88" height="31" alt="shibeeee's homepage button">
+              <img src="images/button.png" width="88" height="31" alt="shibeeee's homepage button" loading="lazy">
               <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.png" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
             </div>
           </div>
@@ -821,7 +839,7 @@
       <a class="prog" href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg><span>pigeon pal<small>help with gamepigeon games</small></span></a>
       <a class="prog" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap<small>key remapper for windows</small></span></a>
       <div class="start-sep"></div>
-      <a class="prog" href="#guestbook"><img src="images/icons/guestbook.png" width="32" height="32" alt=""><span>guestbook<small>leave a message</small></span></a>
+      <a class="prog" href="#guestbook"><img src="images/icons/guestbook.webp" width="32" height="32" alt=""><span>guestbook<small>leave a message</small></span></a>
       <div class="start-empty" hidden>nothing found :(</div>
       <input id="start-search" type="search" placeholder="search programs and pages" aria-label="search the start menu" autocomplete="off">
     </div>
@@ -850,7 +868,7 @@
     <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
     <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
     <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
-    <button id="tray-sound" type="button" aria-pressed="true" aria-label="sound and music" title="sound on/off"><img class="snd-on" src="images/icons/sound-on.png" alt=""><img class="snd-off" src="images/icons/sound-off.png" alt=""></button>
+    <button id="tray-sound" type="button" aria-pressed="true" aria-label="sound and music" title="sound on/off"><img class="snd-on" src="images/icons/sound-on.webp" alt=""><img class="snd-off" src="images/icons/sound-off.webp" alt=""></button>
     <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
     <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
   </nav>
@@ -869,8 +887,9 @@
       }
       var h = document.getElementById("hand-h"), m = document.getElementById("hand-m"),
           s = document.getElementById("hand-s"), date = document.getElementById("clock-date");
+      var skew = 0; // extra milliseconds, used by the clock easter egg
       function tick() {
-        var d = new Date(), sec = d.getSeconds(), min = d.getMinutes() + sec / 60, hr = d.getHours() % 12 + min / 60;
+        var d = new Date(Date.now() + skew), sec = d.getSeconds(), min = d.getMinutes() + sec / 60, hr = d.getHours() % 12 + min / 60;
         h.setAttribute("transform", "rotate(" + hr * 30 + " 60 60)");
         m.setAttribute("transform", "rotate(" + min * 6 + " 60 60)");
         s.setAttribute("transform", "rotate(" + sec * 6 + " 60 60)");
@@ -880,6 +899,16 @@
       }
       tick();
       setInterval(tick, 1000);
+      // spin the hands through twelve hours, then snap back to the real time
+      window.clockSpin = function () {
+        var start = performance.now();
+        (function step(now) {
+          var t = Math.min(1, (now - start) / 1500);
+          skew = 12 * 3600 * 1000 * (1 - Math.pow(1 - t, 3));
+          tick();
+          if (t < 1) requestAnimationFrame(step); else { skew = 0; tick(); }
+        })(start);
+      };
     })();
 
     // Pull my repos from GitHub so new projects and updates show up on their own
@@ -1101,11 +1130,12 @@
       }
       function load(n) {
         index = (n + tracks.length) % tracks.length;
-        audio.src = tracks[index].file;
+        // keep what's already downloaded if it's the same song
+        if (audio.getAttribute("src") !== tracks[index].file) audio.src = tracks[index].file;
         show();
       }
       function play(fadeSeconds) {
-        if (!audio.src) load(index);
+        load(index); // no-op if this song is already loaded; also updates the title
         clearTimeout(fadeTimer);
         hookUp();
         level(0, 0, 0); // silent until the fade-in starts
@@ -1137,6 +1167,17 @@
       }
       document.addEventListener("click", firstTouch, true);
       document.addEventListener("keydown", firstTouch, true);
+
+      // Get the first song ready in the background so it starts the moment you click
+      window.addEventListener("load", function () {
+        if (!wanted || muted || audio.getAttribute("src")) return;
+        audio.preload = "auto";
+        audio.src = tracks[0].file;
+        audio.load();
+      });
+
+      // The song title scrolls only when it doesn't fit (re-checked when the player is resized or shown)
+      if ("ResizeObserver" in window) new ResizeObserver(function () { if (audio.getAttribute("src")) show(); }).observe(lcd);
 
       return {
         setMuted: function (m) { muted = m; audio.muted = m; level(1, 0.1); },
@@ -1273,6 +1314,16 @@
           splash = document.getElementById("splash"), splashText = document.getElementById("splash-text");
 
       var search = document.getElementById("start-search"), empty = menu.querySelector(".start-empty");
+      var SECRETS = {
+        "solitaire": "solitaire isn't installed. pigeon pal has 13 games though",
+        "minesweeper": "minesweeper isn't installed. try sea battle in pigeon pal",
+        "pinball": "space cadet pinball was in xp, not 7. nice try",
+        "vista": "we don't talk about vista",
+        "secret": "you won't find secrets by searching for them... probably",
+        "nanami": "that's me! hi from nanami",
+        "clippy": "wrong windows, buddy",
+        "rm -rf /": "nice try"
+      };
       var items = Array.prototype.slice.call(menu.querySelectorAll(".prog, .place"));
       function filter() {
         var q = search.value.trim().toLowerCase(), any = false;
@@ -1281,6 +1332,7 @@
           el.hidden = !hit; any = any || hit;
         });
         menu.querySelector(".start-sep").hidden = !!q;
+        empty.textContent = SECRETS[q] || "nothing found :(";
         empty.hidden = any;
       }
       search.addEventListener("input", filter);
@@ -1314,7 +1366,7 @@
           site.style.animation = "none";
           void site.offsetWidth; // restart the window-open animation
           site.style.animation = "";
-        }, 400);
+        }, 300);
       }
       var gateOpen = document.documentElement.classList.contains("splash");
       function enter() {
@@ -1326,8 +1378,8 @@
         sfx("hello");
         setTimeout(function () {
           hideSplash();
-          setTimeout(function () { splash.classList.remove("entering"); window.dispatchEvent(new Event("site-entered")); }, 400);
-        }, 900);
+          setTimeout(function () { splash.classList.remove("entering"); window.dispatchEvent(new Event("site-entered")); }, 300);
+        }, 500);
       }
       splash.addEventListener("click", function () { if (gateOpen) enter(); else hideSplash(); });
       document.addEventListener("keydown", function (e) {
@@ -1338,9 +1390,11 @@
       function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
       if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
+      var shutdowns = 0;
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
-        splashText.textContent = "see you later!";
+        shutdowns++;
+        splashText.textContent = shutdowns >= 3 ? "you know this isn't a real computer, right?" : "see you later!";
         sfx("bye");
         var wasPlaying = window.music.fadeOut();
         setTimeout(function () { if (wasPlaying) window.music.resume(); }, 2700);
@@ -1422,6 +1476,11 @@
         bubble.hidden = true;
       });
 
+      window.nanami = {
+        say: say,
+        hop: function () { fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop"); sfx("pop"); }
+      };
+
       buddy.hidden = false;
       // Wait for the welcome screen to finish before saying hi
       if (document.documentElement.classList.contains("splash")) {
@@ -1429,6 +1488,68 @@
       } else {
         setTimeout(function () { say(hello); }, 900);
       }
+    })();
+
+    // Easter eggs
+    (function () {
+      var talk = function (msg) { if (window.nanami) window.nanami.say(msg); };
+      var hop = function () { if (window.nanami) window.nanami.hop(); };
+      var typing = function (e) { return e.target.closest && e.target.closest("input, textarea, [contenteditable]"); };
+
+      // Konami code: a shower of aero bubbles
+      var konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"], pos = 0;
+      // typing "nanami" makes her answer
+      var word = "";
+      document.addEventListener("keydown", function (e) {
+        if (typing(e) || document.documentElement.classList.contains("splash")) return;
+        var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        pos = key === konami[pos] ? pos + 1 : (key === konami[0] ? 1 : 0);
+        if (pos === konami.length) { pos = 0; bubbles(); talk("you know the konami code! have some bubbles"); }
+        if (key.length === 1) {
+          word = (word + key).slice(-6);
+          if (word === "nanami") { hop(); setTimeout(hop, 450); talk("you called? ...oh, you just typed my name"); }
+        }
+      });
+      function bubbles() {
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        sfx("ding");
+        for (var i = 0; i < 24; i++) {
+          var b = document.createElement("span"), size = 16 + Math.random() * 60;
+          b.className = "egg-bubble";
+          b.style.cssText = "left:" + (Math.random() * 100) + "vw;width:" + size + "px;height:" + size + "px;animation-duration:" +
+            (3 + Math.random() * 3) + "s;animation-delay:" + (Math.random() * 1.5) + "s";
+          b.addEventListener("animationend", function () { this.remove(); });
+          document.body.appendChild(b);
+        }
+      }
+
+      // Click the earth logo five times: it spins
+      var logo = document.getElementById("logo"), clicks = 0, clickTimer;
+      logo.addEventListener("click", function () {
+        clicks++;
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(function () { clicks = 0; }, 1200);
+        if (clicks === 5) {
+          clicks = 0;
+          logo.classList.remove("spin"); void logo.offsetWidth; logo.classList.add("spin");
+          talk("you're making the whole world dizzy");
+        }
+      });
+
+      // Click the clock three times: time flies
+      var clock = document.querySelector(".gadget svg"), ticks = 0, tickTimer;
+      clock.addEventListener("click", function () {
+        ticks++;
+        clearTimeout(tickTimer);
+        tickTimer = setTimeout(function () { ticks = 0; }, 1000);
+        if (ticks === 3) { ticks = 0; window.clockSpin(); talk("time flies when you're having fun"); }
+      });
+
+      // A hello for anyone who opens the developer console
+      try {
+        console.log("%cshibeeee's homepage", "font: 600 16px Segoe UI, sans-serif; color: #3cda56");
+        console.log("hi, curious one! all the code for this site is here: https://github.com/shibeeee/shibeeee.github.io");
+      } catch (e) {}
     })();
 
     // Phones: the sidebar folds away behind a "menu" button
