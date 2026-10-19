@@ -9,8 +9,7 @@
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
   <link rel="preconnect" href="https://api.github.com" crossorigin>
-  <link rel="icon" href="images/favicon.png" sizes="64x64" type="image/png">
-  <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" id="favicon" href="images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="theme-color" content="#1f3a12">
   <link rel="canonical" href="https://shibeeee.github.io/">
@@ -574,6 +573,10 @@
       50% { transform: translate(-20px, -60vh); }
       100% { transform: translate(15px, -125vh); opacity: 0.9; }
     }
+    html { transition: transform 0.9s cubic-bezier(0.5, 0, 0.2, 1); }
+    html.flip-hold { height: 100vh; overflow: hidden; }
+    html.flip-hold body { position: fixed; left: 0; right: 0; }
+    html.flipped { transform: rotate(180deg); }
     #logo.spin { animation: earth-spin 1.2s cubic-bezier(0.3, 0, 0.2, 1); }
     @keyframes earth-spin { to { transform: rotate(720deg); } }
     .gadget svg { cursor: pointer; }
@@ -608,7 +611,7 @@
       .task { width: 46px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
+      html { scroll-behavior: auto; transition: none; }
       #logo, .nav-group a, .shot { transition: none; }
       #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn, #logo.spin { animation: none; }
       .digit span { transition: none; }
@@ -1504,15 +1507,46 @@
         if (typing(e) || document.documentElement.classList.contains("splash")) return;
         var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
         pos = key === konami[pos] ? pos + 1 : (key === konami[0] ? 1 : 0);
-        if (pos === konami.length) { pos = 0; bubbles(); talk("you know the konami code! have some bubbles"); }
+        if (pos === konami.length) { pos = 0; flip(); }
         if (key.length === 1) {
           word = (word + key).slice(-6);
           if (word === "nanami") { hop(); setTimeout(hop, 450); talk("you called? ...oh, you just typed my name"); }
         }
       });
+      // Konami code: turn the whole page upside down for a few seconds
+      // The page is held in place while flipped, so the taskbar and nanami turn over with it
+      var flipTimer, flipY = 0, flipping = false;
+      function flip() {
+        var root = document.documentElement;
+        if (flipping) return;
+        if (root.classList.contains("flipped")) { unflip(); return; }
+        flipY = window.scrollY;
+        document.body.style.top = -flipY + "px";
+        root.classList.add("flip-hold");
+        void root.offsetWidth;
+        root.classList.add("flipped");
+        sfx("open");
+        talk("konami code! everything's upside down now. it flips back in a few seconds");
+        flipTimer = setTimeout(unflip, 8000);
+      }
+      function unflip() {
+        var root = document.documentElement;
+        clearTimeout(flipTimer);
+        flipping = true;
+        root.classList.remove("flipped");
+        sfx("close");
+        setTimeout(function () {
+          root.classList.remove("flip-hold");
+          document.body.style.top = "";
+          window.scrollTo({ top: flipY, behavior: "instant" });
+          flipping = false;
+        }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 950);
+      }
+
+      // Bubbles float up when you enter the site
+      window.addEventListener("site-entered", function () { bubbles(); });
       function bubbles() {
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        sfx("ding");
         for (var i = 0; i < 24; i++) {
           var b = document.createElement("span"), size = 16 + Math.random() * 60;
           b.className = "egg-bubble";
@@ -1568,11 +1602,35 @@
       });
     })();
 
-    // Old-web trick: the tab title calls you back when you switch away
+    // Old-web trick: when you switch tabs, the title calls you back and the earth icon spins
     (function () {
-      var title = document.title;
+      var title = document.title, icon = document.getElementById("favicon"), still = icon.href;
+      var FRAMES = 24, frame = 0, timer = null, sprite = null, canvas = null;
+      // Firefox animates a gif tab icon smoothly by itself; other browsers show only its first frame,
+      // so there the page swaps frames (as often as the browser allows for a background tab)
+      var gifIcons = /firefox/i.test(navigator.userAgent);
+      function spinStep() {
+        if (!sprite.complete || !sprite.naturalWidth) return;
+        var c = canvas.getContext("2d");
+        c.clearRect(0, 0, 32, 32);
+        c.drawImage(sprite, frame * 32, 0, 32, 32, 0, 0, 32, 32);
+        icon.href = canvas.toDataURL("image/png");
+        frame = (frame + 1) % FRAMES;
+      }
       document.addEventListener("visibilitychange", function () {
-        document.title = document.hidden ? "come back soon!" : title;
+        if (document.hidden) {
+          document.title = "come back!!";
+          if (gifIcons) { icon.href = "images/earth-spin.gif"; return; }
+          if (!sprite) {
+            sprite = new Image(); sprite.src = "images/earth-spin.png";
+            canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
+          }
+          timer = setInterval(spinStep, 120);
+        } else {
+          document.title = title;
+          clearInterval(timer); timer = null;
+          icon.href = still;
+        }
       });
     })();
 
