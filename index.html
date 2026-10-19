@@ -8,7 +8,7 @@
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
   <link rel="preconnect" href="https://api.github.com" crossorigin>
-  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="images/favicon.png" sizes="64x64" type="image/png">
   <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="theme-color" content="#1f3a12">
@@ -55,7 +55,7 @@
       border-radius: 70px 70px 0 0;
       box-shadow: rgba(0, 0, 0, 0.3) 0 14px 28px, rgba(0, 0, 0, 0.3) 0 10px 10px;
     }
-    #logo { width: 64px; height: 64px; flex: none; transition: transform 0.4s, filter 0.4s; }
+    #logo { display: block; width: 64px; height: 64px; flex: none; transition: transform 0.4s, filter 0.4s; }
     #logo:hover { transform: rotate(6deg); filter: brightness(1.15); }
     .header-title { display: block; color: #fff; font-size: 30px; line-height: 1.1; }
     .header-motto { display: block; color: #c9c9c9; font-size: 15px; margin-left: 2px; }
@@ -245,7 +245,7 @@
     .counter { margin: 10px 0 0; }
     .odometer { display: flex; justify-content: center; gap: 2px; padding: 6px 0 4px; }
     .digit {
-      width: 17px; height: 26px; overflow: hidden;
+      width: 17px; height: 28px; overflow: hidden;
       background: linear-gradient(to bottom, #3a3a3a 0, #111 50%, #000 51%, #1a1a1a 100%);
       border: 1px solid #5a5a5a; border-radius: 3px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 1px 1px 2px rgba(0, 0, 0, 0.8);
@@ -255,7 +255,7 @@
       text-shadow: 0 0 6px rgba(87, 250, 111, 0.6);
       transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    .counter-note { display: block; text-align: center; font-size: 11.5px; color: #9a9a9a; }
+    .counter-note { display: block; margin-bottom: 4px; text-align: center; font-size: 11.5px; color: #9a9a9a; }
 
     /* Guestbook */
     .gb-form { display: grid; gap: 6px; margin-top: 10px; }
@@ -297,8 +297,8 @@
       background: none; border: 0; cursor: pointer; border-radius: 50%;
       transition: filter 0.25s, transform 0.25s;
     }
-    #start-orb svg { width: 100%; height: 100%; display: block; }
-    #start-orb:hover, #start-orb[aria-expanded="true"] { filter: brightness(1.2) drop-shadow(0 0 8px #8dff6f); }
+    #start-orb img { width: 100%; height: 100%; display: block; }
+    #start-orb:hover, #start-orb[aria-expanded="true"] { filter: brightness(1.15) drop-shadow(0 0 8px #8fd8ff); }
     #start-orb:active { transform: scale(0.94); }
     .task {
       position: relative; display: grid; place-items: center; width: 54px; height: 36px;
@@ -356,7 +356,7 @@
       border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 5px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
     }
-    .start-pic svg { width: 100%; height: 100%; display: block; }
+    .start-pic img { width: 100%; height: 100%; display: block; }
     .place {
       display: block; padding: 4px 10px; margin-bottom: 1px;
       color: #fff; font-size: 13px; border: 1px solid transparent; border-radius: 3px;
@@ -471,7 +471,7 @@
       transition: filter 0.2s, box-shadow 0.2s;
     }
     .player-controls button:hover { filter: brightness(1.3); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 8px rgba(120, 200, 255, 0.5); }
-    .player-controls svg { width: 12px; height: 12px; fill: #e8eef3; }
+    .player-controls svg { width: 12px; height: 12px; margin: 0; fill: #e8eef3; }
     .player-controls #play { width: 38px; height: 38px; border-color: #06305e; background: radial-gradient(circle at 50% 28%, #bfe9ff 0, #3ba3f0 35%, #0b5bb5 75%, #063a80 100%); }
     .player-controls #play svg { width: 16px; height: 16px; fill: #fff; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5)); }
     #play .i-pause { display: none; }
@@ -606,7 +606,7 @@
     <div class="gate" role="dialog" aria-label="welcome to shibeeee's homepage">
       <div class="user-tile"><img src="images/nanami.webp" alt=""></div>
       <span class="gate-name">shibeeee</span>
-      <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h12M12 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+      <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12h12M12.5 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
       <span class="gate-hint">this site plays music, so turn your sound on</span>
     </div>
     <div class="loading">
@@ -620,7 +620,6 @@
       <linearGradient id="g-tts" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a66"/><stop offset="1" stop-color="#121216"/></linearGradient>
       <linearGradient id="g-pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fb0ff"/><stop offset="1" stop-color="#0a64d8"/></linearGradient>
       <linearGradient id="g-rm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb54a"/><stop offset="1" stop-color="#e2620c"/></linearGradient>
-      <radialGradient id="g-orb" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#e9ffe0"/><stop offset="0.45" stop-color="#5ee04a"/><stop offset="1" stop-color="#16760f"/></radialGradient>
 
       <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
       <linearGradient id="g-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6e6"/><stop offset="0.45" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#151515"/><stop offset="1" stop-color="#8a8a8a"/></linearGradient>
@@ -628,7 +627,6 @@
       <symbol id="i-tts" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-tts)"/><g stroke="#fff" stroke-width="1.2" opacity="0.5"><path d="M5 10h22M5 14h22M5 18h22M5 22h22"/></g><circle cx="13" cy="20" r="3" fill="#fff"/><path d="M15.6 20V8.5" stroke="#fff" stroke-width="1.8"/></symbol>
       <symbol id="i-pp" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="url(#g-pp)"/><path d="M17 43.5c0-11.3 8.6-20.5 19.5-20.5 5.6 0 9.6 2.4 11.8 5.6l6.2-.6-4.4 5.4c-.3 10.4-8.3 18.1-18.6 18.1H25l-6 5v-13z" fill="#fff"/><circle cx="41.5" cy="30.5" r="2.5" fill="#0a7cff"/></symbol>
       <symbol id="i-rm" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-rm)"/><rect x="5.5" y="10" width="9" height="9" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="17.5" y="10" width="9" height="9" rx="2" fill="#fff"/><path d="M10 23.5h12m-2-2 2 2-2 2" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="i-orb" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="url(#g-orb)" stroke="#0c3d08" stroke-width="1.5"/><ellipse cx="32" cy="19" rx="20" ry="11" fill="#fff" opacity="0.55"/><text x="32" y="44" font-family="Segoe UI, Tahoma, Verdana, sans-serif" font-size="30" font-weight="700" fill="#fff" text-anchor="middle" stroke="#0f5a0a" stroke-width="1.2" paint-order="stroke">s</text></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
     </defs>
@@ -636,7 +634,7 @@
 
   <div id="site">
     <header id="header">
-      <a href="./" title="back to home"><svg id="logo" aria-label="shibeeee"><use href="#i-orb"/></svg></a>
+      <a href="./" title="back to home"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibeeee"></a>
       <div>
         <span class="header-title">shibeeee's homepage</span>
         <span class="header-motto">websites, games and little tools i've made</span>
@@ -665,9 +663,9 @@
           <span class="nav-title">now playing</span>
           <div class="lcd" id="lcd"><span id="track-name">press play ♪</span></div>
           <div class="player-controls">
-            <button id="prev" type="button" aria-label="previous song" title="previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h3v14H6zM20 5v14L9 12z"/></svg></button>
-            <button id="play" type="button" aria-label="play music" title="play / pause"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15L20 12z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg></button>
-            <button id="next" type="button" aria-label="next song" title="next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5h3v14h-3zM4 5v14l11-7z"/></svg></button>
+            <button id="prev" type="button" aria-label="previous song" title="previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h3v14H5zM19 5v14L8 12z"/></svg></button>
+            <button id="play" type="button" aria-label="play music" title="play / pause"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 4.5v15L19.6 12z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg></button>
+            <button id="next" type="button" aria-label="next song" title="next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h3v14h-3zM5 5v14l11-7z"/></svg></button>
           </div>
           <div class="track-bar" aria-hidden="true"><span id="track-progress"></span></div>
           <label class="volume">vol<input id="volume" type="range" min="0" max="1" step="0.05" value="0.2" aria-label="music volume"></label>
@@ -803,8 +801,8 @@
           <div class="box">
             <p>got a site too? feel free to grab my button:</p>
             <div class="linkme" style="margin-top: 8px">
-              <img src="images/button.svg" width="88" height="31" alt="shibeeee's homepage button">
-              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.svg" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
+              <img src="images/button.png" width="88" height="31" alt="shibeeee's homepage button">
+              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.png" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
             </div>
           </div>
         </div>
@@ -813,7 +811,7 @@
 
     <footer id="footer">
       <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
-      <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl)
+      <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl) &middot; earth photo by <a href="https://visibleearth.nasa.gov/images/57723/the-blue-marble">nasa</a>
     </footer>
   </div>
 
@@ -828,7 +826,7 @@
       <input id="start-search" type="search" placeholder="search programs and pages" aria-label="search the start menu" autocomplete="off">
     </div>
     <div class="start-places">
-      <div class="start-pic"><svg aria-hidden="true"><use href="#i-orb"/></svg></div>
+      <div class="start-pic"><img src="images/logo.webp" alt=""></div>
       <a class="place" href="#top">shibeeee</a>
       <a class="place" href="#websites">websites</a>
       <a class="place" href="#downloads">downloads</a>
@@ -847,7 +845,7 @@
   </aside>
 
   <nav id="taskbar" aria-label="taskbar">
-    <button id="start-orb" type="button" aria-label="start menu" aria-expanded="false" aria-controls="start"><svg aria-hidden="true"><use href="#i-orb"/></svg></button>
+    <button id="start-orb" type="button" aria-label="start menu" aria-expanded="false" aria-controls="start"><img src="images/logo.webp" alt=""></button>
     <a class="task" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="tab to sheet" style="--glow: rgba(210, 210, 230, 0.6)"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
     <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
     <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
