@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>shibeeee's homepage ✦ websites, games &amp; tools</title>
+  <title>shibeeee's homepage | websites, games &amp; tools</title>
   <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
@@ -105,7 +105,7 @@
       color: #57fa6f; transform: scale(1.03);
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 40%, rgba(29, 73, 23, 0.3) 40%, rgba(43, 240, 36, 0.7) 100%);
     }
-    .nav-group svg { width: 20px; height: 20px; margin: 1px 5px 1px 4px; flex: none; }
+    .nav-group svg, .nav-group img { width: 20px; height: 20px; margin: 1px 5px 1px 4px; flex: none; }
     .ext { width: 9px !important; height: 9px !important; margin: 0 0 0 4px !important; opacity: 0.7; }
 
     #content {
@@ -158,14 +158,6 @@
       display: block; font-size: 46px; line-height: 1; color: #fff; letter-spacing: -0.5px;
       text-shadow: 0 2px 0 #1b4d0f, 0 0 12px rgba(0, 0, 0, 0.8), 0 0 2px #000;
     }
-    .banner-sub {
-      display: block; margin-top: 8px; font-size: 16px; font-style: italic; color: #fff;
-      text-shadow: 0 1px 2px #000, 0 0 8px #000;
-    }
-    .banner-icons { position: relative; display: flex; gap: 10px; flex: none; }
-    .banner-icons a { display: block; transform: rotate(var(--r)); transition: transform 0.2s; }
-    .banner-icons a:hover { transform: rotate(0) scale(1.08); }
-
     /* App-style icon tiles */
     .tile {
       position: relative; display: block; flex: none; width: 64px; height: 64px;
@@ -179,7 +171,6 @@
       border-radius: 12px 12px 50% 50%;
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.05));
     }
-    .banner .tile { width: 56px; height: 56px; border: 3px solid #fff; border-radius: 6px; box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.7); }
 
     /* Project entries */
     .project { display: flex; gap: 14px; align-items: flex-start; }
@@ -354,7 +345,7 @@
       border: 1px solid transparent; border-radius: 3px;
     }
     .prog:hover { text-decoration: none; background: linear-gradient(to bottom, #f2f9ff, #d6ebfb); border-color: #7da2ce; }
-    .prog svg { width: 32px; height: 32px; flex: none; }
+    .prog svg, .prog img { width: 32px; height: 32px; flex: none; }
     .prog small { display: block; color: #6d6d6d; font-size: 11px; }
     .start-programs span { text-shadow: none; }
     .start-sep { height: 1px; margin: 6px 4px; background: linear-gradient(to right, transparent, #c8d3df, transparent); }
@@ -447,18 +438,8 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     #splash-text { position: relative; font-size: 40px; font-weight: 300; text-shadow: 0 0 18px rgba(160, 225, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4); }
 
-    /* Sound toggles */
-    .sound-toggle {
-      display: flex; align-items: center; justify-content: center; gap: 6px; width: 93%; margin: 1px auto;
-      font: inherit; font-size: 12.5px; color: #eee; cursor: pointer; text-shadow: 0 0 3px #000;
-      border: 1px solid #0f0f0f; border-radius: 5px; padding: 2px 0;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.15) 20%, rgba(92, 92, 92, 0.15) 60%, rgba(0, 0, 0, 0.3) 60%, rgba(41, 41, 41, 0.3) 100%);
-    }
-    .sound-toggle[aria-pressed="true"] {
-      color: #57fa6f;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 40%, rgba(29, 73, 23, 0.3) 40%, rgba(43, 240, 36, 0.7) 100%);
-    }
-    .sound-toggle svg, #tray-sound svg { width: 18px; height: 18px; }
+    /* Taskbar speaker */
+    #tray-sound img { width: 18px; height: 18px; }
     #tray-sound {
       display: grid; place-items: center; width: 28px; height: 28px; margin-left: auto; padding: 0;
       background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer;
@@ -549,7 +530,6 @@
       h2.bar { font-size: 15.5px; }
       .banner { min-height: 240px; padding: 26px 36px; }
       .banner-title { font-size: 56px; }
-      .banner .tile { width: 66px; height: 66px; }
       .shot { width: 320px; }
       .project h3 { font-size: 18.5px; }
       .gadget svg { width: 160px; height: 160px; }
@@ -579,22 +559,6 @@
     #start-search:focus { outline: none; border-color: #3d8de0; box-shadow: 0 0 0 2px rgba(61, 141, 224, 0.25); }
     .start-empty { padding: 6px 8px; font-size: 12.5px; color: #6d6d6d; text-shadow: none; }
 
-    /* Desktop shortcuts on the wallpaper (only when there's room beside the page) */
-    #desktop { display: none; position: fixed; left: 12px; top: 18px; z-index: 1; flex-direction: column; gap: 6px; width: 96px; }
-    @media (min-width: 1560px) { #desktop { display: flex; } }
-    .desk-icon {
-      display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px;
-      color: #fff; font-size: 12px; line-height: 1.25; text-align: center;
-      text-shadow: 0 1px 2px #000, 0 0 5px #000;
-      border: 1px solid transparent; border-radius: 3px;
-    }
-    .desk-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6)); }
-    .desk-icon:hover, .desk-icon:focus-visible {
-      text-decoration: none; outline: none;
-      background: linear-gradient(to bottom, rgba(190, 225, 255, 0.4), rgba(120, 180, 240, 0.25));
-      border-color: rgba(200, 230, 255, 0.75);
-    }
-
     /* Narrow screens: menu sits above the content */
     @media (max-width: 720px) {
       #site { margin-top: 12px; }
@@ -608,6 +572,7 @@
         display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px;
       }
       #menu:not(.open) { display: none; }
+      #menu > * { align-self: start; }
       #menu-toggle { display: inline-flex; }
       #content { border-top: 1px solid #3b3b3b; }
       #content { border-left: 1px solid #3b3b3b; }
@@ -625,7 +590,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      #logo, .nav-group a, .banner-icons a, .shot { transition: none; }
+      #logo, .nav-group a, .shot { transition: none; }
       #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn { animation: none; }
       .digit span { transition: none; }
       .lcd.scroll span { animation: none; padding-left: 0; }
@@ -642,7 +607,7 @@
       <div class="user-tile"><img src="images/nanami.webp" alt=""></div>
       <span class="gate-name">shibeeee</span>
       <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h12M12 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
-      <span class="gate-hint">best with sound on ♪</span>
+      <span class="gate-hint">this site plays music, so turn your sound on</span>
     </div>
     <div class="loading">
       <div class="spinner"></div>
@@ -656,10 +621,6 @@
       <linearGradient id="g-pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fb0ff"/><stop offset="1" stop-color="#0a64d8"/></linearGradient>
       <linearGradient id="g-rm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb54a"/><stop offset="1" stop-color="#e2620c"/></linearGradient>
       <radialGradient id="g-orb" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#e9ffe0"/><stop offset="0.45" stop-color="#5ee04a"/><stop offset="1" stop-color="#16760f"/></radialGradient>
-      <radialGradient id="g-globe" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#bfe9ff"/><stop offset="0.5" stop-color="#2a8fe0"/><stop offset="1" stop-color="#0b3f8a"/></radialGradient>
-      <linearGradient id="g-roof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a4a"/><stop offset="1" stop-color="#c2380c"/></linearGradient>
-      <linearGradient id="g-arrow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6f37a"/><stop offset="1" stop-color="#2f9a12"/></linearGradient>
-      <linearGradient id="g-star" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a0"/><stop offset="1" stop-color="#f0a800"/></linearGradient>
 
       <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
       <linearGradient id="g-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6e6"/><stop offset="0.45" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#151515"/><stop offset="1" stop-color="#8a8a8a"/></linearGradient>
@@ -668,27 +629,10 @@
       <symbol id="i-pp" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="url(#g-pp)"/><path d="M17 43.5c0-11.3 8.6-20.5 19.5-20.5 5.6 0 9.6 2.4 11.8 5.6l6.2-.6-4.4 5.4c-.3 10.4-8.3 18.1-18.6 18.1H25l-6 5v-13z" fill="#fff"/><circle cx="41.5" cy="30.5" r="2.5" fill="#0a7cff"/></symbol>
       <symbol id="i-rm" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-rm)"/><rect x="5.5" y="10" width="9" height="9" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="17.5" y="10" width="9" height="9" rx="2" fill="#fff"/><path d="M10 23.5h12m-2-2 2 2-2 2" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-orb" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="url(#g-orb)" stroke="#0c3d08" stroke-width="1.5"/><ellipse cx="32" cy="19" rx="20" ry="11" fill="#fff" opacity="0.55"/><text x="32" y="44" font-family="Segoe UI, Tahoma, Verdana, sans-serif" font-size="30" font-weight="700" fill="#fff" text-anchor="middle" stroke="#0f5a0a" stroke-width="1.2" paint-order="stroke">s</text></symbol>
-      <symbol id="i-home" viewBox="0 0 24 24"><path d="M5 11v10h14V11" fill="#f2f2f2" stroke="#7a7a7a" stroke-width="0.8"/><path d="M10 21v-6h4v6" fill="#3a7bd5"/><path d="M2 12 12 3l10 9-1.6 1.6L12 6 3.6 13.6z" fill="url(#g-roof)" stroke="#8a2a08" stroke-width="0.6"/></symbol>
-      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="url(#g-globe)" stroke="#0b3f8a" stroke-width="0.6"/><path d="M7 6c2 0 3 1 2.5 2.5S7 10 7.5 12s2.5 1.5 2.5 3.5S8.5 19 8 20M14 4.5c0 2 2 2 3 3.5s-1 3 .5 4.5 2.5 0 3 1.5" fill="none" stroke="#7ee05a" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="10" cy="7" rx="6" ry="3.4" fill="#fff" opacity="0.4"/></symbol>
-      <symbol id="i-download" viewBox="0 0 24 24"><rect x="3" y="17" width="18" height="5" rx="1.5" fill="#d8d8d8" stroke="#6a6a6a" stroke-width="0.8"/><path d="M9 2h6v8h4l-7 7-7-7h4z" fill="url(#g-arrow)" stroke="#1f6b0a" stroke-width="0.8" stroke-linejoin="round"/></symbol>
-      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7z" fill="url(#g-star)" stroke="#a86a00" stroke-width="0.8" stroke-linejoin="round"/></symbol>
-      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" fill="none" stroke="#8fd3ff" stroke-width="2.4" stroke-linecap="round"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" fill="none" stroke="#5ee04a" stroke-width="2.4" stroke-linecap="round"/></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
-      <linearGradient id="g-book" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fb6ff"/><stop offset="1" stop-color="#1c5cb8"/></linearGradient>
-      <symbol id="i-book" viewBox="0 0 24 24"><rect x="4" y="2.5" width="15" height="19" rx="1.5" fill="url(#g-book)" stroke="#123f80" stroke-width="0.8"/><rect x="17" y="3.5" width="3" height="17" rx="0.8" fill="#f4f4f4" stroke="#8a8a8a" stroke-width="0.5"/><path d="M7 7h8M7 10h8M7 13h5" stroke="#fff" stroke-width="1.3" opacity="0.85"/><path d="m13 20 7.5-7.5 1.6 1.6L14.6 21.6 12.5 22z" fill="#ffcf4a" stroke="#8a5a00" stroke-width="0.6"/></symbol>
-      <symbol id="i-speaker-on" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z" fill="#e8eef3" stroke="#5b6f7d" stroke-width="0.9" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="#7fd8ff" stroke-width="1.8" stroke-linecap="round"/></symbol>
-      <symbol id="i-speaker-off" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z" fill="#e8eef3" stroke="#5b6f7d" stroke-width="0.9" stroke-linejoin="round"/><path d="m15.5 9.5 5 5m0-5-5 5" stroke="#ff6b5a" stroke-width="2" stroke-linecap="round"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
     </defs>
   </svg>
-
-  <nav id="desktop" aria-label="desktop shortcuts">
-    <a class="desk-icon" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg><span>tab to sheet</span></a>
-    <a class="desk-icon" href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg><span>pigeon pal</span></a>
-    <a class="desk-icon" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap</span></a>
-    <a class="desk-icon" href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg><span>guestbook</span></a>
-    <a class="desk-icon" href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg><span>github</span></a>
-  </nav>
 
   <div id="site">
     <header id="header">
@@ -704,19 +648,13 @@
       <aside id="menu">
         <nav class="nav-group" aria-label="this page">
           <span class="nav-title">main</span>
-          <a href="#top" class="active"><svg aria-hidden="true"><use href="#i-home"/></svg>home</a>
-          <a href="#websites"><svg aria-hidden="true"><use href="#i-globe"/></svg>websites</a>
-          <a href="#downloads"><svg aria-hidden="true"><use href="#i-download"/></svg>downloads</a>
-          <a href="#more" hidden><svg aria-hidden="true"><use href="#i-github"/></svg>more projects</a>
-          <a href="#updates"><svg aria-hidden="true"><use href="#i-star"/></svg>updates</a>
-          <a href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg>guestbook</a>
-          <a href="#linkme"><svg aria-hidden="true"><use href="#i-link"/></svg>link to me</a>
-        </nav>
-        <nav class="nav-group" aria-label="my websites" id="nav-sites">
-          <span class="nav-title">my sites</span>
-          <a href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg>tab to sheet</a>
-          <a href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg>pigeon pal</a>
-          <!-- other GitHub Pages sites get added here automatically -->
+          <a href="#top" class="active"><img src="images/icons/home.png" width="20" height="20" alt="">home</a>
+          <a href="#websites"><img src="images/icons/websites.png" width="20" height="20" alt="">websites</a>
+          <a href="#downloads"><img src="images/icons/downloads.png" width="20" height="20" alt="">downloads</a>
+          <a href="#more" hidden><img src="images/icons/projects.png" width="20" height="20" alt="">more projects</a>
+          <a href="#updates"><img src="images/icons/updates.png" width="20" height="20" alt="">updates</a>
+          <a href="#guestbook"><img src="images/icons/guestbook.png" width="20" height="20" alt="">guestbook</a>
+          <a href="#linkme"><img src="images/icons/link.png" width="20" height="20" alt="">link to me</a>
         </nav>
         <nav class="nav-group" aria-label="elsewhere">
           <span class="nav-title">elsewhere</span>
@@ -754,12 +692,6 @@
           <div class="odometer" id="odometer" role="img" aria-label="visitor count loading"></div>
           <span class="counter-note" id="counter-note">counting...</span>
         </div>
-
-        <div class="nav-group">
-          <span class="nav-title">options</span>
-          <button class="sound-toggle" type="button" aria-pressed="true" title="all sounds and music on/off"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg><span class="snd-on">sounds on</span><span class="snd-off">sounds off</span></button>
-        </div>
-
       </aside>
 
       <main id="content">
@@ -769,20 +701,14 @@
           <div class="banner">
             <div class="banner-text">
               <span class="banner-title">shibeeee</span>
-              <span class="banner-sub">websites ~ games ~ tools</span>
-            </div>
-            <div class="banner-icons">
-              <a class="tile" style="--r:-6deg" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="tab to sheet"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
-              <a class="tile" style="--r:4deg" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
-              <a class="tile" style="--r:-3deg" href="https://github.com/shibeeee/remap-with-AHK" title="remap"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
             </div>
           </div>
         </div>
 
         <div class="glass">
           <div class="box">
-            <p>hi, welcome to my little corner of the internet! this is where i keep everything i've made: a couple of <a href="#websites">websites</a> you can use right in your browser, plus some <a href="#downloads">downloads</a>.</p>
-            <p>it's all free, and the code is on my <a href="https://github.com/shibeeee">github</a> if you want to poke around. pick something from the menu or just scroll down. have fun!</p>
+            <p>hi, i'm shibeeee. this is where i put the things i make: two <a href="#websites">websites</a> that run in your browser and a small <a href="#downloads">windows tool</a>.</p>
+            <p>everything here is free, and all the code is on my <a href="https://github.com/shibeeee">github</a>.</p>
           </div>
         </div>
 
@@ -793,7 +719,7 @@
             <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.webp" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
             <div class="project-info">
               <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a><span class="kind">music</span></h3>
-              <p>turn any songsterr tab into sheet music you can print: regular notation, tab, or both. you can also listen along, loop the tricky parts, slow things down, and fix notes yourself.</p>
+              <p>paste a songsterr link or search for a song, and it turns the tab into sheet music you can print: standard notation, tab, or both. it plays the song back too, with a loop and a speed trainer for practicing, and it can export guitar pro and midi files.</p>
               <div class="buttons">
                 <a class="btn go" href="https://shibeeee.github.io/songsterr-to-sheet-music/">open it &raquo;</a>
                 <a class="btn" href="https://github.com/shibeeee/songsterr-to-sheet-music">source code</a>
@@ -807,7 +733,7 @@
             <a class="shot" href="https://shibeeee.github.io/pidgeon-pal/"><img src="images/pigeon-pal.webp" width="560" height="350" alt="pigeon pal's list of games" loading="lazy"></a>
             <div class="project-info">
               <h3><span class="tile"><svg aria-hidden="true"><use href="#i-pp"/></svg></span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a><span class="kind">games</span></h3>
-              <p>a little helper for gamepigeon games. it shows you the best move, finds every word in word hunt and anagrams, figures out where the ships are hiding in sea battle, and lets you practice against a really good bot. works offline too.</p>
+              <p>a helper for gamepigeon, the imessage games. it finds every word in word hunt, anagrams and word bites, works out where the ships probably are in sea battle, and has bots for chess, checkers, four in a row and more. 13 games in total, and it works offline.</p>
               <div class="buttons">
                 <a class="btn go" href="https://shibeeee.github.io/pidgeon-pal/">play it &raquo;</a>
                 <a class="btn" href="https://github.com/shibeeee/pidgeon-pal">source code</a>
@@ -823,7 +749,7 @@
             <span class="tile"><svg aria-hidden="true"><use href="#i-rm"/></svg></span>
             <div class="project-info">
               <h3><a href="https://github.com/shibeeee/remap-with-AHK">remap</a><span class="kind">windows</span></h3>
-              <p>a small key remapper for windows, made with autohotkey. you set up profiles that only kick in while a certain program is open. comes with a fix for playing hotline miami on a laptop.</p>
+              <p>a key remapper for windows, built on autohotkey v2. each profile only runs while one of its programs is the active window. it comes with a profile for hotline miami that turns e into right click, which helps a lot on a laptop.</p>
               <div class="buttons">
                 <a class="btn go" href="https://github.com/shibeeee/remap-with-AHK">get it on github &raquo;</a>
               </div>
@@ -844,9 +770,9 @@
             <!-- refreshed from GitHub when the page loads; this list is the fallback -->
             <ul class="updates" id="updates-list">
               <li><time datetime="2026-10-18">oct 18, 2026</time><span>made this homepage!</span></li>
-              <li><time datetime="2026-10-18">oct 18, 2026</time><span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a> got an update</span></li>
-              <li><time datetime="2026-10-07">oct 7, 2026</time><span><a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a> got an update</span></li>
-              <li><time datetime="2026-09-17">sep 17, 2026</time><span><a href="https://github.com/shibeeee/remap-with-AHK">remap</a> got an update</span></li>
+              <li><time datetime="2026-10-18">oct 18, 2026</time><span>worked on <a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a></span></li>
+              <li><time datetime="2026-10-07">oct 7, 2026</time><span>worked on <a href="https://shibeeee.github.io/pidgeon-pal/">pigeon pal</a></span></li>
+              <li><time datetime="2026-09-17">sep 17, 2026</time><span>worked on <a href="https://github.com/shibeeee/remap-with-AHK">remap</a></span></li>
             </ul>
           </div>
         </div>
@@ -855,7 +781,7 @@
 
         <div class="glass">
           <div class="box">
-            <p>thanks for stopping by! leave a little message if you want :)</p>
+            <p>leave a message if you like. be nice :)</p>
             <form class="gb-form" id="gb-form" autocomplete="off">
               <input id="gb-name" name="name" maxlength="32" placeholder="your name" aria-label="your name" required>
               <textarea id="gb-message" name="message" maxlength="500" placeholder="say hi!" aria-label="your message" required></textarea>
@@ -887,7 +813,7 @@
 
     <footer id="footer">
       <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
-      <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a>
+      <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl)
     </footer>
   </div>
 
@@ -897,7 +823,7 @@
       <a class="prog" href="https://shibeeee.github.io/pidgeon-pal/"><svg aria-hidden="true"><use href="#i-pp"/></svg><span>pigeon pal<small>help with gamepigeon games</small></span></a>
       <a class="prog" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap<small>key remapper for windows</small></span></a>
       <div class="start-sep"></div>
-      <a class="prog" href="#guestbook"><svg aria-hidden="true"><use href="#i-book"/></svg><span>guestbook<small>leave a message</small></span></a>
+      <a class="prog" href="#guestbook"><img src="images/icons/guestbook.png" width="32" height="32" alt=""><span>guestbook<small>leave a message</small></span></a>
       <div class="start-empty" hidden>nothing found :(</div>
       <input id="start-search" type="search" placeholder="search programs and pages" aria-label="search the start menu" autocomplete="off">
     </div>
@@ -926,7 +852,7 @@
     <a class="task" href="https://shibeeee.github.io/pidgeon-pal/" title="pigeon pal" style="--glow: rgba(60, 150, 255, 0.75)"><svg aria-hidden="true"><use href="#i-pp"/></svg></a>
     <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
     <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
-    <button id="tray-sound" class="sound-toggle-tray" type="button" aria-pressed="true" aria-label="sounds" title="sounds on/off"><svg class="snd-on" aria-hidden="true"><use href="#i-speaker-on"/></svg><svg class="snd-off" aria-hidden="true"><use href="#i-speaker-off"/></svg></button>
+    <button id="tray-sound" type="button" aria-pressed="true" aria-label="sound and music" title="sound on/off"><img class="snd-on" src="images/icons/sound-on.png" alt=""><img class="snd-off" src="images/icons/sound-off.png" alt=""></button>
     <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
     <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
   </nav>
@@ -996,9 +922,9 @@
         list.replaceChildren.apply(list, repos.slice(0, 5).map(function (r) {
           var isNew = r.created_at.slice(0, 10) === r.pushed_at.slice(0, 10), text;
           if (r.name.toLowerCase() === HOME_REPO) {
-            text = el("span", { textContent: isNew ? "made this homepage!" : "this homepage got an update" });
+            text = el("span", { textContent: isNew ? "made this homepage!" : "worked on this homepage" });
           } else {
-            text = isNew ? el("span", {}, ["new project: ", link(r), "!"]) : el("span", {}, [link(r), " got an update"]);
+            text = el("span", {}, [isNew ? "started " : "worked on ", link(r)]);
           }
           return el("li", {}, [el("time", { dateTime: r.pushed_at, textContent: day(r.pushed_at) }), text]);
         }));
@@ -1009,15 +935,12 @@
           return !FEATURED[key] && key !== HOME_REPO;
         });
         if (!others.length) return;
-        var box = document.getElementById("more-list"), nav = document.getElementById("nav-sites");
+        var box = document.getElementById("more-list");
         box.replaceChildren.apply(box, others.map(function (r) {
           var site = siteUrl(r), buttons = [];
           if (site) buttons.push(el("a", { className: "btn go", href: site, innerHTML: "visit site &raquo;" }));
           buttons.push(el("a", { className: "btn", href: r.html_url, textContent: "source code" }));
           var meta = [r.language ? r.language.toLowerCase() : null, "updated " + day(r.pushed_at)].filter(Boolean).join(" · ");
-          if (r.has_pages) {
-            nav.append(el("a", { href: site }, [svgUse("i-globe"), niceName(r)]));
-          }
           return el("div", { className: "repo" }, [
             el("h3", {}, [link(r)]),
             el("p", { textContent: r.description || "no description yet" }),
@@ -1029,13 +952,6 @@
         box.parentNode.hidden = false;
         document.querySelector('#menu a[href="#more"]').hidden = false;
         window.dispatchEvent(new Event("repos-loaded"));
-      }
-      function svgUse(id) {
-        var ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, "svg"), use = document.createElementNS(ns, "use");
-        svg.setAttribute("aria-hidden", "true");
-        use.setAttribute("href", "#" + id);
-        svg.appendChild(use);
-        return svg;
       }
 
       // Keep a copy for half an hour so repeat visits don't use up GitHub's rate limit
@@ -1095,7 +1011,7 @@
         } catch (e) {}
       }
       function sync() {
-        document.querySelectorAll(".sound-toggle, #tray-sound").forEach(function (b) { b.setAttribute("aria-pressed", String(on)); });
+        document.getElementById("tray-sound").setAttribute("aria-pressed", String(on));
         if (window.music) window.music.setMuted(!on);
       }
       function toggle() {
@@ -1106,13 +1022,11 @@
       }
       document.addEventListener("DOMContentLoaded", function () {
         sync();
-        document.querySelectorAll(".sound-toggle, #tray-sound").forEach(function (b) {
-          b.addEventListener("click", function (e) { e.stopPropagation(); toggle(); });
-        });
+        document.getElementById("tray-sound").addEventListener("click", function (e) { e.stopPropagation(); toggle(); });
         // A soft click for every other button and link
         document.addEventListener("click", function (e) {
           var el = e.target.closest("a, button");
-          if (el && !el.matches("#start-orb, #shutdown, .sound-toggle, #tray-sound, #buddy-figure, #gb-form button, .player-controls button, #enter-btn")) play("click");
+          if (el && !el.matches("#start-orb, #shutdown, #tray-sound, #buddy-figure, #gb-form button, .player-controls button, #enter-btn")) play("click");
         }, true);
       });
       return play;
@@ -1422,7 +1336,7 @@
         if (gateOpen && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); }
       });
       // Everything behind the gate is out of reach until you enter
-      var behind = ["site", "taskbar", "buddy", "start", "desktop"].map(function (id) { return document.getElementById(id); });
+      var behind = ["site", "taskbar", "buddy", "start"].map(function (id) { return document.getElementById(id); });
       function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
       if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
@@ -1455,20 +1369,15 @@
 
       var hour = new Date().getHours();
       var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi hi! " : "good evening! ")
-        + "i'm nanami, welcome to shibeeee's homepage ✿";
+        + "i'm nanami. welcome to shibeeee's homepage!";
       var lines = [
-        "psst, the start button down there actually works",
-        "windows 7 was the best one, right? ...right??",
-        "tab to sheet turns songsterr tabs into real sheet music. pretty cool right?",
-        "playing word hunt? pigeon pal finds every single word",
-        "don't forget to sign the guestbook :)",
-        "you can grab shibeeee's 88x31 button under “link to me”",
-        "the menu lights up as you scroll. i like watching it",
-        "on a big screen there are desktop icons on the left, just like windows 7!",
-        "click the little strip at the far right of the taskbar to zoom back to the top!",
-        "too loud? the speaker down by the clock mutes everything ♪",
-        "like the music? you can skip songs in the little player in the menu ♪",
-        "try typing in the start menu, it can search!"
+        "the start button down there works, go ahead and click it",
+        "windows 7 was the best one. i might be biased though",
+        "tab to sheet can export guitar pro files, not just pdfs",
+        "pigeon pal's four in a row bot plays perfectly. good luck beating it",
+        "sign the guestbook before you go?",
+        "too loud? the speaker by the clock mutes everything",
+        "the music is by kevin macleod. bossa antigua is my favorite"
       ];
       var next = 0, timer;
       function say(msg) {
@@ -1494,7 +1403,7 @@
         var gbSeen = new IntersectionObserver(function (entries) {
           if (!entries[0].isIntersecting || document.documentElement.classList.contains("splash")) return;
           gbSeen.disconnect();
-          say("ooh, the guestbook! leave a little message ✿");
+          say("oh, the guestbook! leave a message if you want");
         }, { threshold: 1 });
         gbSeen.observe(document.getElementById("guestbook"));
       }
@@ -1505,7 +1414,7 @@
         if (!checkedIn) idle = setTimeout(function () {
           if (document.documentElement.classList.contains("splash")) return resetIdle();
           checkedIn = true;
-          say("still there? i'll keep the music going for you ♪");
+          say("still there? i'll keep the music going");
         }, 90000);
       }
       ["scroll", "click", "keydown", "pointermove"].forEach(function (ev) { window.addEventListener(ev, resetIdle, { passive: true }); });
@@ -1544,7 +1453,7 @@
     (function () {
       var title = document.title;
       document.addEventListener("visibilitychange", function () {
-        document.title = document.hidden ? "come back soon! \u2661" : title;
+        document.title = document.hidden ? "come back soon!" : title;
       });
     })();
 
