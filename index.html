@@ -1604,33 +1604,45 @@
 
     // Old-web trick: when you switch tabs, the title calls you back and the earth icon spins
     (function () {
-      var title = document.title, icon = document.getElementById("favicon"), still = icon.href;
-      var FRAMES = 24, frame = 0, timer = null, sprite = null, canvas = null;
-      // Firefox animates a gif tab icon smoothly by itself; other browsers show only its first frame,
-      // so there the page swaps frames (as often as the browser allows for a background tab)
-      var gifIcons = /firefox/i.test(navigator.userAgent);
-      function spinStep() {
-        if (!sprite.complete || !sprite.naturalWidth) return;
+      var title = document.title, still = document.getElementById("favicon").getAttribute("href");
+      var FRAMES = 24, frame = 0, sprite = null, canvas = null, ticker = null, fallback = null;
+
+      // Swap in a brand new <link> each time; some browsers ignore changes to an existing one
+      function setIcon(href, type) {
+        var old = document.getElementById("favicon"), link = document.createElement("link");
+        link.id = "favicon"; link.rel = "icon"; link.type = type; link.href = href;
+        old.parentNode.replaceChild(link, old);
+      }
+      function step() {
+        if (!sprite || !sprite.complete || !sprite.naturalWidth) return;
         var c = canvas.getContext("2d");
         c.clearRect(0, 0, 32, 32);
         c.drawImage(sprite, frame * 32, 0, 32, 32, 0, 0, 32, 32);
-        icon.href = canvas.toDataURL("image/png");
+        setIcon(canvas.toDataURL("image/png"), "image/png");
         frame = (frame + 1) % FRAMES;
       }
-      document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-          document.title = "come back!!";
-          if (gifIcons) { icon.href = "images/earth-spin.gif"; return; }
-          if (!sprite) {
-            sprite = new Image(); sprite.src = "images/earth-spin.png";
-            canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
-          }
-          timer = setInterval(spinStep, 120);
-        } else {
-          document.title = title;
-          clearInterval(timer); timer = null;
-          icon.href = still;
+      // Browsers slow timers in background tabs to about once a second, but not timers inside a
+      // worker, so a tiny worker keeps the beat while the tab is hidden
+      function start() {
+        if (!sprite) {
+          sprite = new Image(); sprite.src = "images/earth-spin.png";
+          canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
         }
+        try {
+          ticker = new Worker(URL.createObjectURL(new Blob(["setInterval(function(){postMessage(0)},100)"], { type: "text/javascript" })));
+          ticker.onmessage = step;
+        } catch (e) {
+          fallback = setInterval(step, 100);
+        }
+      }
+      function stop() {
+        if (ticker) { ticker.terminate(); ticker = null; }
+        clearInterval(fallback); fallback = null;
+        setIcon(still, "image/png");
+      }
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) { document.title = "come back!!"; start(); }
+        else { document.title = title; stop(); }
       });
     })();
 
