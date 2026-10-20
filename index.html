@@ -86,7 +86,7 @@
       background: linear-gradient(to bottom, #fff 0, rgba(129, 129, 129, 0.75) 3%, rgba(56, 56, 56, 0.75) 50%, rgba(27, 27, 27, 0.75) 50%);
       border: 1px solid #000; border-radius: 3px;
     }
-    .nav-group a, .nav-group .nav-link {
+    .nav-group a {
       position: relative; display: flex; align-items: center;
       width: 93%; margin: 0 auto 1px; padding: 1px 0;
       font-size: 12.5px; color: #eee;
@@ -94,13 +94,12 @@
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.15) 20%, rgba(92, 92, 92, 0.15) 60%, rgba(0, 0, 0, 0.3) 60%, rgba(41, 41, 41, 0.3) 100%);
       transition: transform 0.15s;
     }
-    .nav-group .nav-link { font: inherit; font-size: 12.5px; text-align: left; cursor: pointer; }
-    .nav-group a::before, .nav-group .nav-link::before {
+    .nav-group a::before {
       content: ""; position: absolute; top: 0; left: 5%; width: 90%; height: 11px;
       border-radius: 20px; opacity: 0.3;
       background: linear-gradient(to bottom, rgba(117, 117, 117, 0.7) 0, rgba(255, 255, 255, 0.1) 100%);
     }
-    .nav-group a:hover, .nav-group .nav-link:hover {
+    .nav-group a:hover {
       text-decoration: none; transform: scale(1.03);
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 50%, rgba(43, 43, 43, 0.3) 50%, rgba(161, 161, 161, 0.3) 100%);
     }
@@ -229,6 +228,30 @@
       margin-top: 7px; color: #eee; font-weight: 600; line-height: 1.3;
     }
     .video-meta { display: block; font-size: 12.5px; color: #9a9a9a; }
+
+    /* Discord profile card */
+    .dc { display: flex; gap: 16px; align-items: flex-start; }
+    .dc-avatar { position: relative; flex: none; width: 88px; height: 88px; padding: 4px; border-radius: 50%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)); border: 1px solid rgba(236, 242, 249, 0.5); box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); }
+    .dc-avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; background: #5865f2; }
+    .dc-dot { position: absolute; right: 2px; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; border: 4px solid #1b1b1b; background: #80848e; }
+    .dc-dot.online { background: #23a55a; }
+    .dc-dot.idle { background: #f0b232; }
+    .dc-dot.dnd { background: #f23f43; }
+    .dc-info { flex: 1; min-width: 0; }
+    .dc-info h3 { margin: 0; font-size: 19px; font-weight: 600; color: #fff; }
+    .dc-sub { font-size: 13px; color: #9a9a9a; }
+    .dc-custom { margin-top: 6px; color: #dadada; }
+    .dc-activity {
+      display: flex; gap: 12px; align-items: center; margin-top: 10px; padding: 10px;
+      background: rgba(0, 0, 0, 0.35); border: 1px solid #3b3b3b; border-radius: 6px;
+    }
+    .dc-activity img { flex: none; width: 64px; height: 64px; border-radius: 6px; object-fit: cover; }
+    .dc-act-text { flex: 1; min-width: 0; font-size: 13px; color: #bdbdbd; }
+    .dc-act-text > span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dc-act-head { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #9a9a9a; }
+    .dc-act-name { font-weight: 600; color: #fff; }
+    .dc-bar { height: 4px; margin-top: 6px; border-radius: 2px; background: #3b3b3b; overflow: hidden; }
+    .dc-bar span { display: block; height: 100%; width: 0; background: #1ed760; }
 
     /* Updates */
     .updates { margin: 0; padding: 0; list-style: none; }
@@ -544,7 +567,7 @@
       body { font-size: 15px; }
       #site { margin-top: 32px; }
       #menu { width: 220px; }
-      .nav-group a, .nav-group .nav-link { font-size: 13.5px; padding: 2px 0; }
+      .nav-group a { font-size: 13.5px; padding: 2px 0; }
       .nav-title { font-size: 14px; height: 21px; }
       .header-title { font-size: 34px; }
       .header-motto { font-size: 16px; }
@@ -619,6 +642,8 @@
       }
       #menu:not(.open) { display: none; }
       #menu > * { align-self: start; }
+      #menu > :first-child { grid-row: span 2; }
+      #menu { grid-template-rows: auto 1fr; }
       #menu-toggle { display: inline-flex; }
       #content { border-top: 1px solid #3b3b3b; }
       #content { border-left: 1px solid #3b3b3b; }
@@ -626,6 +651,8 @@
       .banner-title { font-size: 34px; }
       .project { flex-direction: column; }
       .shot { width: 100%; }
+      .dc-avatar { width: 68px; height: 68px; }
+      .dc-dot { width: 18px; height: 18px; border-width: 3px; }
       .videos { grid-template-columns: 1fr 1fr; gap: 12px 10px; }
       .video-title { font-size: 13px; }
       .video-meta { font-size: 12px; }
@@ -704,6 +731,7 @@
           <a href="#websites"><img src="images/icons/websites.webp" width="20" height="20" alt="">websites</a>
           <a href="#downloads"><img src="images/icons/downloads.webp" width="20" height="20" alt="">downloads</a>
           <a href="#videos"><img src="images/icons/videos.webp" width="20" height="20" alt="">videos</a>
+          <a href="#discord"><svg aria-hidden="true"><use href="#i-discord"/></svg>discord</a>
           <a href="#more" hidden><img src="images/icons/projects.webp" width="20" height="20" alt="">more projects</a>
           <a href="#updates"><img src="images/icons/updates.webp" width="20" height="20" alt="">updates</a>
           <a href="#guestbook"><img src="images/icons/guestbook.webp" width="20" height="20" alt="">guestbook</a>
@@ -713,7 +741,13 @@
           <span class="nav-title">elsewhere</span>
           <a href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg>github<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
           <a href="https://www.youtube.com/@shibereal"><svg aria-hidden="true"><use href="#i-youtube"/></svg>youtube<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
-          <button class="nav-link" id="discord" type="button" title="copy my discord username"><svg aria-hidden="true"><use href="#i-discord"/></svg><span>discord</span></button>
+        </nav>
+        <nav class="nav-group" aria-label="cool sites">
+          <span class="nav-title">cool sites</span>
+          <a href="https://frutigeraeroarchive.org/"><img src="images/icons/websites.webp" width="20" height="20" alt="">aero archive<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+          <a href="https://frutigeraero.org/"><img src="images/icons/websites.webp" width="20" height="20" alt="">frutigeraero.org<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+          <a href="https://frutiger-aero.neocities.org/"><img src="images/icons/websites.webp" width="20" height="20" alt="">aero neocities<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
+          <a href="https://www.frutiger-aero.online/"><img src="images/icons/websites.webp" width="20" height="20" alt="">aero online<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
         </nav>
 
         <div class="nav-group player" id="player">
@@ -839,6 +873,36 @@
           </div>
         </div>
 
+        <h2 class="bar" id="discord">discord</h2>
+
+        <div class="glass">
+          <div class="box">
+            <!-- live from Lanyard (api.lanyard.rest) once DISCORD_ID is set below; this is the fallback -->
+            <div class="dc">
+              <div class="dc-avatar"><img id="dc-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" width="80" height="80" alt=""><span class="dc-dot" id="dc-dot" hidden></span></div>
+              <div class="dc-info">
+                <h3 id="dc-name">shibereal</h3>
+                <span class="dc-sub"><span id="dc-user">@shibereal</span><span id="dc-status"></span></span>
+                <p class="dc-custom" id="dc-custom">come say hi! send me a friend request on discord.</p>
+                <div class="dc-activity" id="dc-activity" hidden>
+                  <img id="dc-act-img" alt="" hidden>
+                  <div class="dc-act-text">
+                    <span class="dc-act-head" id="dc-act-head"></span>
+                    <span class="dc-act-name" id="dc-act-name"></span>
+                    <span id="dc-act-1"></span>
+                    <span id="dc-act-2"></span>
+                    <div class="dc-bar" id="dc-bar" hidden><span></span></div>
+                  </div>
+                </div>
+                <div class="buttons">
+                  <button class="btn go" id="dc-copy" type="button">copy username</button>
+                  <a class="btn" id="dc-open" hidden>open in discord</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h2 class="bar" id="more" hidden>more projects</h2>
 
         <div class="glass" hidden>
@@ -917,6 +981,7 @@
       <a class="place" href="#updates">updates</a>
       <a class="place" href="#linkme">link to me</a>
       <a class="place" href="#videos">videos</a>
+      <a class="place" href="#discord">discord</a>
       <a class="place" href="https://github.com/shibeeee">github</a>
       <a class="place" href="https://www.youtube.com/@shibereal">youtube</a>
       <button id="shutdown" type="button">shut down</button>
@@ -1416,20 +1481,152 @@
         .catch(function () { if (cached) render(cached.data); });
     })();
 
-    // Discord has no profile links by username, so the button copies it instead
+    // Discord profile, live from Lanyard (https://github.com/Phineas/lanyard). It needs the
+    // numeric user id, and that account has to be in Lanyard's server. Until then the card
+    // shows the username with a copy button.
     (function () {
-      var NAME = "shibereal", button = document.getElementById("discord"), label = button.querySelector("span"), timer;
-      button.addEventListener("click", function () {
+      var DISCORD_ID = "", NAME = "shibereal";
+      var $ = function (id) { return document.getElementById(id); };
+      var copy = $("dc-copy"), timer;
+
+      copy.addEventListener("click", function () {
         function done(copied) {
           if (copied) {
-            label.textContent = "copied!";
+            copy.textContent = "copied!";
             clearTimeout(timer);
-            timer = setTimeout(function () { label.textContent = "discord"; }, 1600);
+            timer = setTimeout(function () { copy.textContent = "copy username"; }, 1600);
           }
           if (window.nanami) window.nanami.say((copied ? "copied! " : "") + "shibeeee is " + NAME + " on discord, send a friend request!");
         }
         if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(NAME).then(function () { done(true); }, function () { done(false); });
         else done(false);
+      });
+
+      if (!DISCORD_ID) return;
+
+      var STATUS = { online: "online", idle: "idle", dnd: "do not disturb", offline: "offline" };
+      var VERB = { 0: "playing", 1: "streaming", 2: "listening to", 3: "watching", 5: "competing in" };
+      var presence = null, tick = null, said = false;
+
+      function assetUrl(act, key) {
+        var img = act.assets && act.assets[key];
+        if (!img) return "";
+        if (img.indexOf("mp:") === 0) return "https://media.discordapp.net/" + img.slice(3);
+        if (img.indexOf("spotify:") === 0) return "https://i.scdn.co/image/" + img.slice(8);
+        return act.application_id ? "https://cdn.discordapp.com/app-assets/" + act.application_id + "/" + img + ".png" : "";
+      }
+      function since(ms) {
+        var min = Math.floor((Date.now() - ms) / 60000);
+        if (min < 1) return "just started";
+        if (min < 60) return "for " + min + (min === 1 ? " minute" : " minutes");
+        var h = Math.floor(min / 60);
+        return "for " + h + (h === 1 ? " hour" : " hours");
+      }
+      function clock(ms) {
+        var s = Math.max(0, Math.floor(ms / 1000));
+        return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+      }
+      // What the card says they're up to: spotify first, then any game or app
+      function activity(p) {
+        if (p.listening_to_spotify && p.spotify) return { spotify: p.spotify };
+        return (p.activities || []).filter(function (a) { return a.type !== 4; })[0] || null;
+      }
+
+      $("dc-act-img").onerror = function () { this.hidden = true; };
+
+      function render(p) {
+        presence = p;
+        var user = p.discord_user, status = p.discord_status || "offline";
+        $("dc-avatar").src = user.avatar
+          ? "https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + (user.avatar.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=160"
+          : "https://cdn.discordapp.com/embed/avatars/" + (window.BigInt ? Number(BigInt(user.id) / BigInt(4194304) % BigInt(6)) : 0) + ".png";
+        $("dc-name").textContent = user.global_name || user.display_name || user.username;
+        $("dc-user").textContent = "@" + user.username;
+        var dot = $("dc-dot");
+        dot.hidden = false; dot.className = "dc-dot " + status; dot.title = STATUS[status] || status;
+        var where = p.active_on_discord_desktop ? " on desktop" : p.active_on_discord_mobile ? " on phone" : p.active_on_discord_web ? " in a browser" : "";
+        $("dc-status").textContent = " · " + (STATUS[status] || status) + (status === "offline" ? "" : where);
+
+        var custom = (p.activities || []).filter(function (a) { return a.type === 4; })[0];
+        $("dc-custom").textContent = custom
+          ? ((custom.emoji && !custom.emoji.id ? custom.emoji.name + " " : "") + (custom.state || "")).trim()
+          : status === "offline" ? "offline right now, but you can still send a friend request!" : "";
+        $("dc-custom").hidden = !$("dc-custom").textContent;
+
+        var open = $("dc-open");
+        open.href = "https://discord.com/users/" + user.id; open.hidden = false;
+        update();
+      }
+
+      // Redrawn every second so times and the song bar keep moving
+      function update() {
+        var act = presence && activity(presence), box = $("dc-activity"), img = $("dc-act-img"), bar = $("dc-bar");
+        box.hidden = !act;
+        clearTimeout(tick);
+        if (!act) return;
+        var lines, art;
+        if (act.spotify) {
+          var sp = act.spotify, t = sp.timestamps || {}, len = t.end - t.start, at = Math.min(Date.now() - t.start, len);
+          lines = ["listening to", sp.song, "by " + sp.artist, len ? clock(at) + " / " + clock(len) : ""];
+          art = sp.album_art_url || "";
+          bar.hidden = !len;
+          bar.firstElementChild.style.width = len ? (at / len * 100) + "%" : "0";
+        } else {
+          var time = act.timestamps && act.timestamps.start ? since(act.timestamps.start) : "";
+          var extra = [act.details, act.state].filter(Boolean);
+          lines = [VERB[act.type] || "playing", act.name, extra[0] || time, extra[0] ? [extra[1], time].filter(Boolean).join(" · ") : ""];
+          art = assetUrl(act, "large_image");
+          bar.hidden = true;
+        }
+        // Only touch the picture when it changes, so one that failed to load stays hidden
+        if ((img.getAttribute("src") || "") !== art) {
+          img.hidden = !art;
+          if (art) img.src = art; else img.removeAttribute("src");
+        }
+        ["dc-act-head", "dc-act-name", "dc-act-1", "dc-act-2"].forEach(function (id, i) { $(id).textContent = lines[i] || ""; });
+        tick = setTimeout(update, 1000);
+      }
+
+      // Nanami mentions it the first time you scroll to the card
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries, obs) {
+          if (!entries[0].isIntersecting || said || !presence || !window.nanami) return;
+          var act = activity(presence);
+          if (!act) return;
+          said = true; obs.disconnect();
+          window.nanami.say(act.spotify ? "shibeeee is listening to " + act.spotify.song + " right now. good taste?" : "shibeeee is " + (VERB[act.type] || "playing") + " " + act.name + " right now!");
+        }, { threshold: 0.6 }).observe($("dc-activity").parentNode.parentNode);
+      }
+
+      // Live updates over Lanyard's socket, reconnecting with a growing delay if it drops
+      var wait = 2000;
+      function connect() {
+        var ws = new WebSocket("wss://api.lanyard.rest/socket"), beat;
+        ws.onmessage = function (e) {
+          var msg = JSON.parse(e.data);
+          if (msg.op === 1) {
+            beat = setInterval(function () { ws.send('{"op":3}'); }, msg.d.heartbeat_interval);
+            ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+          } else if (msg.op === 0 && msg.d && msg.d.discord_user) {
+            wait = 2000;
+            render(msg.d);
+          }
+        };
+        ws.onclose = function () {
+          clearInterval(beat);
+          setTimeout(connect, wait);
+          wait = Math.min(wait * 2, 60000);
+        };
+      }
+      window.addEventListener("load", function () {
+        fetch("https://api.lanyard.rest/v1/users/" + DISCORD_ID)
+          .then(function (res) { return res.json(); })
+          .then(function (json) {
+            if (!json.success) return; // not in Lanyard's server yet; the fallback card stays
+            render(json.data);
+            if ("WebSocket" in window) connect();
+          })
+          .catch(function () {});
       });
     })();
 
