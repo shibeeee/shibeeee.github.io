@@ -1728,47 +1728,43 @@
       });
     })();
 
-    // Old-web trick: when you switch tabs, the title calls you back and the earth icon spins
+    // Old-web trick: the earth in the tab spins, and when you switch tabs the title calls you back
     (function () {
-      var title = document.title, still = document.getElementById("favicon").getAttribute("href");
-      var FRAMES = 24, frame = 0, sprite = null, canvas = null, ticker = null, fallback = null;
+      var title = document.title, FRAMES = 24, frame = 0, frames = [];
 
       // Swap in a brand new <link> each time; some browsers ignore changes to an existing one
-      function setIcon(href, type) {
+      function setIcon(href) {
         var old = document.getElementById("favicon"), link = document.createElement("link");
-        link.id = "favicon"; link.rel = "icon"; link.type = type; link.href = href;
+        link.id = "favicon"; link.rel = "icon"; link.type = "image/png"; link.href = href;
         old.parentNode.replaceChild(link, old);
       }
       function step() {
-        if (!sprite || !sprite.complete || !sprite.naturalWidth) return;
-        var c = canvas.getContext("2d");
-        c.clearRect(0, 0, 32, 32);
-        c.drawImage(sprite, frame * 32, 0, 32, 32, 0, 0, 32, 32);
-        setIcon(canvas.toDataURL("image/png"), "image/png");
+        setIcon(frames[frame]);
         frame = (frame + 1) % FRAMES;
       }
-      // Browsers slow timers in background tabs to about once a second, but not timers inside a
-      // worker, so a tiny worker keeps the beat while the tab is hidden
-      function start() {
-        if (!sprite) {
-          sprite = new Image(); sprite.src = "images/earth-spin.png";
-          canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
-        }
-        try {
-          ticker = new Worker(URL.createObjectURL(new Blob(["setInterval(function(){postMessage(0)},100)"], { type: "text/javascript" })));
-          ticker.onmessage = step;
-        } catch (e) {
-          fallback = setInterval(step, 100);
-        }
-      }
-      function stop() {
-        if (ticker) { ticker.terminate(); ticker = null; }
-        clearInterval(fallback); fallback = null;
-        setIcon(still, "image/png");
-      }
+      // Cut the sprite into frames once, after the page has loaded so it doesn't slow anything down
+      window.addEventListener("load", function () {
+        var sprite = new Image();
+        sprite.onload = function () {
+          var canvas = document.createElement("canvas"), c = canvas.getContext("2d");
+          canvas.width = canvas.height = 32;
+          for (var i = 0; i < FRAMES; i++) {
+            c.clearRect(0, 0, 32, 32);
+            c.drawImage(sprite, i * 32, 0, 32, 32, 0, 0, 32, 32);
+            frames.push(canvas.toDataURL("image/png"));
+          }
+          // Browsers slow timers in background tabs to about once a second, but not timers inside
+          // a worker, so a tiny worker keeps the beat while the tab is hidden
+          try {
+            new Worker(URL.createObjectURL(new Blob(["setInterval(function(){postMessage(0)},100)"], { type: "text/javascript" }))).onmessage = step;
+          } catch (e) {
+            setInterval(step, 100);
+          }
+        };
+        sprite.src = "images/earth-spin.png";
+      });
       document.addEventListener("visibilitychange", function () {
-        if (document.hidden) { document.title = "come back!!"; start(); }
-        else { document.title = title; stop(); }
+        document.title = document.hidden ? "come back!!" : title;
       });
     })();
 
