@@ -9,6 +9,7 @@
 //   GET    /api/guestbook        newest messages, ?before=<id> for older ones
 //   POST   /api/guestbook        { name, message, website } (website is a bot trap)
 //   DELETE /api/guestbook/<id>   remove a message; needs "Authorization: Bearer <ADMIN_TOKEN>"
+//   GET    /api/youtube          latest uploads from the youtube channel, refreshed hourly
 
 import { DurableObject } from "cloudflare:workers";
 
@@ -18,6 +19,9 @@ const NAME_MAX = 32;
 const MESSAGE_MAX = 500;
 const POST_GAP_MS = 60 * 1000; // one message per minute per visitor
 const POSTS_PER_DAY = 5; // per visitor
+const YOUTUBE = "https://www.youtube.com/@shibereal/videos";
+const YOUTUBE_EVERY_MS = 60 * 60 * 1000; // check the channel at most once an hour
+const VIDEOS_MAX = 6;
 
 export class Store extends DurableObject {
   constructor(ctx, env) {
@@ -33,7 +37,21 @@ export class Store extends DurableObject {
         visitor TEXT NOT NULL
       );
       CREATE INDEX IF NOT EXISTS entries_visitor ON entries (visitor, time);
+      CREATE TABLE IF NOT EXISTS saved (key TEXT PRIMARY KEY, value TEXT NOT NULL, time INTEGER NOT NULL);
     `);
+  }
+
+  // Small key-value store for things fetched from elsewhere (the youtube list)
+  load(key) {
+    const row = this.sql.exec("SELECT value, time FROM saved WHERE key = ?", key).toArray()[0];
+    return row ? { value: JSON.parse(row.value), time: row.time } : null;
+  }
+
+  save(key, value) {
+    this.sql.exec(
+      "INSERT INTO saved (key, value, time) VALUES (?, ?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value, time = excluded.time",
+      key, JSON.stringify(value), Date.now()
+    );
   }
 
   visits() {
@@ -158,6 +176,45 @@ function tidy(text) {
   return text.replace(/([^\w\s])\1{3,}/g, "$1$1$1").replace(/(\w)\1{5,}/g, "$1$1$1$1$1");
 }
 
+// YouTube ---------------------------------------------------------------------
+// The channel's RSS feed 404s, and the Data API needs a key, so this reads the
+// list YouTube builds into the channel's videos page.
+async function fetchVideos() {
+  const res = await fetch(YOUTUBE + "?hl=en&gl=US", {
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+      "Accept-Language": "en-US,en;q=0.9",
+      Cookie: "SOCS=CAI", // skip the cookie consent page in europe
+    },
+  });
+  if (!res.ok) throw new Error("youtube " + res.status);
+  const html = await res.text();
+  const data = html.match(/var ytInitialData = (\{.*?\});<\/script>/s);
+  if (!data) throw new Error("no ytInitialData");
+  const videos = [];
+  (function walk(node) {
+    if (!node || typeof node !== "object" || videos.length >= VIDEOS_MAX) return;
+    const lockup = node.lockupViewModel;
+    if (lockup && lockup.contentType === "LOCKUP_CONTENT_TYPE_VIDEO") {
+      const meta = lockup.metadata?.lockupMetadataViewModel;
+      const parts = (meta?.metadata?.contentMetadataViewModel?.metadataRows || []).flatMap((r) => r.metadataParts || []);
+      const label = (re) => (parts.find((p) => re.test(p.accessibilityLabel || "")) || {}).accessibilityLabel || "";
+      const badge = JSON.stringify(lockup.contentImage || {}).match(/"text":"(\d+(?::\d+)+)"/);
+      videos.push({
+        id: lockup.contentId,
+        title: meta?.title?.content || "",
+        views: label(/views?$/),
+        ago: label(/ago$/),
+        length: badge ? badge[1] : "",
+      });
+      return;
+    }
+    Object.values(node).forEach(walk);
+  })(JSON.parse(data[1]));
+  const subs = html.match(/"([\d.,]+[KM]? subscribers?)"/);
+  return { videos: videos.filter((v) => /^[\w-]{11}$/.test(v.id)), subscribers: subs ? subs[1] : "" };
+}
+
 // Hash the IP so rate limits work without storing anyone's address.
 async function visitorId(request) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
@@ -207,6 +264,21 @@ export default {
       if (reason) return json(request, { error: reason }, 400);
       const result = await store.post(name, message, await visitorId(request));
       return json(request, result, result.error ? 429 : 200);
+    }
+
+    if (url.pathname === "/api/youtube" && method === "GET") {
+      const saved = await store.load("youtube");
+      if (saved && Date.now() - saved.time < YOUTUBE_EVERY_MS) return json(request, saved.value);
+      try {
+        const fresh = await fetchVideos();
+        if (!fresh.videos.length) throw new Error("no videos found");
+        await store.save("youtube", fresh);
+        return json(request, fresh);
+      } catch (err) {
+        // YouTube changed something or is down: an old list is better than none
+        if (saved) return json(request, saved.value);
+        return json(request, { error: String(err.message || err) }, 502);
+      }
     }
 
     const del = url.pathname.match(/^\/api\/guestbook\/(\d+)$/);
