@@ -538,6 +538,14 @@
     }
     #buddy-figure img { display: block; height: 220px; width: auto; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
     #buddy-figure.hop { animation: hop 0.45s ease-out; }
+    #buddy { transition: transform 0.3s, opacity 0.3s; }
+    /* ducks down while you type, so she never covers the guestbook form */
+    #buddy.shy { transform: translateY(70%); opacity: 0.4; }
+    #buddy.shy > * { pointer-events: none; }
+    @media (min-width: 721px) and (max-width: 1499px) {
+      #buddy-figure img { height: 160px; }
+      #buddy-bubble { margin-bottom: 115px; }
+    }
     @keyframes bob { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-2px); } }
     @keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
     #buddy-bubble {
@@ -1669,6 +1677,7 @@
         menu.hidden = !open;
         orb.setAttribute("aria-expanded", String(open));
         if (!open && search.value) { search.value = ""; filter(); }
+        if (!open && menu.contains(document.activeElement)) orb.focus();
         // jump straight into the search box, but not on phones (it would pop up the keyboard)
         if (open && matchMedia("(pointer: fine)").matches) search.focus();
       }
@@ -1681,10 +1690,12 @@
       var site = document.getElementById("site"), themeColor = document.getElementById("theme-color");
       // No rubber-band scrolling on the welcome screen (iPhone shows the page around it otherwise)
       splash.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+      var hideTimer;
       function hideSplash() {
         if (!splash.classList.contains("show") && !document.documentElement.classList.contains("splash")) return;
         splash.classList.add("out");
-        setTimeout(function () {
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(function () {
           splash.classList.remove("show", "out");
           document.documentElement.classList.remove("splash");
           themeColor.content = "#1f3a12";
@@ -1715,19 +1726,25 @@
       function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
       if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
-      var shutdowns = 0;
+      var shutdowns = 0, shutdownTimers = [], resumeMusic = false;
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
         shutdowns++;
         splashText.textContent = shutdowns >= 3 ? "you know this isn't a real computer, right?" : "see you later!";
         sfx("bye");
-        var wasPlaying = window.music.fadeOut();
-        setTimeout(function () { if (wasPlaying) window.music.resume(); }, 2700);
-        setTimeout(function () { sfx("hello"); }, 1700);
+        // Shutting down again before the last one finished starts the timing over
+        shutdownTimers.forEach(clearTimeout);
+        clearTimeout(hideTimer);
+        resumeMusic = window.music.fadeOut() || resumeMusic;
+        splash.classList.remove("out");
         splash.classList.add("show");
         themeColor.content = "#0b3d8a";
-        setTimeout(function () { splashText.textContent = "welcome back"; }, 1600);
-        setTimeout(hideSplash, 2600);
+        shutdownTimers = [
+          setTimeout(function () { splashText.textContent = "welcome back"; }, 1600),
+          setTimeout(function () { sfx("hello"); }, 1700),
+          setTimeout(hideSplash, 2600),
+          setTimeout(function () { if (resumeMusic) window.music.resume(); resumeMusic = false; }, 2700),
+        ];
       });
     })();
 
@@ -1744,6 +1761,11 @@
       // Fetch her picture after the rest of the page so she never slows it down
       if (document.readyState === "complete") img.src = MASCOT.src;
       else window.addEventListener("load", function () { img.src = MASCOT.src; });
+
+      // Duck out of the way while you're typing in a form
+      var typingIn = function (el) { return el && el.matches && el.matches("#content input, #content textarea"); };
+      document.addEventListener("focusin", function (e) { if (typingIn(e.target)) buddy.classList.add("shy"); });
+      document.addEventListener("focusout", function (e) { if (typingIn(e.target)) buddy.classList.remove("shy"); });
 
       var hour = new Date().getHours();
       var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi hi! " : "good evening! ")
@@ -1768,7 +1790,7 @@
       fig.addEventListener("click", function (e) {
         fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop");
         sfx("pop");
-        var visitors = document.getElementById("visitor-no").textContent;
+        var visitors = !document.getElementById("visitor-line").hidden && document.getElementById("visitor-no").textContent;
         var msg = lines[next % lines.length];
         if (next === 2 && visitors) msg = "fun fact: you're visitor #" + visitors + "!";
         next++;
@@ -1977,6 +1999,7 @@
       }
       window.addEventListener("scroll", update, { passive: true });
       window.addEventListener("repos-loaded", update);
+      window.addEventListener("site-entered", update);
       update();
     })();
   </script>

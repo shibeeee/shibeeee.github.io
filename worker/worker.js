@@ -120,7 +120,9 @@ function json(request, data, status = 200) {
 // Trim, drop control characters (keeping line breaks in messages) and cap the length.
 function clean(text, max, multiline) {
   if (typeof text !== "string") return "";
-  text = text.replace(multiline ? /[^\P{C}\n]/gu : /\p{C}/gu, "");
+  if (!multiline) text = text.replace(/\s/g, " ");
+  // \u200d glues emoji like 👨‍👩‍👧 together, so it stays
+  text = text.replace(/(?![\n\u200d])\p{C}/gu, "");
   if (multiline) text = text.replace(/\n{3,}/g, "\n\n");
   else text = text.replace(/\s+/g, " ");
   return text.trim().slice(0, max);
@@ -155,18 +157,23 @@ const BLOCKED_SET = new Set(BLOCKED_WORDS);
 // Collapsed spellings too, minus the ones that collapse into normal words (ass -> as, coon -> con)
 const COLLAPSED_SET = new Set(BLOCKED_WORDS.map(collapse).filter((w) => !["as", "con", "bobs", "gok"].includes(w)));
 const isBlocked = (w) => BLOCKED_SET.has(w) || COLLAPSED_SET.has(collapse(w));
-const LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+(\.|\s*(\(dot\)|\[dot\])\s*)(com|net|org|io|ru|xyz|top|ly|gg|co|info|biz|site|online|link|click|shop|app|me|tk|cn)\b)/i;
+const LINK = /https?:\/\/|www\./i;
+const DOMAIN = /\b[a-z0-9-]+(\.|\s*(\(dot\)|\[dot\])\s*)(com|net|org|io|ru|xyz|top|ly|gg|co|info|biz|site|online|link|click|shop|app|me|tk|cn)(?![\w-])/;
+// Real words that happen to contain a slur
+const ALLOWED_INSIDE = /snigger|niggard/g;
 
 // Returns a friendly reason when the text isn't allowed, otherwise null.
 function filterReason(text) {
-  if (LINK.test(text)) return "no links in the guestbook please!";
+  if (LINK.test(text) || DOMAIN.test(text)) return "no links in the guestbook please!";
   const plain = normalize(text);
   const words = plain.split(/[^a-z]+/).filter(Boolean);
   if (words.some(isBlocked)) return "let's keep it friendly! try different words :)";
-  // Single letters spaced out: "f u c k" -> "fuck"
-  const joined = plain.replace(/\b([a-z])[^a-z]+(?=[a-z]\b)/g, "$1");
+  // Single letters spaced out: "f u c k" -> "fuck". Done before the leetspeak swap so
+  // "a 5/5" doesn't turn into "ass"
+  const letters = text.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
+  const joined = letters.replace(/\b([a-z])[^a-z0-9]+(?=[a-z]\b)/g, "$1");
   if (joined.split(/[^a-z]+/).some(isBlocked)) return "let's keep it friendly! try different words :)";
-  const squashed = plain.replace(/[^a-z]/g, "");
+  const squashed = plain.replace(ALLOWED_INSIDE, "").replace(/[^a-z]/g, "");
   if (BLOCKED_ANYWHERE.some((w) => squashed.includes(w))) return "let's keep it friendly! try different words :)";
   return null;
 }
@@ -255,6 +262,7 @@ export default {
       } catch {
         return json(request, { error: "that didn't look right, try again" }, 400);
       }
+      if (!body || typeof body !== "object") return json(request, { error: "that didn't look right, try again" }, 400);
       // Bots fill in every field; people never see this one
       if (body.website) return json(request, { entry: null });
       const name = tidy(clean(body.name, NAME_MAX, false));
