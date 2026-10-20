@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://api.github.com" crossorigin>
   <link rel="icon" id="favicon" href="images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-  <meta name="theme-color" content="#1f3a12">
+  <meta name="theme-color" id="theme-color" content="#1f3a12">
   <link rel="canonical" href="https://shibeeee.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://shibeeee.github.io/">
@@ -45,6 +45,8 @@
     #site { max-width: 1280px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.25s ease-out both; }
     @keyframes win-open { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
     html.splash #site { animation: none; opacity: 0; }
+    /* Nothing behind the welcome screen can scroll or peek out, even with a fast swipe on a phone */
+    html.splash, html.splash body { height: 100%; overflow: hidden; overscroll-behavior: none; background: #0b3d8a; }
 
     /* Header ------------------------------------------------------------- */
     #header {
@@ -621,6 +623,8 @@
   <script>
     // "Click to enter" screen on every page load. The click is what lets the music start right away.
     document.documentElement.classList.add("splash");
+    // Blue phone status bar to match the welcome screen (back to green once you're in)
+    document.getElementById("theme-color").content = "#0b3d8a";
   </script>
 </head>
 <body id="top">
@@ -1359,13 +1363,16 @@
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
       document.getElementById("show-desktop").addEventListener("click", function () { window.scrollTo({ top: 0 }); });
 
-      var site = document.getElementById("site");
+      var site = document.getElementById("site"), themeColor = document.getElementById("theme-color");
+      // No rubber-band scrolling on the welcome screen (iPhone shows the page around it otherwise)
+      splash.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
       function hideSplash() {
         if (!splash.classList.contains("show") && !document.documentElement.classList.contains("splash")) return;
         splash.classList.add("out");
         setTimeout(function () {
           splash.classList.remove("show", "out");
           document.documentElement.classList.remove("splash");
+          themeColor.content = "#1f3a12";
           site.style.animation = "none";
           void site.offsetWidth; // restart the window-open animation
           site.style.animation = "";
@@ -1403,6 +1410,7 @@
         setTimeout(function () { if (wasPlaying) window.music.resume(); }, 2700);
         setTimeout(function () { sfx("hello"); }, 1700);
         splash.classList.add("show");
+        themeColor.content = "#0b3d8a";
         setTimeout(function () { splashText.textContent = "welcome back"; }, 1600);
         setTimeout(hideSplash, 2600);
       });
@@ -1499,7 +1507,7 @@
       var hop = function () { if (window.nanami) window.nanami.hop(); };
       var typing = function (e) { return e.target.closest && e.target.closest("input, textarea, [contenteditable]"); };
 
-      // Konami code: a shower of aero bubbles
+      // Konami code flips the page (below)
       var konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"], pos = 0;
       // typing "nanami" makes her answer
       var word = "";
