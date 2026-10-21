@@ -19,6 +19,7 @@ const NAME_MAX = 32;
 const MESSAGE_MAX = 500;
 const POST_GAP_MS = 60 * 1000; // one message per minute per visitor
 const POSTS_PER_DAY = 5; // per visitor
+const VISIT_GAP_MS = 6 * 60 * 60 * 1000; // a visitor counts again after 6 hours
 const YOUTUBE = "https://www.youtube.com/@shibereal/videos";
 const YOUTUBE_EVERY_MS = 60 * 60 * 1000; // check the channel at most once an hour
 const VIDEOS_MAX = 6;
@@ -38,6 +39,7 @@ export class Store extends DurableObject {
       );
       CREATE INDEX IF NOT EXISTS entries_visitor ON entries (visitor, time);
       CREATE TABLE IF NOT EXISTS saved (key TEXT PRIMARY KEY, value TEXT NOT NULL, time INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS visitors (visitor TEXT PRIMARY KEY, time INTEGER NOT NULL);
     `);
   }
 
@@ -59,7 +61,13 @@ export class Store extends DurableObject {
     return row ? row.value : 0;
   }
 
-  addVisit() {
+  // Counts a visitor at most once per VISIT_GAP_MS, so refreshing (or a script) can't pump the number
+  addVisit(visitor) {
+    const now = Date.now();
+    const last = this.sql.exec("SELECT time FROM visitors WHERE visitor = ?", visitor).toArray()[0];
+    if (last && now - last.time < VISIT_GAP_MS) return this.visits();
+    this.sql.exec("DELETE FROM visitors WHERE time < ?", now - VISIT_GAP_MS);
+    this.sql.exec("INSERT OR REPLACE INTO visitors (visitor, time) VALUES (?, ?)", visitor, now);
     this.sql.exec(
       "INSERT INTO counters (key, value) VALUES ('visits', 1) ON CONFLICT (key) DO UPDATE SET value = value + 1"
     );
@@ -158,7 +166,7 @@ const BLOCKED_SET = new Set(BLOCKED_WORDS);
 const COLLAPSED_SET = new Set(BLOCKED_WORDS.map(collapse).filter((w) => !["as", "con", "bobs", "gok"].includes(w)));
 const isBlocked = (w) => BLOCKED_SET.has(w) || COLLAPSED_SET.has(collapse(w));
 const LINK = /https?:\/\/|www\./i;
-const DOMAIN = /\b[a-z0-9-]+(\.|\s*(\(dot\)|\[dot\])\s*)(com|net|org|io|ru|xyz|top|ly|gg|co|info|biz|site|online|link|click|shop|app|me|tk|cn)(?![\w-])/;
+const DOMAIN = /\b[a-z0-9-]+(\.|\s*(\(dot\)|\[dot\])\s*|\s+dot\s+(?=(com|net|org|io|xyz|gg|ru)\b))(com|net|org|io|ru|xyz|top|ly|gg|co|info|biz|site|online|link|click|shop|app|me|tk|cn)(?![\w-])/;
 // Real words that happen to contain a slur
 const ALLOWED_INSIDE = /snigger|niggard/g;
 
@@ -246,7 +254,7 @@ export default {
 
     if (url.pathname === "/api/visit" && method === "POST") {
       if (!fromHomepage) return json(request, { error: "not allowed" }, 403);
-      return json(request, { visits: await store.addVisit() });
+      return json(request, { visits: await store.addVisit(await visitorId(request)) });
     }
 
     if (url.pathname === "/api/guestbook" && method === "GET") {

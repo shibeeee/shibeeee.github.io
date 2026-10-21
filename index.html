@@ -41,6 +41,7 @@
     p { margin: 0; }
     [hidden] { display: none !important; }
     :focus-visible { outline: 2px solid #57fa6f; outline-offset: 2px; }
+    #welcome:focus { outline: none; }
 
     #site { max-width: 1280px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.25s ease-out both; }
     @keyframes win-open { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
@@ -679,6 +680,10 @@
       #buddy-bubble { max-width: 180px; margin-bottom: 70px; font-size: 12.5px; }
       .task { width: 46px; }
     }
+    @media (max-width: 360px) {
+      .task { width: 38px; }
+      .tray { padding: 0 6px; }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; transition: none; }
       #logo, .nav-group a, .shot { transition: none; }
@@ -741,7 +746,7 @@
         <nav class="nav-group" aria-label="this page">
           <span class="nav-title">main</span>
           <a href="#top" class="active"><img src="images/icons/home.webp" width="20" height="20" alt="">home</a>
-          <a href="#websites"><img src="images/icons/websites.webp" width="20" height="20" alt="">websites</a>
+          <a href="#websites"><img src="images/icons/websites.webp" width="20" height="20" alt="">website</a>
           <a href="#downloads"><img src="images/icons/downloads.webp" width="20" height="20" alt="">downloads</a>
           <a href="#videos"><img src="images/icons/videos.webp" width="20" height="20" alt="">videos</a>
           <a href="#discord"><svg aria-hidden="true"><use href="#i-discord"/></svg>discord</a>
@@ -797,7 +802,7 @@
       </aside>
 
       <main id="content">
-        <h1 class="bar">welcome!</h1>
+        <h1 class="bar" id="welcome" tabindex="-1">welcome!</h1>
 
         <div class="glass">
           <div class="banner">
@@ -814,7 +819,7 @@
           </div>
         </div>
 
-        <h2 class="bar" id="websites">my websites</h2>
+        <h2 class="bar" id="websites">my website</h2>
 
         <div class="glass">
           <div class="box project">
@@ -973,7 +978,7 @@
     <div class="start-places">
       <div class="start-pic"><img src="images/logo.webp" alt=""></div>
       <a class="place" href="#top">shibe</a>
-      <a class="place" href="#websites">websites</a>
+      <a class="place" href="#websites">website</a>
       <a class="place" href="#downloads">downloads</a>
       <a class="place" href="#updates">updates</a>
       <a class="place" href="#linkme">link to me</a>
@@ -1314,7 +1319,7 @@
       return {
         setMuted: function (m) { muted = m; audio.muted = m; level(1, 0.1); },
         // the "click to enter" button starts the first song, fading in softly
-        start: function () { load(0); remember(true); play(3); },
+        start: function () { load(0); if (wanted) play(3); },
         // fade out for "shut down", then pick back up for "welcome back"
         fadeOut: function () {
           if (audio.paused) return false;
@@ -1714,7 +1719,12 @@
         sfx("hello");
         setTimeout(function () {
           hideSplash();
-          setTimeout(function () { splash.classList.remove("entering"); window.dispatchEvent(new Event("site-entered")); }, 300);
+          setTimeout(function () {
+            splash.classList.remove("entering");
+            // keyboard users carry on from the top of the page
+            document.getElementById("welcome").focus({ preventScroll: true });
+            window.dispatchEvent(new Event("site-entered"));
+          }, 300);
         }, 500);
       }
       splash.addEventListener("click", function () { if (gateOpen) enter(); else hideSplash(); });
