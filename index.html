@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shibe's homepage | websites, games &amp; tools</title>
-  <meta name="description" content="websites, games and little tools made by shibe: tab to sheet and remap.">
+  <meta name="description" content="shibe's homepage: tab to sheet, remap, entry point videos and a guestbook.">
   <link rel="preload" href="images/nanami-tile.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
@@ -144,23 +144,15 @@
     .box { padding: 10px 12px; background: rgba(27, 27, 27, 0.83); border: 1px solid #707070; }
     .box p + p { margin-top: 8px; }
 
-    /* Banner */
-    .banner {
-      position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      min-height: 200px; padding: 20px 28px;
-      background: #2a3a10 url("images/banner.webp") center / cover no-repeat;
-      border: 1px solid #707070; overflow: hidden;
+    /* About me */
+    .about { display: flex; gap: 14px; align-items: flex-start; }
+    .about-pic {
+      flex: none; width: 104px; height: 104px; padding: 4px;
+      background: linear-gradient(to bottom, rgba(120, 120, 120, 0.35), rgba(39, 39, 39, 0.2));
+      border: 1px solid rgba(236, 242, 249, 0.5); border-radius: 4px;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
-    .banner::after {
-      content: ""; position: absolute; inset: 0 0 auto 0; height: 45%;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
-      pointer-events: none;
-    }
-    .banner-text { position: relative; }
-    .banner-title {
-      display: block; font-size: 46px; line-height: 1; color: #fff; letter-spacing: -0.5px;
-      text-shadow: 0 2px 0 #1b4d0f, 0 0 12px rgba(0, 0, 0, 0.8), 0 0 2px #000;
-    }
+    .about-pic img { display: block; width: 100%; height: 100%; border: 1px solid #707070; }
     /* App-style icon tiles */
     .tile {
       position: relative; display: block; flex: none; width: 64px; height: 64px;
@@ -190,7 +182,6 @@
     }
     .shot:hover { transform: scale(1.03); }
     .shot img { display: block; width: 100%; height: auto; border: 1px solid #707070; }
-    .project .kind { margin-left: 6px; font-size: 12px; color: #9a9a9a; }
     .project p { margin-top: 3px; }
     .buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
     .btn {
@@ -210,13 +201,7 @@
     }
 
     /* Videos */
-    .channel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 14px; }
-    .channel .tile { width: 48px; height: 48px; border-radius: 11px; }
-    .channel .tile::after { border-radius: 9px 9px 50% 50%; }
-    .channel h3 { margin: 0; font-size: 17px; font-weight: 600; }
-    .channel-info { flex: 1; min-width: 160px; }
-    .channel-stats { font-size: 13px; color: #9a9a9a; }
-    .channel .buttons { margin: 0; }
+    .videos-note { margin-bottom: 12px; }
     .videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px 14px; margin: 0; padding: 0; list-style: none; }
     .video .shot { position: relative; width: auto; }
     .video .shot img { aspect-ratio: 16 / 9; object-fit: cover; background: #111; }
@@ -295,6 +280,9 @@
       text-shadow: 0 0 4px #000, 0 0 2px #000;
     }
     #footer a { color: #8cf59a; }
+    .credits { margin-top: 3px; color: #bdbdbd; }
+    .credits summary { display: inline; cursor: pointer; color: #8cf59a; }
+    .credits[open] summary { display: block; margin-bottom: 2px; }
 
     /* Visitor counter */
     .counter { margin: 10px 0 0; }
@@ -310,6 +298,21 @@
       text-shadow: 0 0 6px rgba(87, 250, 111, 0.6);
       transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
+    .side-box { padding: 0 8px 7px; }
+    .side-box .nav-title { margin: 1px -7px 6px; }
+    .now { display: flex; gap: 7px; align-items: baseline; font-size: 12.5px; line-height: 1.35; color: #ddd; }
+    .now-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #80848e; box-shadow: 0 0 4px rgba(0, 0, 0, 0.8); }
+    .now-dot.online { background: #23a55a; }
+    .now-dot.idle { background: #f0b232; }
+    .now-dot.dnd { background: #f23f43; }
+    .nav-group a.side-video, .nav-group a.side-video:hover {
+      display: block; width: auto; margin: 0; padding: 0; border: 0; background: none; transform: none;
+      font-size: 12.5px; line-height: 1.35; color: #ddd;
+    }
+    .nav-group a.side-video::before { display: none; }
+    .nav-group a.side-video img { display: block; width: 100%; height: auto; margin: 0 0 4px; border: 1px solid #707070; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); }
+    .nav-group a.side-video:hover span { text-decoration: underline; }
+    .site-info { margin: 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.5; color: #bdbdbd; }
     .counter-note { display: block; margin-bottom: 4px; text-align: center; font-size: 11.5px; color: #9a9a9a; }
 
     /* Guestbook */
@@ -590,8 +593,6 @@
       #logo { width: 72px; height: 72px; }
       .bar { font-size: 17px; }
       h2.bar { font-size: 15.5px; }
-      .banner { min-height: 240px; padding: 26px 36px; }
-      .banner-title { font-size: 56px; }
       .shot { width: 320px; }
       .project h3 { font-size: 18.5px; }
       .gadget svg { width: 160px; height: 160px; }
@@ -661,8 +662,8 @@
       #menu-toggle { display: inline-flex; }
       #content { border-top: 1px solid #3b3b3b; }
       #content { border-left: 1px solid #3b3b3b; }
-      .banner { flex-direction: column; align-items: flex-start; min-height: 0; padding: 18px; }
-      .banner-title { font-size: 34px; }
+      .about-pic { width: 76px; height: 76px; padding: 3px; }
+      .side-extra { display: none !important; }
       .project { flex-direction: column; }
       .shot { width: 100%; }
       .dc-avatar { width: 68px; height: 68px; }
@@ -713,7 +714,6 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="g-tts" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a66"/><stop offset="1" stop-color="#121216"/></linearGradient>
-      <linearGradient id="g-yt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a4f"/><stop offset="1" stop-color="#c80d00"/></linearGradient>
       <linearGradient id="g-rm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb54a"/><stop offset="1" stop-color="#e2620c"/></linearGradient>
 
       <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
@@ -722,7 +722,6 @@
       <symbol id="i-tts" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-tts)"/><g stroke="#fff" stroke-width="1.2" opacity="0.5"><path d="M5 10h22M5 14h22M5 18h22M5 22h22"/></g><circle cx="13" cy="20" r="3" fill="#fff"/><path d="M15.6 20V8.5" stroke="#fff" stroke-width="1.8"/></symbol>
       <symbol id="i-rm" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-rm)"/><rect x="5.5" y="10" width="9" height="9" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="17.5" y="10" width="9" height="9" rx="2" fill="#fff"/><path d="M10 23.5h12m-2-2 2 2-2 2" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
-      <symbol id="i-yt-tile" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-yt)"/><path d="M12.5 10v12l10-6z" fill="#fff"/></symbol>
       <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="0.5" y="4" width="23" height="16" rx="4.5" fill="#f22"/><path d="M9.6 8.2v7.6l6.6-3.8z" fill="#fff"/></symbol>
       <symbol id="i-discord" viewBox="0 0 24 24"><path fill="#8c9eff" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
@@ -734,7 +733,7 @@
       <a href="#top" title="back to the top"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibe"></a>
       <div>
         <span class="header-title">shibe's homepage</span>
-        <span class="header-motto">websites, games and little tools i've made</span>
+        <span class="header-motto">stuff i make, and some game videos</span>
       </div>
       <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">menu <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </header>
@@ -790,23 +789,37 @@
           <div class="odometer" id="odometer" role="img" aria-label="visitor count loading"></div>
           <span class="counter-note" id="counter-note">counting...</span>
         </div>
+
+        <!-- filled in live from discord further down -->
+        <div class="nav-group side-box side-extra" id="now-box" hidden>
+          <span class="nav-title">right now</span>
+          <div class="now"><span class="now-dot" id="now-dot"></span><span id="now-text"></span></div>
+        </div>
+
+        <div class="nav-group side-box side-extra">
+          <span class="nav-title">latest video</span>
+          <a class="side-video" id="side-video" href="https://www.youtube.com/watch?v=2x3AhJA6xU8"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span>an angry rooster vs. the world: part 2</span></a>
+        </div>
+
+        <div class="nav-group side-box side-extra">
+          <span class="nav-title">this site</span>
+          <ul class="site-info">
+            <li>up since oct 18, 2026</li>
+            <li>last updated <span id="site-updated">oct 21, 2026</span></li>
+          </ul>
+        </div>
       </aside>
 
       <main id="content">
         <h1 class="bar" id="welcome" tabindex="-1">welcome!</h1>
 
         <div class="glass">
-          <div class="banner">
-            <div class="banner-text">
-              <span class="banner-title">shibe</span>
+          <div class="box about">
+            <span class="about-pic"><img src="images/me.webp" width="96" height="96" alt="my profile picture, a cat swimming"></span>
+            <div>
+              <p>hey, i'm shibe. i make stuff and put it here. right now that's <a href="#websites">tab to sheet</a>, which turns songsterr tabs into sheet music, and <a href="#downloads">remap</a>, a key remapper for windows.</p>
+              <p>i also upload <a href="#videos">game videos</a>, mostly entry point stealth runs. all my code is on <a href="https://github.com/shibeeee">github</a>, and there's a <a href="#guestbook">guestbook</a> at the bottom if you want to say hi.</p>
             </div>
-          </div>
-        </div>
-
-        <div class="glass">
-          <div class="box">
-            <p>hi, i'm shibe. this is where i put the things i make: a <a href="#websites">website</a> that runs in your browser and a small <a href="#downloads">windows tool</a>.</p>
-            <p>everything here is free, and all the code is on my <a href="https://github.com/shibeeee">github</a>. i also put <a href="#videos">game videos</a> on youtube.</p>
           </div>
         </div>
 
@@ -816,8 +829,8 @@
           <div class="box project">
             <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.webp" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
             <div class="project-info">
-              <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a><span class="kind">music</span></h3>
-              <p>paste a songsterr link or search for a song, and it turns the tab into sheet music you can print: standard notation, tab, or both. it plays the song back too, with a loop and a speed trainer for practicing, and it can export guitar pro and midi files.</p>
+              <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a></h3>
+              <p>give it a songsterr link (or search for a song) and it turns the tab into sheet music you can print. it plays the song back too, and you can loop a part or slow it down to practice. it can also save the song as a guitar pro or midi file.</p>
               <div class="buttons">
                 <a class="btn go" href="https://shibeeee.github.io/songsterr-to-sheet-music/">open it &raquo;</a>
                 <a class="btn" href="https://github.com/shibeeee/songsterr-to-sheet-music">source code</a>
@@ -832,8 +845,8 @@
           <div class="box project">
             <span class="tile"><svg aria-hidden="true"><use href="#i-rm"/></svg></span>
             <div class="project-info">
-              <h3><a href="https://github.com/shibeeee/remap-with-AHK">remap</a><span class="kind">windows</span></h3>
-              <p>a key remapper for windows, built on autohotkey v2. each profile only runs while one of its programs is the active window. it comes with a profile for hotline miami that turns e into right click, which helps a lot on a laptop.</p>
+              <h3><a href="https://github.com/shibeeee/remap-with-AHK">remap</a></h3>
+              <p>remaps keys on windows, but only while a certain program is open, so nothing else gets messed up. it runs on autohotkey v2. there's a hotline miami profile in it that makes e a right click, which is way easier on a laptop.</p>
               <div class="buttons">
                 <a class="btn go" href="https://github.com/shibeeee/remap-with-AHK">get it on github &raquo;</a>
               </div>
@@ -845,25 +858,15 @@
 
         <div class="glass">
           <div class="box">
-            <div class="channel">
-              <span class="tile"><svg aria-hidden="true"><use href="#i-yt-tile"/></svg></span>
-              <div class="channel-info">
-                <h3><a href="https://www.youtube.com/@shibereal">shibe</a></h3>
-                <span class="channel-stats"><span id="yt-subs">23 subscribers</span> &middot; i like games</span>
-              </div>
-              <div class="buttons">
-                <a class="btn go" href="https://www.youtube.com/@shibereal?sub_confirmation=1">subscribe &raquo;</a>
-                <a class="btn" href="https://www.youtube.com/@shibereal/videos">all videos</a>
-              </div>
-            </div>
+            <p class="videos-note">mostly entry point, stealth with no kills. <span id="yt-subs">23 subscribers</span> so far, the rest is on <a href="https://www.youtube.com/@shibereal/videos">my channel</a>.</p>
             <!-- refreshed from the channel when the page loads; this list is the fallback -->
             <ul class="videos" id="video-list">
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=2x3AhJA6xU8"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:25</span></a><a class="video-title" href="https://www.youtube.com/watch?v=2x3AhJA6xU8">an angry rooster vs. the world: part 2</a><span class="video-meta">45 views &middot; 6 months ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Co4q0xhVKwo"><img src="https://i.ytimg.com/vi/Co4q0xhVKwo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:02</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Co4q0xhVKwo">entry point - financier daily legend</a><span class="video-meta">16 views &middot; 10 months ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Pou58YN7rpI"><img src="https://i.ytimg.com/vi/Pou58YN7rpI/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:23</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Pou58YN7rpI">entry point - blacksite blindfolded (legend stealth solo no kills)</a><span class="video-meta">111 views &middot; 1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=GfV_KI7HGX4"><img src="https://i.ytimg.com/vi/GfV_KI7HGX4/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">6:15</span></a><a class="video-title" href="https://www.youtube.com/watch?v=GfV_KI7HGX4">entry point - blindfolded: electric boogaloo (the auction legend stealth no kills)</a><span class="video-meta">54 views &middot; 1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc"><img src="https://i.ytimg.com/vi/n8AWQ1WUnhc/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:05</span></a><a class="video-title" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc">entry point - blindfolded (the deposit legend stealth solo no kills)</a><span class="video-meta">112 views &middot; 1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=pKwbyPjREgo"><img src="https://i.ytimg.com/vi/pKwbyPjREgo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">5:41</span></a><a class="video-title" href="https://www.youtube.com/watch?v=pKwbyPjREgo">entry point - the deposit daily challenge legend solo (no kills)</a><span class="video-meta">134 views &middot; 1 year ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=2x3AhJA6xU8"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:25</span></a><a class="video-title" href="https://www.youtube.com/watch?v=2x3AhJA6xU8">an angry rooster vs. the world: part 2</a><span class="video-meta">6 months ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Co4q0xhVKwo"><img src="https://i.ytimg.com/vi/Co4q0xhVKwo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:02</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Co4q0xhVKwo">entry point - financier daily legend</a><span class="video-meta">10 months ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Pou58YN7rpI"><img src="https://i.ytimg.com/vi/Pou58YN7rpI/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:23</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Pou58YN7rpI">entry point - blacksite blindfolded (legend stealth solo no kills)</a><span class="video-meta">1 year ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=GfV_KI7HGX4"><img src="https://i.ytimg.com/vi/GfV_KI7HGX4/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">6:15</span></a><a class="video-title" href="https://www.youtube.com/watch?v=GfV_KI7HGX4">entry point - blindfolded: electric boogaloo (the auction legend stealth no kills)</a><span class="video-meta">1 year ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc"><img src="https://i.ytimg.com/vi/n8AWQ1WUnhc/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:05</span></a><a class="video-title" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc">entry point - blindfolded (the deposit legend stealth solo no kills)</a><span class="video-meta">1 year ago</span></li>
+              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=pKwbyPjREgo"><img src="https://i.ytimg.com/vi/pKwbyPjREgo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">5:41</span></a><a class="video-title" href="https://www.youtube.com/watch?v=pKwbyPjREgo">entry point - the deposit daily challenge legend solo (no kills)</a><span class="video-meta">1 year ago</span></li>
             </ul>
           </div>
         </div>
@@ -878,7 +881,7 @@
               <div class="dc-info">
                 <h3><span id="dc-name">shibe</span><span class="dc-tag" id="dc-tag" hidden><img id="dc-tag-img" alt=""><span id="dc-tag-text"></span></span></h3>
                 <span class="dc-sub"><span id="dc-user">@shibereal</span><span id="dc-status"></span></span>
-                <p class="dc-custom" id="dc-custom">come say hi! send me a friend request on discord.</p>
+                <p class="dc-custom" id="dc-custom">add me if you want.</p>
                 <div class="dc-activity" id="dc-activity" hidden>
                   <img id="dc-act-img" alt="" hidden>
                   <div class="dc-act-text">
@@ -952,8 +955,12 @@
     </div>
 
     <footer id="footer">
-      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibe &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
-      <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl) &middot; earth photo by <a href="https://visibleearth.nasa.gov/images/57723/the-blue-marble">nasa</a>
+      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span> &middot; </span>made by shibe, 2026 &middot; hosted on <a href="https://pages.github.com/">github pages</a>
+      <details class="credits">
+        <summary>credits</summary>
+        background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> (pexels) &middot; earth photo by <a href="https://visibleearth.nasa.gov/images/57723/the-blue-marble">nasa</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl) &middot; nanami madobe belongs to windows 7 mania / microsoft japan
+        <br>music: "bossa antigua", "local forecast – elevator" and "lobby time" by <a href="https://incompetech.com/">kevin macleod</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">cc by 4.0</a>
+      </details>
     </footer>
   </div>
 
@@ -1086,6 +1093,9 @@
         }));
 
         // Everything without its own card
+        var home = repos.filter(function (r) { return r.name.toLowerCase() === HOME_REPO; })[0];
+        if (home) document.getElementById("site-updated").textContent = day(home.pushed_at);
+
         var others = repos.filter(function (r) {
           var key = r.name.toLowerCase();
           return !FEATURED[key] && key !== HOME_REPO;
@@ -1344,7 +1354,7 @@
             col.style.transform = "translateY(" + (-26 * Number(ch)) + "px)";
           }); });
         });
-        note.textContent = "people stopped by";
+        note.textContent = "since oct 2026";
         odo.setAttribute("aria-label", Number(n).toLocaleString() + " visitors");
         document.getElementById("visitor-no").textContent = Number(n).toLocaleString();
         document.getElementById("visitor-line").hidden = false;
@@ -1362,7 +1372,7 @@
           try { sessionStorage.setItem("counted", "1"); } catch (e) {}
           show(d.visits);
         })
-        .catch(function () { note.textContent = "counter is napping"; });
+        .catch(function () { note.textContent = "couldn't load the count"; });
     })();
 
     (function () {
@@ -1389,13 +1399,13 @@
           .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
           .then(function (d) {
             d.entries.forEach(function (e) { list.appendChild(entry(e)); oldest = e.id; });
-            if (!oldest) status.textContent = "no messages yet, be the first!";
+            if (!oldest) status.textContent = "nobody's signed it yet";
             more.hidden = !d.more;
             more.disabled = false;
           })
           .catch(function () {
             if (oldest) { more.disabled = false; return; }
-            status.textContent = "the guestbook is taking a nap right now, try again later!";
+            status.textContent = "couldn't load the guestbook, try again later";
             Array.prototype.forEach.call(form.elements, function (el) { el.disabled = true; });
           });
       }
@@ -1457,11 +1467,15 @@
             shot.appendChild(len);
           }
           title.className = "video-title"; title.href = url; title.textContent = v.title;
-          meta.className = "video-meta"; meta.textContent = [v.views, v.ago].filter(Boolean).join(" \u00b7 ");
+          meta.className = "video-meta"; meta.textContent = v.ago || "";
           li.append(shot, title, meta);
           return li;
         }));
         if (data.subscribers) document.getElementById("yt-subs").textContent = data.subscribers;
+        var latest = data.videos[0], side = document.getElementById("side-video");
+        side.href = "https://www.youtube.com/watch?v=" + latest.id;
+        side.querySelector("img").src = "https://i.ytimg.com/vi/" + latest.id + "/mqdefault.jpg";
+        side.querySelector("span").textContent = latest.title;
       }
 
       var CACHE = "yt-videos", cached = null;
@@ -1555,7 +1569,7 @@
         var custom = (p.activities || []).filter(function (a) { return a.type === 4; })[0];
         $("dc-custom").textContent = custom
           ? ((custom.emoji && !custom.emoji.id ? custom.emoji.name + " " : "") + (custom.state || "")).trim()
-          : status === "offline" ? "offline right now, but you can still send a friend request!" : "come say hi! send me a friend request on discord.";
+          : status === "offline" ? "offline right now, but you can still add me" : "add me if you want.";
         $("dc-custom").hidden = !$("dc-custom").textContent;
 
         var open = $("dc-open");
@@ -1564,8 +1578,19 @@
       }
 
       // Redrawn every second so times and the song bar keep moving
+      // The little "right now" box in the sidebar
+      function sidebar(p, act) {
+        var status = p.discord_status || "offline";
+        $("now-box").hidden = false;
+        $("now-dot").className = "now-dot " + status;
+        $("now-text").textContent = act
+          ? (act.spotify ? "listening to " + act.spotify.song + " by " + act.spotify.artist : (VERB[act.type] || "playing") + " " + act.name)
+          : status === "offline" ? "offline" : status === "idle" ? "away" : status === "dnd" ? "busy" : "online, not doing much";
+      }
+
       function update() {
         var act = presence && activity(presence), box = $("dc-activity"), img = $("dc-act-img"), bar = $("dc-bar");
+        if (presence) sidebar(presence, act);
         box.hidden = !act;
         clearTimeout(tick);
         if (!act) return;
@@ -1928,7 +1953,7 @@
       // A hello for anyone who opens the developer console
       try {
         console.log("%cshibe's homepage", "font: 600 16px Segoe UI, sans-serif; color: #3cda56");
-        console.log("hi, curious one! all the code for this site is here: https://github.com/shibeeee/shibeeee.github.io");
+        console.log("the code for this site is here: https://github.com/shibeeee/shibeeee.github.io");
       } catch (e) {}
     })();
 
