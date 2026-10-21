@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>shibeeee's homepage | websites, games &amp; tools</title>
-  <meta name="description" content="websites, games and little tools made by shibeeee: tab to sheet, pigeon pal and remap.">
+  <title>shibe's homepage | websites, games &amp; tools</title>
+  <meta name="description" content="websites, games and little tools made by shibe: tab to sheet, pigeon pal and remap.">
   <link rel="preload" href="images/nanami-tile.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
@@ -15,7 +15,7 @@
   <link rel="canonical" href="https://shibeeee.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://shibeeee.github.io/">
-  <meta property="og:title" content="shibeeee's homepage">
+  <meta property="og:title" content="shibe's homepage">
   <meta property="og:description" content="websites, games and little tools i've made">
   <meta property="og:image" content="https://shibeeee.github.io/images/banner.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -233,7 +233,14 @@
     .dc { display: flex; gap: 16px; align-items: flex-start; }
     .dc-avatar { position: relative; flex: none; width: 88px; height: 88px; padding: 4px; border-radius: 50%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)); border: 1px solid rgba(236, 242, 249, 0.5); box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); }
     .dc-avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; background: #5865f2; }
-    .dc-dot { position: absolute; right: 2px; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; border: 4px solid #1b1b1b; background: #80848e; }
+    /* Discord's avatar decorations are drawn 20% bigger than the avatar */
+    .dc-avatar .dc-deco { background: none; border-radius: 0; position: absolute; left: 4px; top: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: scale(1.2); pointer-events: none; }
+    .dc-tag {
+      display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 0 6px; height: 20px; vertical-align: 2px;
+      font-size: 12px; font-weight: 600; color: #ddd; background: rgba(255, 255, 255, 0.1); border: 1px solid #4b4b4b; border-radius: 4px;
+    }
+    .dc-tag img { width: 14px; height: 14px; }
+    .dc-dot { z-index: 1; position: absolute; right: 2px; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; border: 4px solid #1b1b1b; background: #80848e; }
     .dc-dot.online { background: #23a55a; }
     .dc-dot.idle { background: #f0b232; }
     .dc-dot.dnd { background: #f23f43; }
@@ -689,9 +696,9 @@
 </head>
 <body id="top">
   <div id="splash">
-    <div class="gate" role="dialog" aria-label="welcome to shibeeee's homepage">
+    <div class="gate" role="dialog" aria-label="welcome to shibe's homepage">
       <div class="user-tile"><img src="images/nanami-tile.webp" width="124" height="124" alt="" fetchpriority="high"></div>
-      <span class="gate-name">shibeeee</span>
+      <span class="gate-name">shibe</span>
       <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12h12M12.5 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
     </div>
     <div class="loading">
@@ -723,9 +730,9 @@
 
   <div id="site">
     <header id="header">
-      <a href="#top" title="back to the top"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibeeee"></a>
+      <a href="#top" title="back to the top"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibe"></a>
       <div>
-        <span class="header-title">shibeeee's homepage</span>
+        <span class="header-title">shibe's homepage</span>
         <span class="header-motto">websites, games and little tools i've made</span>
       </div>
       <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">menu <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -797,14 +804,14 @@
         <div class="glass">
           <div class="banner">
             <div class="banner-text">
-              <span class="banner-title">shibeeee</span>
+              <span class="banner-title">shibe</span>
             </div>
           </div>
         </div>
 
         <div class="glass">
           <div class="box">
-            <p>hi, i'm shibeeee. this is where i put the things i make: two <a href="#websites">websites</a> that run in your browser and a small <a href="#downloads">windows tool</a>.</p>
+            <p>hi, i'm shibe. this is where i put the things i make: two <a href="#websites">websites</a> that run in your browser and a small <a href="#downloads">windows tool</a>.</p>
             <p>everything here is free, and all the code is on my <a href="https://github.com/shibeeee">github</a>. i also put <a href="#videos">game videos</a> on youtube.</p>
           </div>
         </div>
@@ -885,11 +892,11 @@
 
         <div class="glass">
           <div class="box">
-            <!-- live from Lanyard (api.lanyard.rest) once DISCORD_ID is set below; this is the fallback -->
+            <!-- live from Lanyard (api.lanyard.rest); this is the fallback -->
             <div class="dc">
-              <div class="dc-avatar"><img id="dc-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" width="80" height="80" alt=""><span class="dc-dot" id="dc-dot" hidden></span></div>
+              <div class="dc-avatar"><img id="dc-avatar" src="https://cdn.discordapp.com/avatars/589584488519172123/8e2ef49388357b1deec6a6164be64534.png?size=160" width="80" height="80" alt="" onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><img class="dc-deco" id="dc-deco" alt="" hidden><span class="dc-dot" id="dc-dot" hidden></span></div>
               <div class="dc-info">
-                <h3 id="dc-name">shibereal</h3>
+                <h3><span id="dc-name">shibe</span><span class="dc-tag" id="dc-tag" hidden><img id="dc-tag-img" alt=""><span id="dc-tag-text"></span></span></h3>
                 <span class="dc-sub"><span id="dc-user">@shibereal</span><span id="dc-status"></span></span>
                 <p class="dc-custom" id="dc-custom">come say hi! send me a friend request on discord.</p>
                 <div class="dc-activity" id="dc-activity" hidden>
@@ -957,8 +964,8 @@
           <div class="box">
             <p>got a site too? feel free to grab my button:</p>
             <div class="linkme" style="margin-top: 8px">
-              <img src="images/button.png" width="88" height="31" alt="shibeeee's homepage button" loading="lazy">
-              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.png" width="88" height="31" alt="shibeeee"&gt;&lt;/a&gt;</textarea>
+              <img src="images/button.png" width="88" height="31" alt="shibe's homepage button" loading="lazy">
+              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.png" width="88" height="31" alt="shibe"&gt;&lt;/a&gt;</textarea>
             </div>
           </div>
         </div>
@@ -966,7 +973,7 @@
     </div>
 
     <footer id="footer">
-      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibeeee &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
+      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span>! &middot; </span>&copy; 2026 shibe &middot; hosted on <a href="https://pages.github.com/">github pages</a> &middot; background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> on pexels &middot; nanami madobe belongs to her creators (windows 7 mania / microsoft japan)
       <br>music: "local forecast – elevator", "lobby time" and "bossa antigua" by <a href="https://incompetech.com/">kevin macleod (incompetech.com)</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">creative commons: by attribution 4.0</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl) &middot; earth photo by <a href="https://visibleearth.nasa.gov/images/57723/the-blue-marble">nasa</a>
     </footer>
   </div>
@@ -983,7 +990,7 @@
     </div>
     <div class="start-places">
       <div class="start-pic"><img src="images/logo.webp" alt=""></div>
-      <a class="place" href="#top">shibeeee</a>
+      <a class="place" href="#top">shibe</a>
       <a class="place" href="#websites">websites</a>
       <a class="place" href="#downloads">downloads</a>
       <a class="place" href="#updates">updates</a>
@@ -1493,7 +1500,7 @@
     // numeric user id, and that account has to be in Lanyard's server. Until then the card
     // shows the username with a copy button.
     (function () {
-      var DISCORD_ID = "", NAME = "shibereal";
+      var DISCORD_ID = "589584488519172123", NAME = "shibereal";
       var $ = function (id) { return document.getElementById(id); };
       var copy = $("dc-copy"), timer;
 
@@ -1504,7 +1511,7 @@
             clearTimeout(timer);
             timer = setTimeout(function () { copy.textContent = "copy username"; }, 1600);
           }
-          if (window.nanami) window.nanami.say((copied ? "copied! " : "") + "shibeeee is " + NAME + " on discord, send a friend request!");
+          if (window.nanami) window.nanami.say((copied ? "copied! " : "") + "shibe is " + NAME + " on discord, send a friend request!");
         }
         if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(NAME).then(function () { done(true); }, function () { done(false); });
         else done(false);
@@ -1523,6 +1530,8 @@
         if (img.indexOf("spotify:") === 0) return "https://i.scdn.co/image/" + img.slice(8);
         return act.application_id ? "https://cdn.discordapp.com/app-assets/" + act.application_id + "/" + img + ".png" : "";
       }
+      // passthrough=true keeps animated decorations animated
+      function decoUrl(deco) { return "https://cdn.discordapp.com/avatar-decoration-presets/" + deco.asset + ".png?size=160&passthrough=true"; }
       function since(ms) {
         var min = Math.floor((Date.now() - ms) / 60000);
         if (min < 1) return "just started";
@@ -1540,7 +1549,7 @@
         return (p.activities || []).filter(function (a) { return a.type !== 4; })[0] || null;
       }
 
-      $("dc-act-img").onerror = function () { this.hidden = true; };
+      $("dc-act-img").onerror = $("dc-deco").onerror = $("dc-tag-img").onerror = function () { this.hidden = true; };
 
       function render(p) {
         presence = p;
@@ -1549,6 +1558,14 @@
           ? "https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + (user.avatar.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=160"
           : "https://cdn.discordapp.com/embed/avatars/" + (window.BigInt ? Number(BigInt(user.id) / BigInt(4194304) % BigInt(6)) : 0) + ".png";
         $("dc-name").textContent = user.global_name || user.display_name || user.username;
+        var deco = user.avatar_decoration_data, guild = user.primary_guild;
+        $("dc-deco").hidden = !deco;
+        if (deco && $("dc-deco").getAttribute("src") !== decoUrl(deco)) $("dc-deco").src = decoUrl(deco);
+        $("dc-tag").hidden = !(guild && guild.identity_enabled && guild.tag);
+        if (!$("dc-tag").hidden) {
+          $("dc-tag-text").textContent = guild.tag;
+          $("dc-tag-img").src = "https://cdn.discordapp.com/clan-badges/" + guild.identity_guild_id + "/" + guild.badge + ".png?size=32";
+        }
         $("dc-user").textContent = "@" + user.username;
         var dot = $("dc-dot");
         dot.hidden = false; dot.className = "dc-dot " + status; dot.title = STATUS[status] || status;
@@ -1558,7 +1575,7 @@
         var custom = (p.activities || []).filter(function (a) { return a.type === 4; })[0];
         $("dc-custom").textContent = custom
           ? ((custom.emoji && !custom.emoji.id ? custom.emoji.name + " " : "") + (custom.state || "")).trim()
-          : status === "offline" ? "offline right now, but you can still send a friend request!" : "";
+          : status === "offline" ? "offline right now, but you can still send a friend request!" : "come say hi! send me a friend request on discord.";
         $("dc-custom").hidden = !$("dc-custom").textContent;
 
         var open = $("dc-open");
@@ -1602,7 +1619,7 @@
           var act = activity(presence);
           if (!act) return;
           said = true; obs.disconnect();
-          window.nanami.say(act.spotify ? "shibeeee is listening to " + act.spotify.song + " right now. good taste?" : "shibeeee is " + (VERB[act.type] || "playing") + " " + act.name + " right now!");
+          window.nanami.say(act.spotify ? "shibe is listening to " + act.spotify.song + " right now. good taste?" : "shibe is " + (VERB[act.type] || "playing") + " " + act.name + " right now!");
         }, { threshold: 0.6 }).observe($("dc-activity").parentNode.parentNode);
       }
 
@@ -1769,7 +1786,7 @@
 
       var hour = new Date().getHours();
       var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi hi! " : "good evening! ")
-        + "i'm nanami. welcome to shibeeee's homepage!";
+        + "i'm nanami. welcome to shibe's homepage!";
       var lines = [
         "the start button down there works, go ahead and click it",
         "windows 7 was the best one. i might be biased though",
@@ -1926,7 +1943,7 @@
 
       // A hello for anyone who opens the developer console
       try {
-        console.log("%cshibeeee's homepage", "font: 600 16px Segoe UI, sans-serif; color: #3cda56");
+        console.log("%cshibe's homepage", "font: 600 16px Segoe UI, sans-serif; color: #3cda56");
         console.log("hi, curious one! all the code for this site is here: https://github.com/shibeeee/shibeeee.github.io");
       } catch (e) {}
     })();
