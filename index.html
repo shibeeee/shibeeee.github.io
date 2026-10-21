@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>shibe's homepage | websites, games &amp; tools</title>
-  <meta name="description" content="shibe's homepage: tab to sheet, remap, entry point videos and a guestbook.">
-  <link rel="preload" href="images/nanami-tile.webp" as="image" type="image/webp" fetchpriority="high">
+  <title>shibe's homepage</title>
+  <meta name="description" content="shibe's homepage: tab to sheet, remap, entry point videos and a guestbook, on a windows 7 desktop.">
+  <link rel="preload" href="images/me.webp" as="image" type="image/webp" fetchpriority="high">
   <link rel="preload" href="images/grass.webp" as="image" type="image/webp">
   <link rel="preconnect" href="https://shibeeee-homepage.mrshibe.workers.dev" crossorigin>
   <link rel="preconnect" href="https://api.github.com" crossorigin>
+  <link rel="preconnect" href="https://api.lanyard.rest" crossorigin>
   <link rel="icon" id="favicon" href="images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="theme-color" id="theme-color" content="#1f3a12">
@@ -16,429 +17,29 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://shibeeee.github.io/">
   <meta property="og:title" content="shibe's homepage">
-  <meta property="og:description" content="websites, games and little tools i've made">
+  <meta property="og:description" content="tab to sheet, remap, entry point videos and a guestbook">
   <meta property="og:image" content="https://shibeeee.github.io/images/banner.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <style>
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font: 14px/1.45 "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: #dadada;
-      background: #1f3a12;
-      scrollbar-color: rgba(35, 105, 47, 0.8) rgba(31, 31, 31, 0.65);
-    }
-    /* Wallpaper on its own fixed layer (background-attachment: fixed misbehaves on phones) */
-    body::before {
-      content: ""; position: fixed; inset: 0; z-index: -1;
-      background: url("images/grass.webp") center center / cover no-repeat;
-    }
-    a { color: #3cda56; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    a, p, span, li { text-shadow: 0 0 3px #000; }
-    p { margin: 0; }
     [hidden] { display: none !important; }
-    :focus-visible { outline: 2px solid #57fa6f; outline-offset: 2px; }
-    #welcome:focus { outline: none; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; overflow: hidden;
+      font: 12px/1.4 "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; color: #000;
+      background: #1f3a12 url("images/grass.webp") center / cover no-repeat;
+    }
+    a { color: #0066cc; }
+    p { margin: 0; }
+    button { font: inherit; }
+    :focus-visible { outline: 1px dotted #000; outline-offset: 1px; }
 
-    #site { max-width: 1280px; margin: 24px auto 64px; padding: 0 16px; animation: win-open 0.25s ease-out both; }
-    @keyframes win-open { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
-    html.splash #site { animation: none; opacity: 0; }
-    /* Nothing behind the welcome screen can scroll or peek out, even with a fast swipe on a phone */
-    html.splash, html.splash body { height: 100%; overflow: hidden; overscroll-behavior: none; background: #0b3d8a; }
-
-    /* Header ------------------------------------------------------------- */
-    #header {
-      display: flex; align-items: center; gap: 16px;
-      padding: 12px 20px 12px 34px;
-      background: linear-gradient(180deg, rgba(172, 172, 172, 0.9) 0, rgba(71, 71, 71, 0.9) 20%, rgba(19, 19, 19, 0.9) 40%, rgba(7, 7, 7, 0.93) 100%);
-      border: 1px solid #4e4e4e; border-top-width: 2px; border-bottom: 0;
-      border-radius: 70px 70px 0 0;
-      box-shadow: rgba(0, 0, 0, 0.3) 0 14px 28px, rgba(0, 0, 0, 0.3) 0 10px 10px;
-    }
-    #logo { display: block; width: 64px; height: 64px; flex: none; transition: transform 0.4s, filter 0.4s; }
-    #logo:hover { transform: rotate(6deg); filter: brightness(1.15); }
-    .header-title { display: block; color: #fff; font-size: 30px; line-height: 1.1; }
-    .header-motto { display: block; color: #c9c9c9; font-size: 15px; margin-left: 2px; }
-
-    /* Body: menu + content ---------------------------------------------- */
-    #frame { display: flex; align-items: stretch; }
-
-    #menu {
-      flex: none; width: 190px;
-      padding: 10px 9px 14px 8px;
-      background: linear-gradient(to bottom, rgba(26, 26, 26, 0.82), rgba(22, 22, 22, 0.82) 95%);
-      border: 1px solid #4b4b4b; border-top: 0;
-      border-bottom-left-radius: 40px;
-      box-shadow: rgba(0, 0, 0, 0.4) 0 14px 28px, rgba(0, 0, 0, 0.4) 0 10px 10px;
-    }
-    .nav-group {
-      display: flex; flex-direction: column; padding: 1px; margin-bottom: 5px;
-      background: linear-gradient(to bottom, rgba(80, 80, 80, 0.2), rgba(39, 39, 39, 0.1));
-      border: 1px solid rgba(236, 242, 249, 0.2); border-radius: 5px;
-      outline: 1px solid rgba(28, 49, 39, 0.5);
-      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
-    }
-    .nav-title {
-      margin: 1px 1px 2px; padding-bottom: 1px; height: 19px;
-      font-size: 13px; text-align: center; color: #f7f4f4;
-      background: linear-gradient(to bottom, #fff 0, rgba(129, 129, 129, 0.75) 3%, rgba(56, 56, 56, 0.75) 50%, rgba(27, 27, 27, 0.75) 50%);
-      border: 1px solid #000; border-radius: 3px;
-    }
-    .nav-group a {
-      position: relative; display: flex; align-items: center;
-      width: 93%; margin: 0 auto 1px; padding: 1px 0;
-      font-size: 12.5px; color: #eee;
-      border: 1px solid #0f0f0f; border-radius: 5px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.15) 20%, rgba(92, 92, 92, 0.15) 60%, rgba(0, 0, 0, 0.3) 60%, rgba(41, 41, 41, 0.3) 100%);
-      transition: transform 0.15s;
-    }
-    .nav-group a::before {
-      content: ""; position: absolute; top: 0; left: 5%; width: 90%; height: 11px;
-      border-radius: 20px; opacity: 0.3;
-      background: linear-gradient(to bottom, rgba(117, 117, 117, 0.7) 0, rgba(255, 255, 255, 0.1) 100%);
-    }
-    .nav-group a:hover {
-      text-decoration: none; transform: scale(1.03);
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 50%, rgba(43, 43, 43, 0.3) 50%, rgba(161, 161, 161, 0.3) 100%);
-    }
-    .nav-group a.active {
-      color: #57fa6f; transform: scale(1.03);
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 40%, rgba(29, 73, 23, 0.3) 40%, rgba(43, 240, 36, 0.7) 100%);
-    }
-    .nav-group svg, .nav-group img { width: 20px; height: 20px; margin: 1px 5px 1px 4px; flex: none; }
-    .ext { width: 9px !important; height: 9px !important; margin: 0 0 0 4px !important; opacity: 0.7; }
-
-    #content {
-      flex: 1; min-width: 0;
-      padding: 12px 10px 14px 8px;
-      background: rgba(39, 39, 39, 0.5);
-      border-right: 1px solid #3b3b3b; border-bottom: 1px solid #3b3b3b;
-      border-bottom-right-radius: 3px;
-      box-shadow: rgba(0, 0, 0, 0.4) 0 14px 28px, rgba(0, 0, 0, 0.4) 0 10px 10px;
-    }
-
-    /* Glossy black title bars */
-    .bar {
-      display: flex; align-items: center; justify-content: center;
-      margin: 0; padding: 2px 5px 4px;
-      font-size: 16px; font-weight: 400; color: #fff;
-      background: linear-gradient(to bottom, #bebebe 0, #777 3%, #232323 55%, #000 55%, #161616 98%, #000 100%);
-      border: 1px solid #4b4b4b; border-top: 0; border-bottom-color: #000;
-      box-shadow: rgba(0, 0, 0, 0.3) 0 3px 8px;
-      text-shadow: 0 0 3px #000;
-      scroll-margin-top: 12px;
-    }
-    h2.bar { margin-top: 18px; font-size: 14.6px; }
-
-    /* Glass frame around every box */
-    .glass {
-      margin: 9px auto; padding: 5px;
-      background: linear-gradient(to bottom, rgba(66, 66, 66, 0.2), rgba(39, 39, 39, 0.1));
-      border: 1px solid rgba(236, 242, 249, 0.5); border-radius: 6px;
-      outline: 1px solid rgba(28, 49, 39, 0.5);
-      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8), inset -1px -1px 0 rgba(255, 255, 255, 0.2);
-    }
-    .box { padding: 10px 12px; background: rgba(27, 27, 27, 0.83); border: 1px solid #707070; }
-    .box p + p { margin-top: 8px; }
-
-    /* About me */
-    .about { display: flex; gap: 14px; align-items: flex-start; }
-    .about-pic {
-      flex: none; width: 104px; height: 104px; padding: 4px;
-      background: linear-gradient(to bottom, rgba(120, 120, 120, 0.35), rgba(39, 39, 39, 0.2));
-      border: 1px solid rgba(236, 242, 249, 0.5); border-radius: 4px;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }
-    .about-pic img { display: block; width: 100%; height: 100%; border: 1px solid #707070; }
-    /* App-style icon tiles */
-    .tile {
-      position: relative; display: block; flex: none; width: 64px; height: 64px;
-      border-radius: 14px; overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, 0.6);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-    }
-    .tile svg { display: block; width: 100%; height: 100%; }
-    .tile::after {
-      content: ""; position: absolute; left: 5%; right: 5%; top: 2%; height: 46%;
-      border-radius: 12px 12px 50% 50%;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.05));
-    }
-
-    /* Project entries */
-    .project { display: flex; gap: 14px; align-items: flex-start; }
-    .project-info { flex: 1; min-width: 0; }
-    .project h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 17px; font-weight: 600; }
-    .project h3 .tile { width: 30px; height: 30px; border-radius: 7px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); }
-    .project h3 .tile::after { border-radius: 6px 6px 50% 50%; }
-    .shot {
-      display: block; flex: none; width: 250px; padding: 4px;
-      background: linear-gradient(to bottom, rgba(120, 120, 120, 0.35), rgba(39, 39, 39, 0.2));
-      border: 1px solid rgba(236, 242, 249, 0.5); border-radius: 4px;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-      transition: transform 0.3s;
-    }
-    .shot:hover { transform: scale(1.03); }
-    .shot img { display: block; width: 100%; height: auto; border: 1px solid #707070; }
-    .project p { margin-top: 3px; }
-    .buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .btn {
-      position: relative; display: inline-flex; align-items: center; height: 26px; padding: 0 14px;
-      font-size: 13px; color: #eee;
-      border: 1px solid #0f0f0f; border-radius: 4px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0, rgba(117, 117, 117, 0.25) 20%, rgba(92, 92, 92, 0.25) 50%, rgba(0, 0, 0, 0.4) 50%, rgba(60, 60, 60, 0.4) 100%);
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-    .btn { transition: filter 0.2s, box-shadow 0.2s; }
-    .btn:hover { text-decoration: none; filter: brightness(1.25); box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), 0 0 8px rgba(255, 255, 255, 0.25); }
-    .btn.go:hover { box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6), 0 0 10px rgba(87, 250, 111, 0.55); }
-    .btn:disabled { opacity: 0.5; cursor: default; filter: none; box-shadow: none; }
-    .btn.go {
-      color: #fff;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0, rgba(117, 117, 117, 0.2) 20%, rgba(92, 92, 92, 0.2) 45%, rgba(29, 73, 23, 0.5) 45%, rgba(43, 200, 36, 0.85) 100%);
-    }
-
-    /* Videos */
-    .videos-note { margin-bottom: 12px; }
-    .videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px 14px; margin: 0; padding: 0; list-style: none; }
-    .video .shot { position: relative; width: auto; }
-    .video .shot img { aspect-ratio: 16 / 9; object-fit: cover; background: #111; }
-    .video-len {
-      position: absolute; right: 9px; bottom: 9px; padding: 0 4px; border-radius: 3px;
-      font-size: 12px; color: #fff; background: rgba(0, 0, 0, 0.8);
-    }
-    .video-title {
-      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
-      margin-top: 7px; color: #eee; font-weight: 600; line-height: 1.3;
-    }
-    .video-meta { display: block; font-size: 12.5px; color: #9a9a9a; }
-
-    /* Discord profile card */
-    .dc { display: flex; gap: 16px; align-items: flex-start; }
-    .dc-avatar { position: relative; flex: none; width: 88px; height: 88px; padding: 4px; border-radius: 50%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)); border: 1px solid rgba(236, 242, 249, 0.5); box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); }
-    .dc-avatar img { display: block; width: 100%; height: 100%; border-radius: 50%; background: #5865f2; }
-    /* Discord's avatar decorations are drawn 20% bigger than the avatar */
-    .dc-avatar .dc-deco { background: none; border-radius: 0; position: absolute; left: 4px; top: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: scale(1.2); pointer-events: none; }
-    .dc-tag {
-      display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 0 6px; height: 20px; vertical-align: 2px;
-      font-size: 12px; font-weight: 600; color: #ddd; background: rgba(255, 255, 255, 0.1); border: 1px solid #4b4b4b; border-radius: 4px;
-    }
-    .dc-tag img { width: 14px; height: 14px; }
-    .dc-dot { z-index: 1; position: absolute; right: 2px; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; border: 4px solid #1b1b1b; background: #80848e; }
-    .dc-dot.online { background: #23a55a; }
-    .dc-dot.idle { background: #f0b232; }
-    .dc-dot.dnd { background: #f23f43; }
-    .dc-info { flex: 1; min-width: 0; }
-    .dc-info h3 { margin: 0; font-size: 19px; font-weight: 600; color: #fff; }
-    .dc-sub { font-size: 13px; color: #9a9a9a; }
-    .dc-custom { margin-top: 6px; color: #dadada; }
-    .dc-activity {
-      display: flex; gap: 12px; align-items: center; margin-top: 10px; padding: 10px;
-      background: rgba(0, 0, 0, 0.35); border: 1px solid #3b3b3b; border-radius: 6px;
-    }
-    .dc-activity img { flex: none; width: 64px; height: 64px; border-radius: 6px; object-fit: cover; }
-    .dc-act-text { flex: 1; min-width: 0; font-size: 13px; color: #bdbdbd; }
-    .dc-act-text > span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .dc-act-head { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #9a9a9a; }
-    .dc-act-name { font-weight: 600; color: #fff; }
-    .dc-bar { height: 4px; margin-top: 6px; border-radius: 2px; background: #3b3b3b; overflow: hidden; }
-    .dc-bar span { display: block; height: 100%; width: 0; background: #1ed760; }
-
-    /* Updates */
-    .updates { margin: 0; padding: 0; list-style: none; }
-    .updates li { display: flex; gap: 12px; padding: 3px 0; border-bottom: 1px dotted #4b4b4b; }
-    .updates li:last-child { border-bottom: 0; }
-    .updates time { flex: none; width: 92px; color: #9a9a9a; font-size: 13px; }
-
-    /* Repos pulled from GitHub */
-    .repo { padding: 8px 2px; border-bottom: 1px dotted #4b4b4b; }
-    .repo:first-child { padding-top: 0; }
-    .repo:last-child { border-bottom: 0; padding-bottom: 0; }
-    .repo h3 { margin: 0; font-size: 15px; font-weight: 600; }
-    .repo p { margin-top: 2px; }
-    .repo .meta { margin-top: 2px; font-size: 12px; color: #9a9a9a; }
-    .repo .buttons { margin-top: 6px; }
-
-    /* Link to me */
-    .linkme { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-    .linkme img { display: block; image-rendering: auto; }
-    .linkme textarea {
-      flex: 1; min-width: 200px; height: 46px; resize: none;
-      font: 11px/1.3 Consolas, "Lucida Console", monospace; color: #cfcfcf;
-      background: #0c0c0c; border: 1px solid #555; padding: 4px 6px;
-    }
-
-    /* Vista-style sidebar clock */
-    .gadget { margin: 14px auto 0; text-align: center; }
-    .gadget svg { display: block; width: 140px; height: 140px; margin: 0 auto; filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.7)); }
-    .gadget span { display: block; margin-top: 4px; font-size: 12px; color: #c9c9c9; }
-
-    #footer {
-      margin-top: 14px; text-align: center; font-size: 12px; color: #e8e8e8;
-      text-shadow: 0 0 4px #000, 0 0 2px #000;
-    }
-    #footer a { color: #8cf59a; }
-    .credits { margin-top: 3px; color: #bdbdbd; }
-    .credits summary { display: inline; cursor: pointer; color: #8cf59a; }
-    .credits[open] summary { display: block; margin-bottom: 2px; }
-
-    /* Visitor counter */
-    .counter { margin: 10px 0 0; }
-    .odometer { display: flex; justify-content: center; gap: 2px; padding: 6px 0 4px; }
-    .digit {
-      width: 17px; height: 28px; overflow: hidden;
-      background: linear-gradient(to bottom, #3a3a3a 0, #111 50%, #000 51%, #1a1a1a 100%);
-      border: 1px solid #5a5a5a; border-radius: 3px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 1px 1px 2px rgba(0, 0, 0, 0.8);
-    }
-    .digit span {
-      display: block; font: bold 17px/26px Consolas, "Lucida Console", monospace; color: #57fa6f; text-align: center;
-      text-shadow: 0 0 6px rgba(87, 250, 111, 0.6);
-      transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .side-box { padding: 0 8px 7px; }
-    .side-box .nav-title { margin: 1px -7px 6px; }
-    .now { display: flex; gap: 7px; align-items: baseline; font-size: 12.5px; line-height: 1.35; color: #ddd; }
-    .now-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #80848e; box-shadow: 0 0 4px rgba(0, 0, 0, 0.8); }
-    .now-dot.online { background: #23a55a; }
-    .now-dot.idle { background: #f0b232; }
-    .now-dot.dnd { background: #f23f43; }
-    .nav-group a.side-video, .nav-group a.side-video:hover {
-      display: block; width: auto; margin: 0; padding: 0; border: 0; background: none; transform: none;
-      font-size: 12.5px; line-height: 1.35; color: #ddd;
-    }
-    .nav-group a.side-video::before { display: none; }
-    .nav-group a.side-video img { display: block; width: 100%; height: auto; margin: 0 0 4px; border: 1px solid #707070; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8); }
-    .nav-group a.side-video:hover span { text-decoration: underline; }
-    .site-info { margin: 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.5; color: #bdbdbd; }
-    .counter-note { display: block; margin-bottom: 4px; text-align: center; font-size: 11.5px; color: #9a9a9a; }
-
-    /* Guestbook */
-    .gb-form { display: grid; gap: 6px; margin-top: 10px; }
-    .gb-form input, .gb-form textarea {
-      width: 100%; padding: 5px 7px; font: inherit; color: #eee;
-      background: #0c0c0c; border: 1px solid #555; border-radius: 2px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .gb-form textarea { height: 76px; resize: vertical; }
-    .gb-form input:focus, .gb-form textarea:focus { outline: none; border-color: #57fa6f; box-shadow: 0 0 6px rgba(87, 250, 111, 0.4); }
-    .gb-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .gb-status { font-size: 12.5px; color: #c9c9c9; }
-    .gb-count { margin-left: auto; order: 3; font-size: 11.5px; color: #9a9a9a; }
-    .gb-count.full { color: #ffb05a; }
-    .gb-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-    .gb-entry {
-      margin-top: 8px; padding: 7px 10px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-      border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 4px;
-    }
-    .gb-entry.new { animation: pop 0.4s ease-out; }
-    @keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(0.97); } to { opacity: 1; transform: none; } }
-    .gb-head { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: #9a9a9a; }
-    .gb-head strong { font-size: 13.5px; font-weight: 600; color: #57fa6f; text-shadow: 0 0 3px #000; }
-    .gb-msg { margin-top: 2px; white-space: pre-wrap; overflow-wrap: anywhere; }
-    .gb-more { margin-top: 10px; }
-
-    /* Taskbar */
-    #taskbar {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-      display: flex; align-items: center; gap: 2px; height: 40px; padding-left: 4px;
-      background: linear-gradient(to bottom, rgba(70, 95, 120, 0.55) 0, rgba(25, 40, 55, 0.7) 50%, rgba(10, 18, 28, 0.82) 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 -2px 12px rgba(0, 0, 0, 0.45);
-      -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
-    }
-    #start-orb {
-      flex: none; width: 46px; height: 46px; margin: -8px 6px 0 2px; padding: 0;
-      background: none; border: 0; cursor: pointer; border-radius: 50%;
-      transition: filter 0.25s, transform 0.25s;
-    }
-    #start-orb img { width: 100%; height: 100%; display: block; }
-    #start-orb:hover, #start-orb[aria-expanded="true"] { filter: brightness(1.15) drop-shadow(0 0 8px #8fd8ff); }
-    #start-orb:active { transform: scale(0.94); }
-    .task {
-      position: relative; display: grid; place-items: center; width: 54px; height: 36px;
-      border: 1px solid transparent; border-radius: 3px;
-      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
-    }
-    .task svg { width: 26px; height: 26px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
-    .task:hover {
-      text-decoration: none; border-color: rgba(255, 255, 255, 0.4);
-      background: radial-gradient(ellipse at 50% 100%, var(--glow) 0, transparent 75%), linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 6px rgba(0, 0, 0, 0.4);
-    }
-    .tray {
-      margin-left: auto; padding: 0 12px; text-align: center;
-      font-size: 12px; line-height: 1.3; color: #fff; text-shadow: 0 0 4px #000;
-    }
-    #show-desktop {
-      align-self: stretch; width: 14px; padding: 0; cursor: pointer;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04));
-      border: 0; border-left: 1px solid rgba(255, 255, 255, 0.35);
-      transition: background 0.2s;
-    }
-    #show-desktop:hover { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15)); }
-
-    /* Start menu */
-    #start {
-      position: fixed; left: 4px; bottom: 42px; z-index: 60;
-      display: flex; gap: 8px; width: 420px; max-width: calc(100vw - 8px); padding: 8px;
-      background: linear-gradient(to bottom, rgba(70, 95, 120, 0.8), rgba(18, 28, 42, 0.92));
-      border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 8px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 10px 30px rgba(0, 0, 0, 0.65);
-      -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
-      animation: start-open 0.18s ease-out;
-    }
-    @keyframes start-open { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-    .start-programs {
-      flex: 1.25; min-width: 0; padding: 6px;
-      background: #fff; border: 1px solid #6f87a3; border-radius: 4px;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-    }
-    .prog {
-      display: flex; align-items: center; gap: 9px; padding: 4px 8px; margin-bottom: 2px;
-      color: #1e1e1e; font-size: 13px; text-shadow: none;
-      border: 1px solid transparent; border-radius: 3px;
-    }
-    .prog:hover { text-decoration: none; background: linear-gradient(to bottom, #f2f9ff, #d6ebfb); border-color: #7da2ce; }
-    .prog svg, .prog img { width: 32px; height: 32px; flex: none; }
-    .prog small { display: block; color: #6d6d6d; font-size: 11px; }
-    .start-programs span { text-shadow: none; }
-    .start-sep { height: 1px; margin: 6px 4px; background: linear-gradient(to right, transparent, #c8d3df, transparent); }
-    .start-places { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-    .start-pic {
-      align-self: center; width: 54px; height: 54px; margin: -26px 0 6px; padding: 3px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2));
-      border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 5px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-    }
-    .start-pic img { width: 100%; height: 100%; display: block; }
-    .place {
-      display: block; padding: 4px 10px; margin-bottom: 1px;
-      color: #fff; font-size: 13px; border: 1px solid transparent; border-radius: 3px;
-    }
-    .place:hover {
-      text-decoration: none; border-color: rgba(255, 255, 255, 0.35);
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
-    }
-    #shutdown {
-      align-self: flex-end; margin-top: auto; height: 24px; padding: 0 12px; cursor: pointer;
-      font: inherit; font-size: 12.5px; color: #fff; text-shadow: 0 0 3px #000;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08) 50%, rgba(0, 0, 0, 0.25) 51%, rgba(255, 255, 255, 0.1));
-      border: 1px solid rgba(0, 0, 0, 0.6); border-radius: 3px;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-    }
-    #shutdown:hover { background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f); }
-
-    /* Sign-in style welcome screen */
+    /* Log on screen ------------------------------------------------------- */
     #splash {
       position: fixed; inset: 0; z-index: 100; display: none;
       align-items: center; justify-content: center; gap: 16px;
       background: radial-gradient(ellipse at 50% 115%, #5cc0ff 0, #1f78d6 30%, #0d469c 60%, #062457 100%);
-      color: #fff; cursor: pointer;
-      transition: opacity 0.3s;
+      color: #fff; cursor: pointer; transition: opacity 0.3s;
     }
     #splash::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -447,11 +48,13 @@
         radial-gradient(ellipse 50% 12% at 70% 80%, rgba(160, 230, 255, 0.18), transparent 70%);
     }
     html.splash #splash, #splash.show { display: flex; }
+    html.splash, html.splash body { overscroll-behavior: none; background: #0b3d8a; }
     .loading { position: relative; display: flex; align-items: center; gap: 16px; }
     .gate { position: relative; display: none; flex-direction: column; align-items: center; gap: 14px; }
     html.splash #splash:not(.entering) .gate { display: flex; }
     html.splash #splash:not(.entering) .loading { display: none; }
     #splash:not(.entering) { cursor: default; }
+    #splash.out { opacity: 0; }
     .user-tile {
       width: 136px; height: 136px; padding: 6px; border-radius: 10px;
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.12) 51%, rgba(255, 255, 255, 0.4));
@@ -459,16 +62,12 @@
       box-shadow: 0 6px 22px rgba(0, 20, 60, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
       animation: tile-in 0.5s ease-out both;
     }
-    .user-tile img {
-      display: block; width: 100%; height: 100%; object-fit: cover;
-      border-radius: 5px; border: 1px solid rgba(0, 40, 90, 0.5);
-      background: radial-gradient(circle at 50% 30%, #bfe9ff, #3ba3f0 60%, #0b5bb5);
-    }
+    .user-tile img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 5px; border: 1px solid rgba(0, 40, 90, 0.5); }
     @keyframes tile-in { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: none; } }
     .gate-name { font-size: 26px; font-weight: 300; text-shadow: 0 0 12px rgba(160, 225, 255, 0.8), 0 2px 3px rgba(0, 0, 0, 0.4); }
     #enter-btn {
       display: flex; align-items: center; gap: 14px; height: 40px; padding: 0 5px 0 22px; cursor: pointer;
-      font: inherit; font-size: 17px; color: #fff; text-shadow: 0 1px 2px rgba(0, 30, 70, 0.6);
+      font-size: 17px; color: #fff; text-shadow: 0 1px 2px rgba(0, 30, 70, 0.6);
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.05) 51%, rgba(255, 255, 255, 0.2));
       border: 1px solid rgba(255, 255, 255, 0.75); border-radius: 6px;
       box-shadow: 0 4px 16px rgba(0, 20, 60, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -477,14 +76,13 @@
     }
     #enter-btn:hover { box-shadow: 0 4px 16px rgba(0, 20, 60, 0.5), 0 0 16px rgba(170, 230, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
     #enter-btn:active { transform: translateY(1px); }
-    #enter-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 3px; border-radius: 6px; }
+    #enter-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 3px; }
     .enter-arrow {
       display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
       background: radial-gradient(circle at 50% 28%, #bfe9ff 0, #3ba3f0 35%, #0b5bb5 75%, #063a80 100%);
       border: 1px solid #06305e; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
     .enter-arrow svg { width: 18px; height: 18px; }
-    #splash.out { opacity: 0; }
     .spinner {
       width: 30px; height: 30px; border-radius: 50%;
       background: conic-gradient(from 0deg, rgba(255, 255, 255, 0), rgba(160, 230, 255, 0.7), #fff);
@@ -495,132 +93,429 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     #splash-text { position: relative; font-size: 40px; font-weight: 300; text-shadow: 0 0 18px rgba(160, 225, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4); }
 
-    /* Taskbar speaker */
-    #tray-sound img { width: 18px; height: 18px; }
-    #tray-sound {
-      display: grid; place-items: center; width: 28px; height: 28px; margin-left: auto; padding: 0;
+    /* Desktop ------------------------------------------------------------- */
+    #desktop { position: fixed; inset: 0 0 40px 0; overflow: hidden; }
+    #icons {
+      position: absolute; top: 6px; left: 6px; bottom: 6px;
+      display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 94px); grid-auto-columns: 84px; gap: 2px;
+      margin: 0; padding: 0; list-style: none;
+    }
+    .icon {
+      display: flex; flex-direction: column; align-items: center; gap: 4px; width: 84px; height: 92px; padding: 5px 2px;
+      color: #fff; text-align: center; text-decoration: none; text-shadow: 0 1px 2px #000, 0 0 4px #000, 0 0 1px #000;
       background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer;
     }
-    #tray-sound:hover { border-color: rgba(255, 255, 255, 0.35); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04)); }
-    #tray-sound + .tray { margin-left: 0; }
-    .snd-off { display: none; }
-    [aria-pressed="false"] .snd-on { display: none; }
-    [aria-pressed="false"] .snd-off { display: inline; }
+    .ico { position: relative; display: block; width: 48px; height: 48px; flex: none; }
+    .ico img, .ico svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45)); }
+    .shortcut .ico::after {
+      content: ""; position: absolute; left: -2px; bottom: -2px; width: 17px; height: 17px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='.5' y='.5' width='15' height='15' fill='%23fff' stroke='%23888'/%3E%3Cpath d='M4 12.5c0-4.2 2.2-6.3 6-6.3V3.5l3.6 3.7L10 10.8V8.2c-3 0-5 1.2-6 4.3z' fill='%231a64c8'/%3E%3C/svg%3E") center / contain;
+    }
+    .icon span:last-child { line-height: 1.25; overflow-wrap: anywhere; }
+    .icon:hover { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08)); border-color: rgba(255, 255, 255, 0.4); }
+    .icon.selected, .icon:focus-visible {
+      outline: none; border-color: rgba(185, 220, 255, 0.85);
+      background: linear-gradient(to bottom, rgba(150, 200, 255, 0.5), rgba(90, 155, 230, 0.4));
+    }
 
-    /* Media player gadget */
-    .lcd {
-      margin: 2px 4px 4px; padding: 3px 6px; overflow: hidden; white-space: nowrap;
-      font: 12px/1.3 Consolas, "Lucida Console", monospace; color: #57fa6f;
-      background: linear-gradient(to bottom, #061a06, #020a02); border: 1px solid #000; border-radius: 3px;
-      box-shadow: inset 0 0 6px rgba(87, 250, 111, 0.2), 0 1px 0 rgba(255, 255, 255, 0.12);
+    /* Gadgets, like the windows 7 sidebar */
+    #gadgets { position: absolute; top: 14px; right: 16px; width: 176px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .clock svg { display: block; width: 150px; height: 150px; margin: 0 auto; cursor: pointer; filter: drop-shadow(2px 4px 5px rgba(0, 0, 0, 0.6)); }
+    .clock-date { display: block; margin-top: 2px; text-align: center; font-size: 12px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
+    .gadget-box {
+      width: 100%; padding: 7px 10px 9px; color: #fff;
+      background: linear-gradient(to bottom, rgba(45, 55, 65, 0.78), rgba(10, 14, 18, 0.86));
+      border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 6px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
-    .lcd span { display: inline-block; text-shadow: 0 0 5px rgba(87, 250, 111, 0.6); }
-    .lcd.scroll span { padding-left: 100%; animation: lcd-scroll 12s linear infinite; }
-    @keyframes lcd-scroll { to { transform: translateX(-100%); } }
-    .track-bar { height: 3px; margin: -2px 5px 4px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; }
-    .track-bar span { display: block; width: 0; height: 100%; background: linear-gradient(to right, #2bc41f, #8dff6f); box-shadow: 0 0 4px #57fa6f; }
-    .player-controls { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 2px 0 4px; }
-    .player-controls button {
-      display: grid; place-items: center; padding: 0; cursor: pointer; border-radius: 50%;
-      width: 26px; height: 26px; border: 1px solid #0b0b0b;
-      background: radial-gradient(circle at 50% 30%, #6a6a6a, #232323 60%, #0c0c0c);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.8);
-      transition: filter 0.2s, box-shadow 0.2s;
+    .gadget-box h2 { margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; color: #a9d4ff; }
+    .feed { margin: 0; padding: 0; list-style: none; }
+    .feed li { padding: 4px 0; border-top: 1px solid rgba(255, 255, 255, 0.12); font-size: 11.5px; line-height: 1.3; }
+    .feed li:first-child { border-top: 0; }
+    .feed time { display: block; font-size: 10.5px; color: #9fb3c4; }
+    .feed a { color: #fff; }
+    .odometer { display: flex; justify-content: center; gap: 2px; padding: 3px 0 2px; }
+    .digit {
+      width: 17px; height: 28px; overflow: hidden;
+      background: linear-gradient(to bottom, #3a3a3a 0, #111 50%, #000 51%, #1a1a1a 100%);
+      border: 1px solid #5a5a5a; border-radius: 3px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 1px 1px 2px rgba(0, 0, 0, 0.8);
     }
-    .player-controls button:hover { filter: brightness(1.3); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 8px rgba(120, 200, 255, 0.5); }
-    .player-controls svg { width: 12px; height: 12px; margin: 0; fill: #e8eef3; }
-    .player-controls #play { width: 38px; height: 38px; border-color: #06305e; background: radial-gradient(circle at 50% 28%, #bfe9ff 0, #3ba3f0 35%, #0b5bb5 75%, #063a80 100%); }
-    .player-controls #play svg { width: 16px; height: 16px; fill: #fff; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5)); }
-    #play .i-pause { display: none; }
+    .digit span {
+      display: block; white-space: pre; font: bold 17px/26px Consolas, "Lucida Console", monospace; color: #57fa6f; text-align: center;
+      text-shadow: 0 0 6px rgba(87, 250, 111, 0.6);
+      transition: transform 1.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .counter-note { display: block; text-align: center; font-size: 11px; color: #9fb3c4; }
+    @media (max-width: 1000px), (max-height: 560px) { #gadgets { display: none; } }
+    @media (max-height: 760px) { .gadget-feed { display: none; } }
+
+    /* Windows ------------------------------------------------------------- */
+    #windows { position: absolute; inset: 0; pointer-events: none; }
+    .win {
+      position: absolute; display: flex; flex-direction: column; pointer-events: auto;
+      min-width: 280px; min-height: 180px; padding: 0 7px 7px;
+      background: linear-gradient(to bottom, rgba(190, 218, 242, 0.82), rgba(150, 188, 222, 0.76) 34px, rgba(128, 170, 208, 0.7));
+      border: 1px solid rgba(20, 38, 60, 0.75); border-radius: 7px 7px 5px 5px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 10px 36px rgba(0, 0, 0, 0.55);
+      -webkit-backdrop-filter: blur(10px) saturate(1.3); backdrop-filter: blur(10px) saturate(1.3);
+      resize: both; overflow: hidden;
+      animation: win-in 0.18s ease-out;
+    }
+    .win:not(.active) {
+      background: linear-gradient(to bottom, rgba(215, 228, 240, 0.72), rgba(195, 212, 228, 0.66));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 6px 22px rgba(0, 0, 0, 0.35);
+    }
+    .win.closing { animation: win-out 0.15s ease-in forwards; }
+    .win.maxed { left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; resize: none; }
+    @keyframes win-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+    @keyframes win-out { to { opacity: 0; transform: scale(0.94); } }
+    .win.dragging iframe { pointer-events: none; }
+    .win-bar { display: flex; align-items: center; gap: 6px; height: 30px; flex: none; padding-left: 2px; user-select: none; -webkit-user-select: none; touch-action: none; }
+    .win-bar > img { width: 16px; height: 16px; flex: none; }
+    .win-title {
+      flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      color: #000; text-shadow: 0 0 9px #fff, 0 0 4px #fff, 0 0 2px #fff;
+    }
+    .win:not(.active) .win-title { color: #4a4a4a; }
+    .win-btns { display: flex; align-self: flex-start; margin-right: -2px; }
+    .win-btns button {
+      display: grid; place-items: center; width: 27px; height: 20px; padding: 0; cursor: pointer;
+      border: 1px solid rgba(20, 38, 60, 0.6); border-top: 0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.08) 51%, rgba(255, 255, 255, 0.35));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    }
+    .win-btns button + button { border-left: 0; }
+    .win-btns svg { width: 12px; height: 10px; }
+    .win-btns button:hover { background: linear-gradient(to bottom, rgba(220, 240, 255, 0.95), rgba(140, 200, 245, 0.7) 50%, rgba(70, 150, 225, 0.6) 51%, rgba(150, 215, 255, 0.85)); }
+    .wb-min { border-radius: 0 0 0 5px; }
+    .wb-close { width: 46px !important; border-radius: 0 0 5px 0; background: linear-gradient(to bottom, #e8a493, #d0522f 45%, #b8361b 50%, #d76b48) !important; }
+    .wb-close:hover { background: linear-gradient(to bottom, #f7b8a6, #e5603a 45%, #c8401f 50%, #ef8a5f) !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 9px rgba(255, 110, 70, 0.9) !important; }
+    .win:not(.active) .wb-close { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.08) 51%, rgba(255, 255, 255, 0.35)) !important; }
+    .win-body { flex: 1; min-height: 0; overflow: auto; background: #fff; border: 1px solid rgba(20, 38, 60, 0.55); }
+
+    /* windows 7 push button */
+    .btn7 {
+      display: inline-flex; align-items: center; justify-content: center; min-width: 76px; height: 24px; padding: 0 12px;
+      color: #000; text-decoration: none; cursor: pointer; white-space: nowrap;
+      background: linear-gradient(to bottom, #f2f2f2 0, #ebebeb 49%, #dddddd 50%, #cfcfcf 100%);
+      border: 1px solid #707070; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    }
+    .btn7:hover { background: linear-gradient(to bottom, #eaf6fd 0, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%); border-color: #3c7fb1; }
+    .btn7:active { background: linear-gradient(to bottom, #e5f4fc 0, #c4e5f6 49%, #98d1ef 50%, #68b3db 100%); border-color: #2c628b; }
+    .btn7.default { border-color: #3399ff; box-shadow: inset 0 0 0 1px #9fd5ff; }
+    .btn7:disabled { color: #8d8d8d; cursor: default; background: #f4f4f4; border-color: #adb2b5; box-shadow: none; }
+
+    /* Notepad */
+    .notepad { display: flex; flex-direction: column; overflow: hidden; }
+    .menubar { display: flex; flex: none; padding: 1px 0; background: linear-gradient(to bottom, #fdfeff, #e4ebf5); border-bottom: 1px solid #b6bccc; }
+    .menubar span { padding: 2px 8px; color: #000; }
+    .notepad-text {
+      flex: 1; margin: 0; padding: 6px 8px; overflow: auto;
+      font: 15px/1.5 Consolas, "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+
+    /* Explorer */
+    .ex-top { display: flex; align-items: center; gap: 6px; flex: none; height: 34px; padding-bottom: 5px; }
+    .ex-nav { display: flex; flex: none; }
+    .ex-nav span {
+      width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+      background: radial-gradient(circle at 50% 30%, #d6ebfb 0, #8dbfe8 45%, #3e83c4 80%);
+      border: 1px solid #2d5f91; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6); opacity: 0.55;
+    }
+    .ex-nav span + span { margin-left: -2px; }
+    .ex-nav svg { width: 14px; height: 14px; }
+    .ex-addr, .ex-search {
+      display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 6px; min-width: 0;
+      background: #fff; border: 1px solid rgba(20, 38, 60, 0.5); border-radius: 2px;
+    }
+    .ex-addr { flex: 1; overflow: hidden; white-space: nowrap; }
+    .ex-addr img { width: 16px; height: 16px; flex: none; }
+    .ex-addr b { font-weight: 400; color: #555; }
+    .ex-search { width: 190px; flex: none; padding: 0; }
+    .ex-search input { width: 100%; height: 100%; padding: 0 6px; font: inherit; font-style: italic; border: 0; outline: none; background: none; }
+    .ex-search input:not(:placeholder-shown) { font-style: normal; }
+    .explorer { display: flex; flex-direction: column; overflow: hidden; }
+    .ex-cmd {
+      display: flex; align-items: center; gap: 2px; flex: none; height: 32px; padding: 0 6px;
+      background: linear-gradient(to bottom, #f5f9fd, #dbe6f4); border-bottom: 1px solid #a7b8cc;
+    }
+    .ex-cmd button, .ex-cmd a {
+      padding: 3px 9px; color: #1e395b; text-decoration: none; cursor: pointer;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    .ex-cmd button:hover, .ex-cmd a:hover { border-color: #7da2ce; background: linear-gradient(to bottom, #fafdff, #dbeafa); }
+    .ex-main { flex: 1; display: flex; min-height: 0; }
+    .ex-side { width: 150px; flex: none; overflow: auto; padding: 8px 0; border-right: 1px solid #d5dfe5; }
+    .ex-side h3 { display: flex; align-items: center; gap: 6px; margin: 6px 0 2px; padding: 0 10px; font-size: 12px; font-weight: 400; color: #1e395b; }
+    .ex-side h3 img { width: 16px; height: 16px; }
+    .ex-side button {
+      display: flex; align-items: center; gap: 6px; width: 100%; padding: 3px 10px 3px 24px; text-align: left; cursor: pointer;
+      color: #000; background: none; border: 1px solid transparent;
+    }
+    .ex-side button img, .ex-side button svg { width: 16px; height: 16px; flex: none; }
+    .ex-side button:hover { background: #e5f3fb; border-color: #70c0e7; }
+    .ex-side button.here { background: #cce8ff; border-color: #99d1ff; }
+    .ex-files { flex: 1; min-width: 0; overflow: auto; padding: 8px; align-content: start; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 2px; }
+    .file {
+      display: flex; align-items: center; gap: 10px; padding: 5px 6px; text-align: left; cursor: pointer; color: #000; text-decoration: none;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    .file > img, .file > svg { width: 48px; height: 48px; flex: none; }
+    .file b { display: block; font-weight: 400; }
+    .file small { display: block; font-size: 11.5px; color: #6d6d6d; }
+    .file:hover { border-color: #b8d6fb; background: linear-gradient(to bottom, #fafbfd, #ebf3fd); }
+    .file.selected { border-color: #84acdd; background: linear-gradient(to bottom, #dcebfc, #c1dbfc); }
+    .ex-details {
+      display: flex; align-items: center; gap: 12px; flex: none; min-height: 64px; padding: 8px 12px;
+      background: linear-gradient(to bottom, #f1f6fb, #d9e5f2); border-top: 1px solid #a7b8cc;
+    }
+    .ex-details > img, .ex-details > svg { width: 48px; height: 48px; flex: none; }
+    .ex-details .info { flex: 1; min-width: 0; }
+    .ex-details b { display: block; font-size: 13px; font-weight: 600; }
+    .ex-details .info p { color: #333; }
+    .ex-details .acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+    /* video thumbnails */
+    .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; }
+    .thumb {
+      display: block; padding: 6px; text-align: center; cursor: pointer; color: #000; text-decoration: none;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    .thumb:hover { border-color: #b8d6fb; background: linear-gradient(to bottom, #fafbfd, #ebf3fd); }
+    .thumb .pic { position: relative; display: block; border: 1px solid #c8c8c8; box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.25); }
+    .thumb img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #111; }
+    .thumb .len { position: absolute; right: 4px; bottom: 4px; padding: 0 4px; font-size: 11px; color: #fff; background: rgba(0, 0, 0, 0.8); border-radius: 2px; }
+    .thumb .t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-top: 5px; line-height: 1.3; }
+    .thumb small { display: block; color: #6d6d6d; }
+    .lib-head { padding: 2px 4px 10px; }
+    .lib-head b { display: block; font-size: 17px; font-weight: 400; color: #1e395b; }
+    .lib-head span { color: #555; }
+
+    /* Internet explorer */
+    .ie-top { display: flex; align-items: center; gap: 6px; flex: none; height: 34px; padding-bottom: 5px; }
+    .ie-top .ex-addr { font-family: inherit; }
+    .ie-top .btn7 { min-width: 0; }
+    .ie-body { overflow: hidden; }
+    .ie-body iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+
+    /* Media player */
+    .wmp { display: flex; flex-direction: column; overflow: hidden; color: #fff; background: radial-gradient(ellipse at 50% 35%, #1e3d5c 0, #0a1420 55%, #030507 100%); }
+    .wmp-main { flex: 1; display: flex; min-height: 0; }
+    .wmp-now { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 14px; text-align: center; }
+    .viz { display: flex; align-items: flex-end; gap: 4px; height: 70px; margin-bottom: 8px; }
+    .viz span {
+      width: 9px; height: 100%; border-radius: 2px 2px 0 0; transform-origin: bottom; transform: scaleY(0.15);
+      background: linear-gradient(to top, #1b6ad8, #4fc3ff 60%, #c8f1ff);
+      box-shadow: 0 0 8px rgba(79, 195, 255, 0.5);
+    }
+    .wmp.playing .viz span { animation: viz 0.9s ease-in-out infinite alternate; }
+    .viz span:nth-child(2n) { animation-duration: 0.7s !important; }
+    .viz span:nth-child(3n) { animation-duration: 1.15s !important; animation-delay: -0.4s; }
+    .viz span:nth-child(5n) { animation-duration: 0.55s !important; animation-delay: -0.2s; }
+    @keyframes viz { from { transform: scaleY(0.15); } to { transform: scaleY(1); } }
+    #track-name { font-size: 16px; }
+    .wmp-artist { color: #9fc4e6; }
+    .wmp-list { width: 180px; flex: none; margin: 0; padding: 6px; overflow: auto; list-style: none; border-left: 1px solid rgba(255, 255, 255, 0.12); background: rgba(0, 0, 0, 0.25); }
+    .wmp-list button {
+      display: block; width: 100%; padding: 5px 7px; text-align: left; cursor: pointer; color: #dfe9f2;
+      background: none; border: 1px solid transparent; border-radius: 2px;
+    }
+    .wmp-list button:hover { border-color: rgba(120, 190, 255, 0.5); background: rgba(80, 150, 230, 0.2); }
+    .wmp-list button.current { color: #fff; border-color: rgba(120, 190, 255, 0.7); background: rgba(80, 150, 230, 0.35); }
+    .wmp-list small { display: block; color: #8fa8bf; }
+    .wmp-bar { display: flex; align-items: center; gap: 8px; flex: none; padding: 8px 12px; background: linear-gradient(to bottom, #3a434d, #12161a 50%, #050607); border-top: 1px solid #000; }
+    .wmp-seek { flex: 1; height: 5px; border-radius: 3px; background: #2a2f35; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6); overflow: hidden; }
+    #track-progress { display: block; width: 0; height: 100%; background: linear-gradient(to bottom, #8fd8ff, #1e7ed8); }
+    .wmp-btn {
+      display: grid; place-items: center; width: 30px; height: 30px; padding: 0; flex: none; cursor: pointer;
+      border-radius: 50%; border: 1px solid #000;
+      background: radial-gradient(circle at 50% 25%, #6c7682 0, #2b3138 55%, #101317 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    .wmp-btn svg { width: 14px; height: 14px; fill: #fff; }
+    #play { width: 40px; height: 40px; background: radial-gradient(circle at 50% 25%, #a8dcff 0, #2c8de6 45%, #0a4b98 100%); border-color: #062f63; }
+    #play svg { width: 18px; height: 18px; }
+    #play .i-pause, #play.playing .i-play { display: none; }
     #play.playing .i-pause { display: block; }
-    #play.playing .i-play { display: none; }
-    .volume { display: flex; align-items: center; gap: 6px; margin: 0 8px 4px; font-size: 11px; color: #9a9a9a; }
-    .volume input { flex: 1; min-width: 0; accent-color: #57fa6f; height: 14px; }
+    .wmp-btn:hover { filter: brightness(1.25); }
+    #volume { width: 80px; accent-color: #4fb0ff; }
 
-    /* Mascot buddy in the corner */
-    #buddy {
-      position: fixed; right: 18px; bottom: 40px; z-index: 40;
-      display: flex; align-items: flex-end; gap: 6px; pointer-events: none;
+    /* Messenger */
+    .wlm { padding: 14px; background: linear-gradient(to bottom, #cfe6f7 0, #e9f4fc 90px, #ffffff 170px); }
+    .wlm-head { display: flex; gap: 12px; align-items: flex-start; }
+    .wlm-pic {
+      flex: none; width: 96px; height: 96px; padding: 5px; border-radius: 9px;
+      background: linear-gradient(to bottom, #dfe3e7, #9aa5ae); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 1px 4px rgba(0, 0, 0, 0.35);
     }
+    .wlm-pic.online { background: linear-gradient(to bottom, #d2f7b0, #47b021); }
+    .wlm-pic.idle { background: linear-gradient(to bottom, #ffe2a3, #e8930c); }
+    .wlm-pic.dnd { background: linear-gradient(to bottom, #ffb3a6, #d6341f); }
+    .wlm-pic img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.3); background: #5865f2; }
+    .wlm-who { min-width: 0; padding-top: 4px; }
+    .wlm-name { font-size: 18px; color: #1e395b; }
+    .wlm-name small { font-size: 12px; color: #4f6b85; }
+    .wlm-pm { margin-top: 4px; color: #444; font-style: italic; overflow-wrap: anywhere; }
+    .wlm-user { margin-top: 4px; color: #6a7f92; }
+    .wlm-act { display: flex; gap: 10px; align-items: center; margin-top: 14px; padding: 8px; background: #fff; border: 1px solid #c5d7ea; border-radius: 4px; }
+    .wlm-act img { flex: none; width: 56px; height: 56px; object-fit: cover; border-radius: 3px; }
+    .wlm-act-text { flex: 1; min-width: 0; }
+    .wlm-act-text > span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wlm-act-head { font-size: 11px; color: #6a7f92; }
+    .wlm-act-name { font-weight: 600; }
+    .wlm-bar { height: 4px; margin-top: 5px; border-radius: 2px; background: #dde6ee; overflow: hidden; }
+    .wlm-bar span { display: block; height: 100%; width: 0; background: #1db954; }
+    .wlm-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+    /* Sticky notes guestbook */
+    .notes-body { padding: 12px; background: #e3e8ee; }
+    .notes-intro { margin-bottom: 10px; color: #333; }
+    .notes { columns: 200px; column-gap: 12px; }
+    .note {
+      position: relative; break-inside: avoid; margin: 0 0 12px; padding: 22px 12px 10px;
+      font: 14px/1.45 "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive; color: #2f2b10;
+      background: linear-gradient(to bottom, #fefecf, #f9f3a0); border: 1px solid #d8cf72;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+    }
+    .note::before { content: ""; position: absolute; inset: 0 0 auto; height: 15px; background: linear-gradient(to bottom, #f5ec84, #ebdf66); border-bottom: 1px solid #d8cf72; }
+    .note p { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .note footer { margin-top: 8px; font-size: 12px; color: #6f6630; }
+    .note.new { animation: win-in 0.4s ease-out; }
+    .note-form input, .note-form textarea {
+      display: block; width: 100%; margin: 0 0 6px; padding: 2px 0; font: inherit; color: inherit;
+      background: none; border: 0; border-bottom: 1px dashed #c8bc5c; outline: none; resize: vertical;
+    }
+    .note-form textarea { min-height: 70px; }
+    .note-form .row { display: flex; align-items: center; justify-content: space-between; gap: 6px; font: 12px "Segoe UI", Tahoma, sans-serif; }
+    .note-form .hp { position: absolute; left: -9999px; }
+    #gb-count.full { color: #b3261e; }
+    #gb-status { margin-top: 6px; font: 12px "Segoe UI", Tahoma, sans-serif; color: #6f6630; }
+    #gb-more { display: block; margin: 4px auto 0; }
+
+    .video-body { overflow: hidden; background: #000; }
+    .video-body iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+    /* Taskbar ------------------------------------------------------------- */
+    #taskbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+      display: flex; align-items: center; gap: 2px; height: 40px; padding-left: 4px;
+      background: linear-gradient(to bottom, rgba(70, 95, 120, 0.55) 0, rgba(25, 40, 55, 0.72) 50%, rgba(10, 18, 28, 0.84) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 -2px 12px rgba(0, 0, 0, 0.45);
+      -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
+    }
+    #start-orb {
+      flex: none; width: 46px; height: 46px; margin: -8px 6px 0 2px; padding: 0;
+      background: none; border: 0; cursor: pointer; border-radius: 50%; transition: filter 0.25s, transform 0.25s;
+    }
+    #start-orb img { width: 100%; height: 100%; display: block; }
+    #start-orb:hover, #start-orb[aria-expanded="true"] { filter: brightness(1.15) drop-shadow(0 0 8px #8fd8ff); }
+    #start-orb:active { transform: scale(0.94); }
+    #tasks { display: flex; gap: 2px; min-width: 0; overflow: hidden; }
+    .task {
+      position: relative; display: grid; place-items: center; flex: none; width: 54px; height: 36px; padding: 0; cursor: pointer;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .task img, .task svg { width: 26px; height: 26px; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)); }
+    .task.running { border-color: rgba(255, 255, 255, 0.28); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03)); }
+    .task.active { border-color: rgba(255, 255, 255, 0.5); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.1)); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 6px rgba(0, 0, 0, 0.4); }
+    .task:hover {
+      border-color: rgba(255, 255, 255, 0.45);
+      background: radial-gradient(ellipse at 50% 100%, var(--glow, rgba(120, 190, 255, 0.7)) 0, transparent 75%), linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02));
+    }
+    .tray { margin-left: auto; padding: 0 12px; text-align: center; font-size: 12px; line-height: 1.3; color: #fff; text-shadow: 0 0 4px #000; }
+    #tray-sound {
+      margin-left: auto; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; cursor: pointer;
+      background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    #tray-sound img { width: 18px; height: 18px; }
+    #tray-sound:hover { border-color: rgba(255, 255, 255, 0.35); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04)); }
+    #tray-sound[aria-pressed="true"] .snd-off, #tray-sound[aria-pressed="false"] .snd-on { display: none; }
+    #tray-sound + .tray { margin-left: 0; }
+    #show-desktop {
+      align-self: stretch; width: 14px; padding: 0; cursor: pointer;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04));
+      border: 0; border-left: 1px solid rgba(255, 255, 255, 0.35);
+    }
+    #show-desktop:hover { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15)); }
+
+    /* Start menu */
+    #start {
+      position: fixed; left: 0; bottom: 40px; z-index: 60; display: flex; gap: 6px;
+      width: 400px; max-width: 100vw; height: 480px; max-height: calc(100% - 46px); padding: 8px 8px 8px;
+      background: linear-gradient(to bottom, rgba(70, 100, 130, 0.75), rgba(20, 34, 48, 0.88));
+      border: 1px solid rgba(0, 0, 0, 0.65); border-bottom: 0; border-radius: 7px 7px 0 0;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 0 16px rgba(0, 0, 0, 0.6);
+      -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4);
+      animation: start-open 0.16s ease-out;
+    }
+    @keyframes start-open { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .start-left { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 6px 4px 6px; background: #fff; border: 1px solid rgba(0, 0, 0, 0.55); border-radius: 4px; }
+    .start-progs { flex: 1; overflow: auto; }
+    .prog {
+      display: flex; align-items: center; gap: 9px; width: 100%; padding: 4px 6px; text-align: left; cursor: pointer;
+      color: #000; text-decoration: none; background: none; border: 1px solid transparent; border-radius: 3px;
+    }
+    .prog img, .prog svg { width: 32px; height: 32px; flex: none; }
+    .prog small { display: block; color: #6d6d6d; }
+    .prog:hover, .prog:focus-visible { outline: none; border-color: #7da2ce; background: linear-gradient(to bottom, #f2f7fd, #d9e8fa); }
+    .start-sep { height: 1px; margin: 5px 8px; background: #d9e1ea; }
+    .start-empty { padding: 6px 8px; color: #6d6d6d; }
+    #start-search { width: 100%; height: 26px; padding: 0 8px; font: inherit; font-style: italic; border: 1px solid #a9b8c8; border-radius: 3px; }
+    #start-search:not(:placeholder-shown) { font-style: normal; }
+    #start-search:focus { outline: none; border-color: #3d8de0; }
+    .start-right { position: relative; display: flex; flex-direction: column; width: 140px; flex: none; padding-top: 58px; }
+    .start-pic {
+      position: absolute; top: -34px; left: 50%; width: 70px; height: 70px; margin-left: -35px; padding: 5px; border-radius: 8px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.15) 51%, rgba(255, 255, 255, 0.45));
+      border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+    .start-pic img { display: block; width: 100%; height: 100%; border-radius: 4px; }
+    .place {
+      display: block; padding: 6px 10px; color: #fff; text-decoration: none; text-shadow: 0 0 6px rgba(0, 0, 0, 0.8); cursor: pointer;
+      background: none; border: 1px solid transparent; border-radius: 3px; text-align: left; width: 100%;
+    }
+    .place:hover, .place:focus-visible { outline: none; border-color: rgba(255, 255, 255, 0.45); background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08)); }
+    .start-right .start-sep { background: rgba(255, 255, 255, 0.2); }
+    #shutdown {
+      margin-top: auto; align-self: flex-end; padding: 4px 14px; color: #fff; cursor: pointer; text-shadow: 0 0 3px #000;
+      background: linear-gradient(to bottom, #e8a493, #c84a2a 50%, #a93718 51%, #d76b48);
+      border: 1px solid #4c1608; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+    #shutdown:hover { background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f); }
+
+    /* Nanami ------------------------------------------------------------- */
+    #buddy { position: fixed; right: 14px; bottom: 40px; z-index: 40; display: flex; align-items: flex-end; gap: 4px; pointer-events: none; }
     #buddy > * { pointer-events: auto; }
-    #buddy-figure {
-      position: relative; padding: 0; border: 0; background: none; cursor: pointer;
-      animation: bob 3.2s ease-in-out infinite;
-    }
-    #buddy-figure img { display: block; height: 220px; width: auto; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+    #buddy-figure { padding: 0; background: none; border: 0; cursor: pointer; animation: bob 3.2s ease-in-out infinite; }
+    #buddy-figure img { display: block; height: 200px; width: auto; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
     #buddy-figure.hop { animation: hop 0.45s ease-out; }
-    #buddy { transition: transform 0.3s, opacity 0.3s; }
-    /* ducks down while you type, so she never covers the guestbook form */
-    #buddy.shy { transform: translateY(70%); opacity: 0.4; }
-    #buddy.shy > * { pointer-events: none; }
-    @media (min-width: 721px) and (max-width: 1499px) {
-      #buddy-figure img { height: 160px; }
-      #buddy-bubble { margin-bottom: 115px; }
-    }
     @keyframes bob { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-2px); } }
     @keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
+    /* windows 7 style notification balloon */
     #buddy-bubble {
-      position: relative; max-width: 230px; margin-bottom: 160px; padding: 9px 12px;
-      font-size: 13px; line-height: 1.4; color: #1e2a35; text-shadow: none;
-      background: linear-gradient(to bottom, #ffffff, #e6f2fb);
-      border: 1px solid #7da2ce; border-radius: 10px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 #fff;
-      animation: pop 0.3s ease-out;
+      position: relative; width: 240px; margin-bottom: 140px; padding: 9px 12px 10px;
+      line-height: 1.4; color: #000;
+      background: linear-gradient(to bottom, #ffffff, #e4ecf7);
+      border: 1px solid #76808c; border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      animation: tile-in 0.25s ease-out;
     }
     #buddy-bubble::after {
-      content: ""; position: absolute; right: -9px; bottom: 18px;
-      border: 9px solid transparent; border-right: 0; border-left-color: #e6f2fb;
-      filter: drop-shadow(1px 0 0 #7da2ce);
+      content: ""; position: absolute; right: -9px; bottom: 22px;
+      border: 9px solid transparent; border-right: 0; border-left-color: #e8eef8;
+      filter: drop-shadow(1px 0 0 #76808c);
     }
-    #buddy-bubble span { text-shadow: none; }
     #buddy-close {
-      float: right; width: 18px; height: 18px; margin: -3px -5px 2px 6px; padding: 0;
+      float: right; width: 18px; height: 18px; margin: -3px -6px 2px 6px; padding: 0;
       font: 14px/16px Tahoma, sans-serif; color: #5b6f7d; cursor: pointer;
       background: none; border: 1px solid transparent; border-radius: 3px;
     }
     #buddy-close:hover { color: #fff; border-color: rgba(0, 0, 0, 0.5); background: linear-gradient(to bottom, #f7a38f, #d4412a 50%, #a92812 51%, #e2603f); }
-    #buddy-name { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; color: #1c6fb5; }
-
-    /* Big monitors: a little more room and slightly bigger text */
-    @media (min-width: 1500px) {
-      body { font-size: 15px; }
-      #site { margin-top: 32px; }
-      #menu { width: 220px; }
-      .nav-group a { font-size: 13.5px; padding: 2px 0; }
-      .nav-title { font-size: 14px; height: 21px; }
-      .header-title { font-size: 34px; }
-      .header-motto { font-size: 16px; }
-      #logo { width: 72px; height: 72px; }
-      .bar { font-size: 17px; }
-      h2.bar { font-size: 15.5px; }
-      .shot { width: 320px; }
-      .project h3 { font-size: 18.5px; }
-      .gadget svg { width: 160px; height: 160px; }
-      #buddy-figure img { height: 300px; }
-      #buddy-bubble { max-width: 260px; margin-bottom: 220px; font-size: 14px; }
-    }
-
-    /* Phone menu button (hidden on bigger screens) */
-    #menu-toggle {
-      display: none; align-items: center; gap: 6px; margin-left: auto; height: 32px; padding: 0 12px; cursor: pointer;
-      font: inherit; font-size: 13.5px; color: #fff; text-shadow: 0 0 3px #000;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0, rgba(117, 117, 117, 0.25) 20%, rgba(92, 92, 92, 0.25) 50%, rgba(0, 0, 0, 0.4) 50%, rgba(60, 60, 60, 0.4) 100%);
-      border: 1px solid #0f0f0f; border-radius: 5px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    #menu-toggle svg { width: 12px; height: 12px; transition: transform 0.2s; }
-    #menu-toggle[aria-expanded="true"] { color: #57fa6f; }
-    #menu-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
-
-    /* Start menu search */
-    #start-search {
-      width: 100%; margin-top: 6px; padding: 5px 8px;
-      font: inherit; font-size: 12.5px; color: #1e1e1e;
-      background: #fff; border: 1px solid #9fb3c6; border-radius: 3px;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
-    }
-    #start-search::placeholder { color: #8a8a8a; font-style: italic; }
-    #start-search:focus { outline: none; border-color: #3d8de0; box-shadow: 0 0 0 2px rgba(61, 141, 224, 0.25); }
-    .start-empty { padding: 6px 8px; font-size: 12.5px; color: #6d6d6d; text-shadow: none; }
+    #buddy-name { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; font-weight: 700; }
+    #buddy-name img { width: 16px; height: 16px; }
 
     /* Easter eggs */
     .egg-bubble {
@@ -638,70 +533,47 @@
       100% { transform: translate(15px, -125vh); opacity: 0.9; }
     }
     html { transition: transform 0.9s cubic-bezier(0.5, 0, 0.2, 1); }
-    html.flip-hold { height: 100vh; overflow: hidden; }
-    html.flip-hold body { position: fixed; left: 0; right: 0; }
     html.flipped { transform: rotate(180deg); }
-    #logo.spin { animation: earth-spin 1.2s cubic-bezier(0.3, 0, 0.2, 1); }
-    @keyframes earth-spin { to { transform: rotate(720deg); } }
-    .gadget svg { cursor: pointer; }
 
-    /* Narrow screens: menu sits above the content */
+    /* Phones: windows fill the screen and the icons sit in a grid */
     @media (max-width: 720px) {
-      #site { margin-top: 12px; }
-      #header { padding: 10px 14px 10px 20px; border-radius: 36px 36px 0 0; gap: 12px; }
-      #logo { width: 46px; height: 46px; }
-      .header-title { font-size: 22px; }
-      .header-motto { font-size: 13px; }
-      #frame { flex-direction: column; }
-      #menu {
-        width: auto; border-bottom-left-radius: 0; box-shadow: none;
-        display: grid; grid-template-columns: 1fr 1fr; gap: 0 6px;
+      #icons {
+        top: 10px; left: 6px; right: 6px; bottom: auto;
+        grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); grid-template-rows: none; grid-auto-rows: 94px; grid-auto-columns: auto;
+        justify-items: center;
       }
-      #menu:not(.open) { display: none; }
-      #menu > * { align-self: start; }
-      #menu-toggle { display: inline-flex; }
-      #content { border-top: 1px solid #3b3b3b; }
-      #content { border-left: 1px solid #3b3b3b; }
-      .about-pic { width: 76px; height: 76px; padding: 3px; }
-      .side-extra { display: none !important; }
-      .project { flex-direction: column; }
-      .shot { width: 100%; }
-      .dc-avatar { width: 68px; height: 68px; }
-      .dc-dot { width: 18px; height: 18px; border-width: 3px; }
-      .videos { grid-template-columns: 1fr 1fr; gap: 12px 10px; }
-      .video-title { font-size: 13px; }
-      .video-meta { font-size: 12px; }
-      .project > .tile { width: 48px; height: 48px; border-radius: 11px; }
-      .gadget { display: none; }
-      .counter, .player { grid-column: 1 / -1; }
+      .icon { width: 80px; }
+      .win { left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; resize: none; padding: 0 4px 4px; }
+      .wb-min, .wb-max { display: none !important; }
+      .wb-close { border-radius: 0 0 5px 5px; }
+      .ex-side, .ex-search, .ex-nav { display: none; }
+      .wmp-main { flex-direction: column; }
+      .wmp-list { width: auto; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+      .task { width: 44px; }
+      #start { width: 100%; }
       #buddy { right: 2px; }
-      #buddy-figure img { height: 96px; }
-      #buddy-bubble { max-width: 180px; margin-bottom: 70px; font-size: 12.5px; }
-      .task { width: 46px; }
+      html.has-windows #buddy { display: none; }
+      #buddy-figure img { height: 110px; }
+      #buddy-bubble { width: 200px; margin-bottom: 70px; }
     }
-    @media (max-width: 360px) {
-      .task { width: 38px; }
-      .tray { padding: 0 6px; }
-    }
+    @media (max-width: 360px) { .task { width: 38px; } .tray { padding: 0 6px; } }
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; transition: none; }
-      #logo, .nav-group a, .shot { transition: none; }
-      #site, #start, .gb-entry.new, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn, #logo.spin { animation: none; }
+      html { transition: none; }
+      .win, .win.closing, #start, #buddy-figure, #buddy-bubble, .user-tile, #enter-btn, .note.new { animation: none; }
+      .wmp.playing .viz span { animation: none; transform: scaleY(0.6); }
       .digit span { transition: none; }
-      .lcd.scroll span { animation: none; padding-left: 0; }
     }
   </style>
   <script>
-    // "Click to enter" screen on every page load. The click is what lets the music start right away.
+    // The log on screen shows on every page load; clicking it is what lets the music start
     document.documentElement.classList.add("splash");
-    // Blue phone status bar to match the welcome screen (back to green once you're in)
     document.getElementById("theme-color").content = "#0b3d8a";
   </script>
 </head>
-<body id="top">
+<body>
   <div id="splash">
-    <div class="gate" role="dialog" aria-label="welcome to shibe's homepage">
-      <div class="user-tile"><img src="images/nanami-tile.webp" width="124" height="124" alt="" fetchpriority="high"></div>
+    <div class="gate" role="dialog" aria-label="log on to shibe's homepage">
+      <div class="user-tile"><img src="images/me.webp" width="124" height="124" alt="" fetchpriority="high"></div>
       <span class="gate-name">shibe</span>
       <button id="enter-btn" type="button"><span>click to enter</span><span class="enter-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12h12M12.5 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
     </div>
@@ -715,300 +587,273 @@
     <defs>
       <linearGradient id="g-tts" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a66"/><stop offset="1" stop-color="#121216"/></linearGradient>
       <linearGradient id="g-rm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb54a"/><stop offset="1" stop-color="#e2620c"/></linearGradient>
-
-      <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
-      <linearGradient id="g-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6e6"/><stop offset="0.45" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#151515"/><stop offset="1" stop-color="#8a8a8a"/></linearGradient>
-
       <symbol id="i-tts" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-tts)"/><g stroke="#fff" stroke-width="1.2" opacity="0.5"><path d="M5 10h22M5 14h22M5 18h22M5 22h22"/></g><circle cx="13" cy="20" r="3" fill="#fff"/><path d="M15.6 20V8.5" stroke="#fff" stroke-width="1.8"/></symbol>
       <symbol id="i-rm" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="url(#g-rm)"/><rect x="5.5" y="10" width="9" height="9" rx="2" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="17.5" y="10" width="9" height="9" rx="2" fill="#fff"/><path d="M10 23.5h12m-2-2 2 2-2 2" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="#fff" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.96c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></symbol>
       <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="0.5" y="4" width="23" height="16" rx="4.5" fill="#f22"/><path d="M9.6 8.2v7.6l6.6-3.8z" fill="#fff"/></symbol>
       <symbol id="i-discord" viewBox="0 0 24 24"><path fill="#8c9eff" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.1.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol>
       <symbol id="i-ext" viewBox="0 0 12 12"><path d="M5 2H2v8h8V7M7 1.5h3.5V5M10.5 1.5 5.5 6.5" fill="none" stroke="#ccc" stroke-width="1.3"/></symbol>
+      <radialGradient id="g-face" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5e0e8"/></radialGradient>
+      <linearGradient id="g-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6e6"/><stop offset="0.45" stop-color="#4a4a4a"/><stop offset="0.55" stop-color="#151515"/><stop offset="1" stop-color="#8a8a8a"/></linearGradient>
     </defs>
   </svg>
 
-  <div id="site">
-    <header id="header">
-      <a href="#top" title="back to the top"><img id="logo" src="images/logo.webp" width="64" height="64" alt="shibe"></a>
-      <div>
-        <span class="header-title">shibe's homepage</span>
-        <span class="header-motto">stuff i make, and some game videos</span>
+  <main id="desktop">
+    <h1 hidden>shibe's homepage</h1>
+    <ul id="icons" aria-label="desktop">
+      <li><button class="icon" type="button" data-open="about"><span class="ico"><img src="images/os/notepad.webp" alt=""></span><span>about me.txt</span></button></li>
+      <li><button class="icon shortcut" type="button" data-open="tabtosheet"><span class="ico"><svg><use href="#i-tts"/></svg></span><span>tab to sheet</span></button></li>
+      <li><button class="icon" type="button" data-open="projects"><span class="ico"><img src="images/os/folder-dev.webp" alt=""></span><span>projects</span></button></li>
+      <li><button class="icon" type="button" data-open="videos"><span class="ico"><img src="images/os/folder-video.webp" alt=""></span><span>videos</span></button></li>
+      <li><button class="icon" type="button" data-open="messenger"><span class="ico"><img src="images/os/messenger.webp" alt=""></span><span>messenger</span></button></li>
+      <li><button class="icon" type="button" data-open="guestbook"><span class="ico"><img src="images/os/notes.webp" alt=""></span><span>guestbook</span></button></li>
+      <li><button class="icon" type="button" data-open="music"><span class="ico"><img src="images/os/player.webp" alt=""></span><span>media player</span></button></li>
+      <li><button class="icon" type="button" data-open="recycle"><span class="ico"><img src="images/os/trash-full.webp" alt=""></span><span>recycle bin</span></button></li>
+    </ul>
+
+    <aside id="gadgets" aria-label="gadgets">
+      <div class="clock" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="58" fill="url(#g-rim)"/>
+          <circle cx="60" cy="60" r="51" fill="url(#g-face)" stroke="#2a2a2a" stroke-width="1"/>
+          <g id="clock-ticks" stroke="#444"></g>
+          <line id="hand-h" x1="60" y1="64" x2="60" y2="34" stroke="#1b1b1b" stroke-width="4" stroke-linecap="round"/>
+          <line id="hand-m" x1="60" y1="66" x2="60" y2="20" stroke="#1b1b1b" stroke-width="2.6" stroke-linecap="round"/>
+          <line id="hand-s" x1="60" y1="70" x2="60" y2="16" stroke="#d42a1e" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="3.5" fill="#1b1b1b" stroke="#d42a1e" stroke-width="1.2"/>
+          <ellipse cx="60" cy="36" rx="40" ry="22" fill="#fff" opacity="0.35"/>
+        </svg>
+        <span class="clock-date" id="clock-date"></span>
       </div>
-      <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">menu <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </header>
+      <div class="gadget-box gadget-feed">
+        <h2>what i've been working on</h2>
+        <!-- refreshed from GitHub; this is the fallback -->
+        <ul class="feed" id="feed">
+          <li><time datetime="2026-10-21">oct 21, 2026</time>this homepage</li>
+          <li><time datetime="2026-10-18">oct 18, 2026</time>tab to sheet</li>
+          <li><time datetime="2026-09-17">sep 17, 2026</time>remap</li>
+        </ul>
+      </div>
+      <div class="gadget-box">
+        <h2>visitors</h2>
+        <div class="odometer" id="odometer" role="img" aria-label="visitor count loading"></div>
+        <span class="counter-note" id="counter-note">counting...</span>
+      </div>
+    </aside>
 
-    <div id="frame">
-      <aside id="menu">
-        <nav class="nav-group" aria-label="this page">
-          <span class="nav-title">main</span>
-          <a href="#top" class="active"><img src="images/icons/home.webp" width="20" height="20" alt="">home</a>
-          <a href="#websites"><img src="images/icons/websites.webp" width="20" height="20" alt="">project</a>
-          <a href="#downloads"><img src="images/icons/downloads.webp" width="20" height="20" alt="">downloads</a>
-          <a href="#videos"><img src="images/icons/videos.webp" width="20" height="20" alt="">videos</a>
-          <a href="#discord"><svg aria-hidden="true"><use href="#i-discord"/></svg>discord</a>
-          <a href="#more" hidden><img src="images/icons/projects.webp" width="20" height="20" alt="">more projects</a>
-          <a href="#updates"><img src="images/icons/updates.webp" width="20" height="20" alt="">updates</a>
-          <a href="#guestbook"><img src="images/icons/guestbook.webp" width="20" height="20" alt="">guestbook</a>
-          <a href="#linkme"><img src="images/icons/link.webp" width="20" height="20" alt="">link to me</a>
-        </nav>
-        <nav class="nav-group" aria-label="elsewhere">
-          <span class="nav-title">elsewhere</span>
-          <a href="https://github.com/shibeeee"><svg aria-hidden="true"><use href="#i-github"/></svg>github<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
-          <a href="https://www.youtube.com/@shibereal"><svg aria-hidden="true"><use href="#i-youtube"/></svg>youtube<svg class="ext" aria-hidden="true"><use href="#i-ext"/></svg></a>
-        </nav>
+    <div id="windows">
+      <section class="win" id="win-about" data-app="about" data-title="about me.txt - Notepad" data-icon="images/os/notepad.webp" data-w="540" data-h="470" hidden>
+        <div class="win-body notepad">
+          <div class="menubar" aria-hidden="true"><span>File</span><span>Edit</span><span>Format</span><span>View</span><span>Help</span></div>
+          <div class="notepad-text">hey, i'm shibe.
 
-        <div class="nav-group player" id="player">
-          <span class="nav-title">now playing</span>
-          <div class="lcd" id="lcd"><span id="track-name">press play ♪</span></div>
-          <div class="player-controls">
-            <button id="prev" type="button" aria-label="previous song" title="previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h3v14H5zM19 5v14L8 12z"/></svg></button>
-            <button id="play" type="button" aria-label="play music" title="play / pause"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 4.5v15L19.6 12z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg></button>
-            <button id="next" type="button" aria-label="next song" title="next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h3v14h-3zM5 5v14l11-7z"/></svg></button>
-          </div>
-          <div class="track-bar" aria-hidden="true"><span id="track-progress"></span></div>
-          <label class="volume">vol<input id="volume" type="range" min="0" max="1" step="0.05" value="0.2" aria-label="music volume"></label>
+this is my homepage. i make stuff and put it here:
+
+- <a href="#tabtosheet">tab to sheet</a>: turns songsterr tabs into sheet music you can print
+- <a href="#projects">remap</a>: a key remapper for windows. it has a profile for hotline miami
+
+i also upload <a href="#videos">game videos</a>, mostly entry point stealth runs (legend, no kills).
+
+if you want to talk, i'm shibereal on discord (it's in <a href="#messenger">messenger</a>), or stick a note on the <a href="#guestbook">guestbook</a>.
+
+thanks for stopping by
+- shibe
+<span id="visitor-line" hidden>
+you're visitor #<span id="visitor-no"></span></span></div>
         </div>
+      </section>
 
-        <div class="gadget" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="58" fill="url(#g-rim)"/>
-            <circle cx="60" cy="60" r="51" fill="url(#g-face)" stroke="#2a2a2a" stroke-width="1"/>
-            <g id="clock-ticks" stroke="#444"></g>
-            <line id="hand-h" x1="60" y1="64" x2="60" y2="34" stroke="#1b1b1b" stroke-width="4" stroke-linecap="round"/>
-            <line id="hand-m" x1="60" y1="66" x2="60" y2="20" stroke="#1b1b1b" stroke-width="2.6" stroke-linecap="round"/>
-            <line id="hand-s" x1="60" y1="70" x2="60" y2="16" stroke="#d42a1e" stroke-width="1.2" stroke-linecap="round"/>
-            <circle cx="60" cy="60" r="3.5" fill="#1b1b1b" stroke="#d42a1e" stroke-width="1.2"/>
-            <ellipse cx="60" cy="36" rx="40" ry="22" fill="#fff" opacity="0.35"/>
-          </svg>
-          <span id="clock-date"></span>
+      <section class="win" id="win-tabtosheet" data-app="tabtosheet" data-title="tab to sheet - Windows Internet Explorer" data-icon="images/os/browser.webp" data-w="1000" data-h="680" hidden>
+        <div class="ie-top">
+          <div class="ex-addr"><img src="images/os/browser.webp" alt="">https://shibeeee.github.io/songsterr-to-sheet-music/</div>
+          <a class="btn7" href="https://shibeeee.github.io/songsterr-to-sheet-music/" target="_blank" rel="noopener">open in a new tab</a>
         </div>
+        <div class="win-body ie-body"><iframe id="tts-frame" title="tab to sheet" data-src="https://shibeeee.github.io/songsterr-to-sheet-music/"></iframe></div>
+      </section>
 
-        <div class="nav-group counter">
-          <span class="nav-title">visitors</span>
-          <div class="odometer" id="odometer" role="img" aria-label="visitor count loading"></div>
-          <span class="counter-note" id="counter-note">counting...</span>
+      <section class="win" id="win-projects" data-app="projects" data-title="projects" data-icon="images/os/folder-dev.webp" data-w="760" data-h="500" hidden>
+        <div class="ex-top">
+          <div class="ex-nav" aria-hidden="true"><span><svg viewBox="0 0 16 16"><path d="M9.5 3.5 5 8l4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span><span><svg viewBox="0 0 16 16"><path d="M6.5 3.5 11 8l-4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span></div>
+          <div class="ex-addr"><img src="images/os/folder-dev.webp" alt="">shibe <b>&#9656;</b> projects</div>
+          <div class="ex-search"><input type="search" placeholder="search projects" aria-label="search projects" data-filter="#project-files"></div>
         </div>
-
-        <!-- filled in live from discord further down -->
-        <div class="nav-group side-box side-extra" id="now-box" hidden>
-          <span class="nav-title">right now</span>
-          <div class="now"><span class="now-dot" id="now-dot"></span><span id="now-text"></span></div>
-        </div>
-
-        <div class="nav-group side-box side-extra">
-          <span class="nav-title">latest video</span>
-          <a class="side-video" id="side-video" href="https://www.youtube.com/watch?v=2x3AhJA6xU8"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span>an angry rooster vs. the world: part 2</span></a>
-        </div>
-
-        <div class="nav-group side-box side-extra">
-          <span class="nav-title">this site</span>
-          <ul class="site-info">
-            <li>up since oct 18, 2026</li>
-            <li>last updated <span id="site-updated">oct 21, 2026</span></li>
-          </ul>
-        </div>
-      </aside>
-
-      <main id="content">
-        <h1 class="bar" id="welcome" tabindex="-1">welcome!</h1>
-
-        <div class="glass">
-          <div class="box about">
-            <span class="about-pic"><img src="images/me.webp" width="96" height="96" alt="my profile picture, a cat swimming"></span>
-            <div>
-              <p>hey, i'm shibe. i make stuff and put it here. right now that's <a href="#websites">tab to sheet</a>, which turns songsterr tabs into sheet music, and <a href="#downloads">remap</a>, a key remapper for windows.</p>
-              <p>i also upload <a href="#videos">game videos</a>, mostly entry point stealth runs. all my code is on <a href="https://github.com/shibeeee">github</a>, and there's a <a href="#guestbook">guestbook</a> at the bottom if you want to say hi.</p>
+        <div class="win-body explorer">
+          <div class="ex-cmd"><a href="https://github.com/shibeeee">open on github</a></div>
+          <div class="ex-main">
+            <nav class="ex-side" aria-label="folders"></nav>
+            <div class="ex-files tiles" id="project-files">
+              <button class="file" type="button" data-name="tab to sheet" data-kind="website" data-open="tabtosheet" data-src="https://github.com/shibeeee/songsterr-to-sheet-music"
+                data-desc="give it a songsterr link (or search for a song) and it turns the tab into sheet music you can print. it plays the song back too, and you can loop a part or slow it down to practice. it can also save the song as a guitar pro or midi file.">
+                <svg><use href="#i-tts"/></svg><span><b>tab to sheet</b><small>website</small></span></button>
+              <button class="file" type="button" data-name="remap" data-kind="windows app" data-href="https://github.com/shibeeee/remap-with-AHK" data-src="https://github.com/shibeeee/remap-with-AHK"
+                data-desc="remaps keys on windows, but only while a certain program is open, so nothing else gets messed up. it runs on autohotkey v2. there's a hotline miami profile in it that makes e a right click, which is way easier on a laptop.">
+                <svg><use href="#i-rm"/></svg><span><b>remap</b><small>windows app</small></span></button>
             </div>
           </div>
+          <div class="ex-details" id="project-details">
+            <img src="images/os/folder-dev.webp" alt="">
+            <div class="info"><b>2 items</b><p>click something to see what it is</p></div>
+          </div>
         </div>
+      </section>
 
-        <h2 class="bar" id="websites">my project</h2>
-
-        <div class="glass">
-          <div class="box project">
-            <a class="shot" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><img src="images/tab-to-sheet.webp" width="560" height="350" alt="tab to sheet showing a song as notation and tab" loading="lazy"></a>
-            <div class="project-info">
-              <h3><span class="tile"><svg aria-hidden="true"><use href="#i-tts"/></svg></span><a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a></h3>
-              <p>give it a songsterr link (or search for a song) and it turns the tab into sheet music you can print. it plays the song back too, and you can loop a part or slow it down to practice. it can also save the song as a guitar pro or midi file.</p>
-              <div class="buttons">
-                <a class="btn go" href="https://shibeeee.github.io/songsterr-to-sheet-music/">open it &raquo;</a>
-                <a class="btn" href="https://github.com/shibeeee/songsterr-to-sheet-music">source code</a>
+      <section class="win" id="win-videos" data-app="videos" data-title="videos" data-icon="images/os/folder-video.webp" data-w="820" data-h="560" hidden>
+        <div class="ex-top">
+          <div class="ex-nav" aria-hidden="true"><span><svg viewBox="0 0 16 16"><path d="M9.5 3.5 5 8l4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span><span><svg viewBox="0 0 16 16"><path d="M6.5 3.5 11 8l-4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span></div>
+          <div class="ex-addr"><img src="images/os/folder-video.webp" alt="">libraries <b>&#9656;</b> videos</div>
+          <div class="ex-search"><input type="search" placeholder="search videos" aria-label="search videos" data-filter="#video-list"></div>
+        </div>
+        <div class="win-body explorer">
+          <div class="ex-cmd"><a href="https://www.youtube.com/@shibereal/videos">open my channel</a><a href="https://www.youtube.com/@shibereal?sub_confirmation=1">subscribe</a></div>
+          <div class="ex-main">
+            <nav class="ex-side" aria-label="folders"></nav>
+            <div class="ex-files">
+              <div class="lib-head"><b>videos library</b><span>mostly entry point, stealth with no kills &middot; <span id="yt-subs">23 subscribers</span></span></div>
+              <!-- refreshed from the channel; this list is the fallback -->
+              <div class="thumbs" id="video-list">
+                <a class="thumb" href="https://www.youtube.com/watch?v=2x3AhJA6xU8" data-id="2x3AhJA6xU8"><span class="pic"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">7:25</span></span><span class="t">an angry rooster vs. the world: part 2</span><small>6 months ago</small></a>
+                <a class="thumb" href="https://www.youtube.com/watch?v=Co4q0xhVKwo" data-id="Co4q0xhVKwo"><span class="pic"><img src="https://i.ytimg.com/vi/Co4q0xhVKwo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">7:02</span></span><span class="t">entry point - financier daily legend</span><small>10 months ago</small></a>
+                <a class="thumb" href="https://www.youtube.com/watch?v=Pou58YN7rpI" data-id="Pou58YN7rpI"><span class="pic"><img src="https://i.ytimg.com/vi/Pou58YN7rpI/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">8:23</span></span><span class="t">entry point - blacksite blindfolded (legend stealth solo no kills)</span><small>1 year ago</small></a>
+                <a class="thumb" href="https://www.youtube.com/watch?v=GfV_KI7HGX4" data-id="GfV_KI7HGX4"><span class="pic"><img src="https://i.ytimg.com/vi/GfV_KI7HGX4/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">6:15</span></span><span class="t">entry point - blindfolded: electric boogaloo (the auction legend stealth no kills)</span><small>1 year ago</small></a>
+                <a class="thumb" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc" data-id="n8AWQ1WUnhc"><span class="pic"><img src="https://i.ytimg.com/vi/n8AWQ1WUnhc/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">8:05</span></span><span class="t">entry point - blindfolded (the deposit legend stealth solo no kills)</span><small>1 year ago</small></a>
+                <a class="thumb" href="https://www.youtube.com/watch?v=pKwbyPjREgo" data-id="pKwbyPjREgo"><span class="pic"><img src="https://i.ytimg.com/vi/pKwbyPjREgo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="len">5:41</span></span><span class="t">entry point - the deposit daily challenge legend solo (no kills)</span><small>1 year ago</small></a>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <h2 class="bar" id="downloads">downloads</h2>
+      <section class="win" id="win-video" data-app="video" data-title="video - Windows Media Player" data-icon="images/os/player.webp" data-w="860" data-h="540" hidden>
+        <div class="win-body video-body"><iframe id="video-frame" title="video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+      </section>
 
-        <div class="glass">
-          <div class="box project">
-            <span class="tile"><svg aria-hidden="true"><use href="#i-rm"/></svg></span>
-            <div class="project-info">
-              <h3><a href="https://github.com/shibeeee/remap-with-AHK">remap</a></h3>
-              <p>remaps keys on windows, but only while a certain program is open, so nothing else gets messed up. it runs on autohotkey v2. there's a hotline miami profile in it that makes e a right click, which is way easier on a laptop.</p>
-              <div class="buttons">
-                <a class="btn go" href="https://github.com/shibeeee/remap-with-AHK">get it on github &raquo;</a>
-              </div>
+      <section class="win" id="win-messenger" data-app="messenger" data-title="Windows Live Messenger" data-icon="images/os/messenger.webp" data-w="380" data-h="340" hidden>
+        <div class="win-body wlm">
+          <!-- live from Lanyard (api.lanyard.rest); this is the fallback -->
+          <div class="wlm-head">
+            <div class="wlm-pic" id="wlm-pic"><img id="wlm-avatar" src="images/me.webp" width="86" height="86" alt="shibe's picture"></div>
+            <div class="wlm-who">
+              <div class="wlm-name"><span id="wlm-name">shibe</span> <small id="wlm-status"></small></div>
+              <p class="wlm-pm" id="wlm-pm">add me if you want</p>
+              <p class="wlm-user">discord: <span id="wlm-user">shibereal</span></p>
             </div>
           </div>
-        </div>
-
-        <h2 class="bar" id="videos">my videos</h2>
-
-        <div class="glass">
-          <div class="box">
-            <p class="videos-note">mostly entry point, stealth with no kills. <span id="yt-subs">23 subscribers</span> so far, the rest is on <a href="https://www.youtube.com/@shibereal/videos">my channel</a>.</p>
-            <!-- refreshed from the channel when the page loads; this list is the fallback -->
-            <ul class="videos" id="video-list">
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=2x3AhJA6xU8"><img src="https://i.ytimg.com/vi/2x3AhJA6xU8/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:25</span></a><a class="video-title" href="https://www.youtube.com/watch?v=2x3AhJA6xU8">an angry rooster vs. the world: part 2</a><span class="video-meta">6 months ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Co4q0xhVKwo"><img src="https://i.ytimg.com/vi/Co4q0xhVKwo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">7:02</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Co4q0xhVKwo">entry point - financier daily legend</a><span class="video-meta">10 months ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=Pou58YN7rpI"><img src="https://i.ytimg.com/vi/Pou58YN7rpI/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:23</span></a><a class="video-title" href="https://www.youtube.com/watch?v=Pou58YN7rpI">entry point - blacksite blindfolded (legend stealth solo no kills)</a><span class="video-meta">1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=GfV_KI7HGX4"><img src="https://i.ytimg.com/vi/GfV_KI7HGX4/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">6:15</span></a><a class="video-title" href="https://www.youtube.com/watch?v=GfV_KI7HGX4">entry point - blindfolded: electric boogaloo (the auction legend stealth no kills)</a><span class="video-meta">1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc"><img src="https://i.ytimg.com/vi/n8AWQ1WUnhc/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">8:05</span></a><a class="video-title" href="https://www.youtube.com/watch?v=n8AWQ1WUnhc">entry point - blindfolded (the deposit legend stealth solo no kills)</a><span class="video-meta">1 year ago</span></li>
-              <li class="video"><a class="shot" href="https://www.youtube.com/watch?v=pKwbyPjREgo"><img src="https://i.ytimg.com/vi/pKwbyPjREgo/mqdefault.jpg" width="320" height="180" alt="" loading="lazy"><span class="video-len">5:41</span></a><a class="video-title" href="https://www.youtube.com/watch?v=pKwbyPjREgo">entry point - the deposit daily challenge legend solo (no kills)</a><span class="video-meta">1 year ago</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <h2 class="bar" id="discord">discord</h2>
-
-        <div class="glass">
-          <div class="box">
-            <!-- live from Lanyard (api.lanyard.rest); this is the fallback -->
-            <div class="dc">
-              <div class="dc-avatar"><img id="dc-avatar" src="https://cdn.discordapp.com/avatars/589584488519172123/8e2ef49388357b1deec6a6164be64534.png?size=160" width="80" height="80" alt="" onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><img class="dc-deco" id="dc-deco" alt="" hidden><span class="dc-dot" id="dc-dot" hidden></span></div>
-              <div class="dc-info">
-                <h3><span id="dc-name">shibe</span><span class="dc-tag" id="dc-tag" hidden><img id="dc-tag-img" alt=""><span id="dc-tag-text"></span></span></h3>
-                <span class="dc-sub"><span id="dc-user">@shibereal</span><span id="dc-status"></span></span>
-                <p class="dc-custom" id="dc-custom">add me if you want.</p>
-                <div class="dc-activity" id="dc-activity" hidden>
-                  <img id="dc-act-img" alt="" hidden>
-                  <div class="dc-act-text">
-                    <span class="dc-act-head" id="dc-act-head"></span>
-                    <span class="dc-act-name" id="dc-act-name"></span>
-                    <span id="dc-act-1"></span>
-                    <span id="dc-act-2"></span>
-                    <div class="dc-bar" id="dc-bar" hidden><span></span></div>
-                  </div>
-                </div>
-                <div class="buttons">
-                  <button class="btn go" id="dc-copy" type="button">copy username</button>
-                  <a class="btn" id="dc-open" hidden>open in discord</a>
-                </div>
-              </div>
+          <div class="wlm-act" id="wlm-act" hidden>
+            <img id="wlm-act-img" alt="" hidden>
+            <div class="wlm-act-text">
+              <span class="wlm-act-head" id="wlm-act-head"></span>
+              <span class="wlm-act-name" id="wlm-act-name"></span>
+              <span id="wlm-act-1"></span>
+              <span id="wlm-act-2"></span>
+              <div class="wlm-bar" id="wlm-bar" hidden><span></span></div>
             </div>
           </div>
-        </div>
-
-        <h2 class="bar" id="more" hidden>more projects</h2>
-
-        <div class="glass" hidden>
-          <div class="box" id="more-list"></div>
-        </div>
-
-        <h2 class="bar" id="updates">latest updates</h2>
-
-        <div class="glass">
-          <div class="box">
-            <!-- refreshed from GitHub when the page loads; this list is the fallback -->
-            <ul class="updates" id="updates-list">
-              <li><time datetime="2026-10-18">oct 18, 2026</time><span>made this homepage!</span></li>
-              <li><time datetime="2026-10-18">oct 18, 2026</time><span>worked on <a href="https://shibeeee.github.io/songsterr-to-sheet-music/">tab to sheet</a></span></li>
-              <li><time datetime="2026-09-17">sep 17, 2026</time><span>worked on <a href="https://github.com/shibeeee/remap-with-AHK">remap</a></span></li>
-            </ul>
+          <div class="wlm-btns">
+            <button class="btn7 default" id="wlm-copy" type="button">copy username</button>
+            <a class="btn7" id="wlm-open" href="https://discord.com/users/589584488519172123">open in discord</a>
           </div>
         </div>
+      </section>
 
-        <h2 class="bar" id="guestbook">guestbook</h2>
-
-        <div class="glass">
-          <div class="box">
-            <p>leave a message if you like. be nice :)</p>
-            <form class="gb-form" id="gb-form" autocomplete="off">
-              <input id="gb-name" name="name" maxlength="32" placeholder="your name" aria-label="your name" required>
-              <textarea id="gb-message" name="message" maxlength="500" placeholder="say hi!" aria-label="your message" required></textarea>
-              <div class="gb-trap" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
-              <div class="gb-row">
-                <button class="btn go" type="submit">sign the guestbook &raquo;</button>
-                <span class="gb-count" id="gb-count" aria-hidden="true">0/500</span>
-                <span class="gb-status" id="gb-status" role="status"></span>
-              </div>
+      <section class="win" id="win-guestbook" data-app="guestbook" data-title="guestbook - Sticky Notes" data-icon="images/os/notes.webp" data-w="760" data-h="560" hidden>
+        <div class="win-body notes-body">
+          <p class="notes-intro">leave a note if you want. be nice :)</p>
+          <div class="notes" id="gb-list">
+            <form class="note note-form" id="gb-form" autocomplete="off">
+              <input name="name" maxlength="32" required placeholder="your name" aria-label="your name">
+              <textarea name="message" maxlength="500" required placeholder="write something..." aria-label="your message"></textarea>
+              <input class="hp" name="website" tabindex="-1" aria-hidden="true">
+              <div class="row"><span id="gb-count">0/500</span><button class="btn7" type="submit">stick it</button></div>
+              <div id="gb-status" role="status"></div>
             </form>
-            <div id="gb-list"></div>
-            <button class="btn gb-more" id="gb-more" type="button" hidden>show older messages</button>
           </div>
+          <button class="btn7" id="gb-more" type="button" hidden>older notes</button>
         </div>
+      </section>
 
-        <h2 class="bar" id="linkme">link to me!</h2>
-
-        <div class="glass">
-          <div class="box">
-            <p>got a site too? feel free to grab my button:</p>
-            <div class="linkme" style="margin-top: 8px">
-              <img src="images/button.png" width="88" height="31" alt="shibe's homepage button" loading="lazy">
-              <textarea readonly aria-label="html code for my button" onclick="this.select()">&lt;a href="https://shibeeee.github.io/"&gt;&lt;img src="https://shibeeee.github.io/images/button.png" width="88" height="31" alt="shibe"&gt;&lt;/a&gt;</textarea>
+      <section class="win" id="win-music" data-app="music" data-title="Windows Media Player" data-icon="images/os/player.webp" data-w="560" data-h="380" hidden>
+        <div class="win-body wmp" id="wmp">
+          <div class="wmp-main">
+            <div class="wmp-now">
+              <div class="viz" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <span id="track-name">bossa antigua</span>
+              <span class="wmp-artist">kevin macleod</span>
             </div>
+            <ul class="wmp-list" id="playlist"></ul>
+          </div>
+          <div class="wmp-bar">
+            <button class="wmp-btn" id="prev" type="button" aria-label="previous song" title="previous"><svg viewBox="0 0 24 24"><path d="M5 5h3v14H5zM19 5v14L8 12z"/></svg></button>
+            <button class="wmp-btn" id="play" type="button" aria-label="play music" title="play / pause"><svg class="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15L20 12z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg></button>
+            <button class="wmp-btn" id="next" type="button" aria-label="next song" title="next"><svg viewBox="0 0 24 24"><path d="M16 5h3v14h-3zM5 5v14l11-7z"/></svg></button>
+            <div class="wmp-seek" aria-hidden="true"><span id="track-progress"></span></div>
+            <input id="volume" type="range" min="0" max="1" step="0.05" value="0.2" aria-label="music volume" title="volume">
           </div>
         </div>
-      </main>
-    </div>
+      </section>
 
-    <footer id="footer">
-      <span id="visitor-line" hidden>you're visitor #<span id="visitor-no"></span> &middot; </span>made by shibe, 2026 &middot; hosted on <a href="https://pages.github.com/">github pages</a>
-      <details class="credits">
-        <summary>credits</summary>
-        background photos by <a href="https://www.pexels.com/@jplenio/">johannes plenio</a> (pexels) &middot; earth photo by <a href="https://visibleearth.nasa.gov/images/57723/the-blue-marble">nasa</a> &middot; icons from the <a href="https://github.com/KDE/oxygen-icons">oxygen icon theme</a> (lgpl) &middot; nanami madobe belongs to windows 7 mania / microsoft japan
-        <br>music: "bossa antigua", "local forecast – elevator" and "lobby time" by <a href="https://incompetech.com/">kevin macleod</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">cc by 4.0</a>
-      </details>
-    </footer>
-  </div>
+      <section class="win" id="win-recycle" data-app="recycle" data-title="Recycle Bin" data-icon="images/os/trash-full.webp" data-w="560" data-h="360" hidden>
+        <div class="ex-top">
+          <div class="ex-nav" aria-hidden="true"><span><svg viewBox="0 0 16 16"><path d="M9.5 3.5 5 8l4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span><span><svg viewBox="0 0 16 16"><path d="M6.5 3.5 11 8l-4.5 4.5" fill="none" stroke="#fff" stroke-width="2.2"/></svg></span></div>
+          <div class="ex-addr"><img src="images/os/trash-full.webp" alt="">recycle bin</div>
+        </div>
+        <div class="win-body explorer">
+          <div class="ex-cmd"><button type="button" id="empty-bin">empty the recycle bin</button></div>
+          <div class="ex-files tiles" id="bin-files">
+            <button class="file" type="button" data-say="we don't talk about vista"><img src="images/os/exe.webp" alt=""><span><b>windows vista</b><small>application</small></span></button>
+            <button class="file" type="button" data-say="clippy? wrong windows, buddy"><img src="images/os/help.webp" alt=""><span><b>clippy</b><small>office assistant</small></span></button>
+            <button class="file" type="button" data-say="this homepage used to be one long page. it's better now, right?"><img src="images/os/browser.webp" alt=""><span><b>old homepage.html</b><small>html document</small></span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
   <div id="start" hidden>
-    <div class="start-programs">
-      <a class="prog" href="https://shibeeee.github.io/songsterr-to-sheet-music/"><svg aria-hidden="true"><use href="#i-tts"/></svg><span>tab to sheet<small>sheet music from songsterr tabs</small></span></a>
-      <a class="prog" href="https://github.com/shibeeee/remap-with-AHK"><svg aria-hidden="true"><use href="#i-rm"/></svg><span>remap<small>key remapper for windows</small></span></a>
-      <div class="start-sep"></div>
-      <a class="prog" href="#guestbook"><img src="images/icons/guestbook.webp" width="32" height="32" alt=""><span>guestbook<small>leave a message</small></span></a>
-      <div class="start-empty" hidden>nothing found :(</div>
-      <input id="start-search" type="search" placeholder="search programs and pages" aria-label="search the start menu" autocomplete="off">
+    <div class="start-left">
+      <div class="start-progs">
+        <button class="prog" type="button" data-open="about"><img src="images/os/notepad.webp" alt=""><span>about me.txt<small>notepad</small></span></button>
+        <button class="prog" type="button" data-open="tabtosheet"><svg aria-hidden="true"><use href="#i-tts"/></svg><span>tab to sheet<small>sheet music from songsterr tabs</small></span></button>
+        <button class="prog" type="button" data-open="projects"><img src="images/os/folder-dev.webp" alt=""><span>projects<small>everything i've made</small></span></button>
+        <button class="prog" type="button" data-open="videos"><img src="images/os/folder-video.webp" alt=""><span>videos<small>entry point and more</small></span></button>
+        <button class="prog" type="button" data-open="messenger"><img src="images/os/messenger.webp" alt=""><span>messenger<small>what i'm up to on discord</small></span></button>
+        <button class="prog" type="button" data-open="guestbook"><img src="images/os/notes.webp" alt=""><span>guestbook<small>leave a sticky note</small></span></button>
+        <button class="prog" type="button" data-open="music"><img src="images/os/player.webp" alt=""><span>media player<small>the background music</small></span></button>
+        <div class="start-empty" hidden>nothing found :(</div>
+      </div>
+      <input id="start-search" type="search" placeholder="search programs" aria-label="search the start menu" autocomplete="off">
     </div>
-    <div class="start-places">
-      <div class="start-pic"><img src="images/logo.webp" alt=""></div>
-      <a class="place" href="#top">shibe</a>
-      <a class="place" href="#websites">project</a>
-      <a class="place" href="#downloads">downloads</a>
-      <a class="place" href="#updates">updates</a>
-      <a class="place" href="#linkme">link to me</a>
-      <a class="place" href="#videos">videos</a>
-      <a class="place" href="#discord">discord</a>
+    <div class="start-right">
+      <div class="start-pic"><img src="images/me.webp" alt=""></div>
+      <button class="place" type="button" data-open="about">shibe</button>
+      <button class="place" type="button" data-open="projects">projects</button>
+      <button class="place" type="button" data-open="videos">videos</button>
+      <button class="place" type="button" data-open="music">music</button>
+      <div class="start-sep"></div>
       <a class="place" href="https://github.com/shibeeee">github</a>
       <a class="place" href="https://www.youtube.com/@shibereal">youtube</a>
+      <a class="place" href="https://discord.com/users/589584488519172123">discord</a>
       <button id="shutdown" type="button">shut down</button>
     </div>
   </div>
 
   <aside id="buddy" aria-label="site mascot" hidden>
-    <div id="buddy-bubble" role="status" hidden><button id="buddy-close" type="button" aria-label="close the speech bubble" title="close">&times;</button><span id="buddy-name"></span><span id="buddy-text"></span></div>
-    <button id="buddy-figure" type="button" aria-label="talk to the mascot">
-      <img id="buddy-img" alt="">
-    </button>
+    <div id="buddy-bubble" role="status" hidden><button id="buddy-close" type="button" aria-label="close" title="close">&times;</button><span id="buddy-name"><img src="images/os/messenger.webp" alt="">nanami madobe</span><span id="buddy-text"></span></div>
+    <button id="buddy-figure" type="button" aria-label="talk to nanami"><img id="buddy-img" alt="nanami madobe waving hello"></button>
   </aside>
 
   <nav id="taskbar" aria-label="taskbar">
-    <button id="start-orb" type="button" aria-label="start menu" aria-expanded="false" aria-controls="start"><img src="images/logo.webp" alt=""></button>
-    <a class="task" href="https://shibeeee.github.io/songsterr-to-sheet-music/" title="tab to sheet" style="--glow: rgba(210, 210, 230, 0.6)"><svg aria-hidden="true"><use href="#i-tts"/></svg></a>
-    <a class="task" href="https://github.com/shibeeee/remap-with-AHK" title="remap" style="--glow: rgba(255, 150, 40, 0.75)"><svg aria-hidden="true"><use href="#i-rm"/></svg></a>
+    <button id="start-orb" type="button" aria-label="start" aria-expanded="false" title="start"><img src="images/logo.webp" alt=""></button>
     <a class="task" href="https://github.com/shibeeee" title="github" style="--glow: rgba(255, 255, 255, 0.5)"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
     <a class="task" href="https://www.youtube.com/@shibereal" title="youtube" style="--glow: rgba(255, 60, 50, 0.7)"><svg aria-hidden="true"><use href="#i-youtube"/></svg></a>
     <a class="task" href="https://discord.com/users/589584488519172123" title="discord" style="--glow: rgba(114, 137, 218, 0.8)"><svg aria-hidden="true"><use href="#i-discord"/></svg></a>
+    <div id="tasks"></div>
     <button id="tray-sound" type="button" aria-pressed="true" aria-label="sound and music" title="sound on/off"><img class="snd-on" src="images/icons/sound-on.webp" alt=""><img class="snd-off" src="images/icons/sound-off.webp" alt=""></button>
-    <div class="tray"><span id="tray-time"></span><br><span id="tray-date"></span></div>
-    <button id="show-desktop" type="button" title="back to top" aria-label="back to top"></button>
+    <div class="tray"><div id="tray-time"></div><div id="tray-date"></div></div>
+    <button id="show-desktop" type="button" aria-label="show desktop" title="show desktop"></button>
   </nav>
 
   <script>
-    // Sidebar clock
+    // Clock gadget and the taskbar clock
     (function () {
       var ns = "http://www.w3.org/2000/svg", ticks = document.getElementById("clock-ticks");
       for (var i = 0; i < 60; i++) {
@@ -1043,97 +888,6 @@
           if (t < 1) requestAnimationFrame(step); else { skew = 0; tick(); }
         })(start);
       };
-    })();
-
-    // Pull my repos from GitHub so new projects and updates show up on their own
-    (function () {
-      var USER = "shibeeee", HOME_REPO = "shibeeee.github.io";
-      // Repos that already have their own hand-made card above
-      var FEATURED = { "songsterr-to-sheet-music": "tab to sheet", "remap-with-ahk": "remap" };
-      // Repos to leave off the site entirely
-      var HIDDEN = ["pidgeon-pal"];
-
-      function niceName(r) {
-        var key = r.name.toLowerCase();
-        if (key === HOME_REPO) return "this homepage";
-        return FEATURED[key] || key.replace(/[-_]+/g, " ");
-      }
-      function siteUrl(r) {
-        if (r.has_pages) return "https://" + USER + ".github.io/" + r.name + "/";
-        if (r.homepage && /^https:\/\//.test(r.homepage)) return r.homepage;
-        return null;
-      }
-      function day(iso) {
-        return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
-      }
-      function el(tag, props, kids) {
-        var e = document.createElement(tag);
-        for (var k in props) e[k] = props[k];
-        (kids || []).forEach(function (c) { e.append(c); });
-        return e;
-      }
-      function link(r) {
-        return el("a", { href: siteUrl(r) || r.html_url, textContent: niceName(r) });
-      }
-
-      function render(repos) {
-        repos = repos.filter(function (r) { return !r.fork && !r.archived && r.size > 0 && HIDDEN.indexOf(r.name.toLowerCase()) < 0; });
-        repos.sort(function (a, b) { return b.pushed_at.localeCompare(a.pushed_at); });
-
-        // Latest updates
-        var list = document.getElementById("updates-list");
-        list.replaceChildren.apply(list, repos.slice(0, 5).map(function (r) {
-          var isNew = r.created_at.slice(0, 10) === r.pushed_at.slice(0, 10), text;
-          if (r.name.toLowerCase() === HOME_REPO) {
-            text = el("span", { textContent: isNew ? "made this homepage!" : "worked on this homepage" });
-          } else {
-            text = el("span", {}, [isNew ? "started " : "worked on ", link(r)]);
-          }
-          return el("li", {}, [el("time", { dateTime: r.pushed_at, textContent: day(r.pushed_at) }), text]);
-        }));
-
-        // Everything without its own card
-        var home = repos.filter(function (r) { return r.name.toLowerCase() === HOME_REPO; })[0];
-        if (home) document.getElementById("site-updated").textContent = day(home.pushed_at);
-
-        var others = repos.filter(function (r) {
-          var key = r.name.toLowerCase();
-          return !FEATURED[key] && key !== HOME_REPO;
-        });
-        if (!others.length) return;
-        var box = document.getElementById("more-list");
-        box.replaceChildren.apply(box, others.map(function (r) {
-          var site = siteUrl(r), buttons = [];
-          if (site) buttons.push(el("a", { className: "btn go", href: site, innerHTML: "visit site &raquo;" }));
-          buttons.push(el("a", { className: "btn", href: r.html_url, textContent: "source code" }));
-          var meta = [r.language ? r.language.toLowerCase() : null, "updated " + day(r.pushed_at)].filter(Boolean).join(" · ");
-          return el("div", { className: "repo" }, [
-            el("h3", {}, [link(r)]),
-            el("p", { textContent: r.description || "no description yet" }),
-            el("div", { className: "meta", textContent: meta }),
-            el("div", { className: "buttons" }, buttons)
-          ]);
-        }));
-        document.getElementById("more").hidden = false;
-        box.parentNode.hidden = false;
-        document.querySelector('#menu a[href="#more"]').hidden = false;
-        window.dispatchEvent(new Event("repos-loaded"));
-      }
-
-      // Keep a copy for half an hour so repeat visits don't use up GitHub's rate limit
-      var CACHE = "gh-repos", cached = null;
-      try { cached = JSON.parse(localStorage.getItem(CACHE)); } catch (e) {}
-      if (cached && Date.now() - cached.time < 30 * 60 * 1000) { render(cached.repos); return; }
-
-      fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=pushed")
-        .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
-        .then(function (repos) {
-          try { localStorage.setItem(CACHE, JSON.stringify({ time: Date.now(), repos: repos })); } catch (e) {}
-          render(repos);
-        })
-        .catch(function () {
-          if (cached) render(cached.repos); // stale copy beats nothing; otherwise the built-in list stays
-        });
     })();
 
     // One shared Web Audio context for the effects and the music, made on the first click
@@ -1189,24 +943,370 @@
       document.addEventListener("DOMContentLoaded", function () {
         sync();
         document.getElementById("tray-sound").addEventListener("click", function (e) { e.stopPropagation(); toggle(); });
-        // A soft click for every other button and link
+        // A soft click for links and buttons that don't make their own sound
         document.addEventListener("click", function (e) {
           var el = e.target.closest("a, button");
-          if (el && !el.matches("#start-orb, #shutdown, #tray-sound, #buddy-figure, #gb-form button, .player-controls button, #enter-btn")) play("click");
+          if (el && !el.closest(".win-btns, #icons, .start-progs, .start-right, #buddy, #gb-form, .wmp-bar, #taskbar, #splash, .file, .thumb")) play("click");
         }, true);
       });
       return play;
     })();
 
-    // Background music: a little media player in the sidebar. The "click to enter" button starts it,
-    // or the first click anywhere on later page loads (browsers don't allow sound before a click).
+    // Windows: open, close, minimize, maximize, drag, and a button in the taskbar for each one
+    var wm = (function () {
+      var layer = document.getElementById("windows"), tasks = document.getElementById("tasks");
+      var phone = matchMedia("(max-width: 720px)");
+      var wins = {}, z = 10, cascade = 0, active = null;
+      var GLYPHS = {
+        min: '<svg viewBox="0 0 12 10" aria-hidden="true"><path d="M2.5 6h7v2.6h-7z" fill="#fff" stroke="#22364b" stroke-width=".8"/></svg>',
+        max: '<svg viewBox="0 0 12 10" aria-hidden="true"><path d="M2 1h8v8H2zM3.6 3.4v4h4.8v-4z" fill="#fff" fill-rule="evenodd" stroke="#22364b" stroke-width=".8"/></svg>',
+        close: '<svg viewBox="0 0 12 10" aria-hidden="true"><path d="M2.6 1.2 6 3.9l3.4-2.7 1.3 1.2L7.6 5l3.1 2.6-1.3 1.2L6 6.1 2.6 8.8 1.3 7.6 4.4 5 1.3 2.4z" fill="#fff" stroke="#5a1a0f" stroke-width=".7"/></svg>'
+      };
+
+      Array.prototype.forEach.call(document.querySelectorAll(".win"), function (el) {
+        var id = el.dataset.app;
+        var bar = document.createElement("div");
+        bar.className = "win-bar";
+        bar.innerHTML = '<img alt="" src="' + el.dataset.icon + '"><span class="win-title"></span><div class="win-btns">' +
+          '<button class="wb-min" type="button" aria-label="minimize" title="minimize">' + GLYPHS.min + '</button>' +
+          '<button class="wb-max" type="button" aria-label="maximize" title="maximize">' + GLYPHS.max + '</button>' +
+          '<button class="wb-close" type="button" aria-label="close" title="close">' + GLYPHS.close + '</button></div>';
+        bar.querySelector(".win-title").textContent = el.dataset.title;
+        el.prepend(bar);
+        el.setAttribute("role", "dialog");
+        el.setAttribute("aria-label", el.dataset.title);
+        el.tabIndex = -1;
+        wins[id] = { el: el, bar: bar, open: false, min: false, max: false, placed: false, task: null };
+        bar.querySelector(".wb-min").addEventListener("click", function () { minimize(id); });
+        bar.querySelector(".wb-max").addEventListener("click", function () { toggleMax(id); });
+        bar.querySelector(".wb-close").addEventListener("click", function () { close(id); });
+        bar.addEventListener("dblclick", function (e) { if (!e.target.closest("button")) toggleMax(id); });
+        el.addEventListener("pointerdown", function () { focus(id); });
+        drag(id);
+      });
+
+      // First time a window opens it goes in the middle of the free space, a bit further down for each new one
+      function place(w) {
+        var el = w.el, vw = layer.clientWidth, vh = layer.clientHeight;
+        var right = vw > 1000 ? 200 : 10, width = Math.min(+el.dataset.w, vw - 110 - right), height = Math.min(+el.dataset.h, vh - 20);
+        var left = 100 + Math.max(0, (vw - 100 - right - width) / 2) + (cascade % 4) * 24 - 30;
+        var top = Math.max(8, (vh - height) / 2 - 20) + (cascade % 4) * 24 - 30;
+        cascade++;
+        el.style.width = width + "px";
+        el.style.height = height + "px";
+        el.style.left = Math.round(Math.max(96, Math.min(left, vw - width - 8))) + "px";
+        el.style.top = Math.round(Math.max(8, Math.min(top, vh - height - 8))) + "px";
+      }
+
+      function open(id) {
+        var w = wins[id];
+        if (!w) return;
+        if (!w.open) {
+          if (!w.placed) { place(w); w.placed = true; }
+          w.open = true;
+          w.el.hidden = false;
+          w.el.classList.remove("closing");
+          addTask(id);
+          sfx("open");
+          w.el.dispatchEvent(new Event("win-open"));
+          w.el.focus({ preventScroll: true });
+        }
+        if (w.min) { w.min = false; w.el.hidden = false; }
+        focus(id);
+        if (id !== "video" && location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+      }
+      function close(id) {
+        var w = wins[id];
+        if (!w || !w.open) return;
+        w.open = false; w.min = false;
+        w.el.classList.add("closing");
+        setTimeout(function () { if (!w.open) { w.el.hidden = true; w.el.classList.remove("closing"); } }, 150);
+        w.task.remove(); w.task = null;
+        sfx("close");
+        w.el.dispatchEvent(new Event("win-close"));
+        if (location.hash === "#" + id) history.replaceState(null, "", location.pathname + location.search);
+        if (active === id) focusTop();
+      }
+      function minimize(id) {
+        var w = wins[id];
+        w.min = true;
+        w.el.hidden = true;
+        if (active === id) focusTop();
+      }
+      function toggleMax(id) {
+        var w = wins[id];
+        if (phone.matches) return;
+        w.max = !w.max;
+        w.el.classList.toggle("maxed", w.max);
+        w.bar.querySelector(".wb-max").setAttribute("aria-label", w.max ? "restore" : "maximize");
+      }
+      function sync() {
+        document.documentElement.classList.toggle("has-windows", Object.keys(wins).some(function (k) { return wins[k].open && !wins[k].min; }));
+      }
+      function focus(id) {
+        sync();
+        var w = wins[id];
+        if (!w || !w.open || w.min) return;
+        if (active !== id) w.el.style.zIndex = ++z;
+        active = id;
+        Object.keys(wins).forEach(function (k) {
+          wins[k].el.classList.toggle("active", k === id);
+          if (wins[k].task) wins[k].task.classList.toggle("active", k === id);
+        });
+      }
+      // Give focus to whatever window is on top now
+      function focusTop() {
+        sync();
+        var best = null;
+        Object.keys(wins).forEach(function (k) {
+          var w = wins[k];
+          if (w.open && !w.min && (!best || +w.el.style.zIndex > +wins[best].el.style.zIndex)) best = k;
+        });
+        active = null;
+        Object.keys(wins).forEach(function (k) {
+          wins[k].el.classList.remove("active");
+          if (wins[k].task) wins[k].task.classList.remove("active");
+        });
+        if (best) focus(best);
+      }
+      function addTask(id) {
+        var w = wins[id], b = document.createElement("button");
+        b.className = "task running";
+        b.type = "button";
+        b.title = w.el.dataset.title;
+        b.innerHTML = '<img alt="" src="' + w.el.dataset.icon + '">';
+        b.addEventListener("click", function () {
+          if (active === id && !w.min) minimize(id); else open(id);
+        });
+        tasks.appendChild(b);
+        w.task = b;
+      }
+      function setTitle(id, title) {
+        var w = wins[id];
+        w.el.dataset.title = title;
+        w.bar.querySelector(".win-title").textContent = title;
+        w.el.setAttribute("aria-label", title);
+        if (w.task) w.task.title = title;
+      }
+
+      // Drag by the title bar. Letting go at the very top of the screen maximizes, like aero snap.
+      function drag(id) {
+        var w = wins[id], el = w.el, bar = w.bar;
+        bar.addEventListener("pointerdown", function (e) {
+          if (e.button !== 0 || e.target.closest("button") || phone.matches) return;
+          var sx = e.clientX, sy = e.clientY, ox, oy, moved = false;
+          bar.setPointerCapture(e.pointerId);
+          function move(ev) {
+            if (!moved) {
+              if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 4) return;
+              moved = true;
+              if (w.max) {
+                // pull a maximized window back down, keeping it under the pointer
+                toggleMax(id);
+                el.style.left = Math.round(ev.clientX - el.offsetWidth / 2) + "px";
+                el.style.top = "0px";
+              }
+              ox = el.offsetLeft; oy = el.offsetTop; sx = ev.clientX; sy = ev.clientY;
+              el.classList.add("dragging");
+            }
+            var x = ox + ev.clientX - sx, y = oy + ev.clientY - sy;
+            x = Math.max(80 - el.offsetWidth, Math.min(x, layer.clientWidth - 80));
+            y = Math.max(0, Math.min(y, layer.clientHeight - 30));
+            el.style.left = x + "px";
+            el.style.top = y + "px";
+          }
+          function up(ev) {
+            bar.removeEventListener("pointermove", move);
+            bar.removeEventListener("pointerup", up);
+            bar.removeEventListener("pointercancel", up);
+            el.classList.remove("dragging");
+            if (moved && ev.type === "pointerup" && ev.clientY <= 2 && !w.max) toggleMax(id);
+          }
+          bar.addEventListener("pointermove", move);
+          bar.addEventListener("pointerup", up);
+          bar.addEventListener("pointercancel", up);
+        });
+      }
+
+      // Keep title bars on screen when the browser window gets smaller
+      window.addEventListener("resize", function () {
+        Object.keys(wins).forEach(function (k) {
+          var el = wins[k].el;
+          if (!wins[k].placed) return;
+          el.style.left = Math.max(80 - el.offsetWidth, Math.min(el.offsetLeft, layer.clientWidth - 80)) + "px";
+          el.style.top = Math.max(0, Math.min(el.offsetTop, layer.clientHeight - 30)) + "px";
+        });
+      });
+
+      // Links like href="#guestbook" open that window
+      function fromHash() {
+        var id = location.hash.slice(1);
+        if (wins[id] && id !== "video") { open(id); return true; }
+        return false;
+      }
+      window.addEventListener("hashchange", fromHash);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && active && document.getElementById("start").hidden && !document.documentElement.classList.contains("splash")) close(active);
+      });
+
+      return {
+        open: open, close: close, focus: focus, setTitle: setTitle, fromHash: fromHash,
+        isOpen: function (id) { return wins[id] && wins[id].open; },
+        el: function (id) { return wins[id].el; },
+        minimizeAll: function () { Object.keys(wins).forEach(function (k) { if (wins[k].open) minimize(k); }); }
+      };
+    })();
+
+    // Desktop icons, the folder side panes, and search boxes in folders
+    (function () {
+      var icons = document.querySelectorAll("#icons .icon");
+      Array.prototype.forEach.call(icons, function (b) {
+        b.addEventListener("click", function () {
+          Array.prototype.forEach.call(icons, function (o) { o.classList.toggle("selected", o === b); });
+          wm.open(b.dataset.open);
+        });
+      });
+      // clicking empty desktop clears the selection
+      document.getElementById("desktop").addEventListener("pointerdown", function (e) {
+        if (e.target.id === "desktop" || e.target.id === "windows" || e.target.id === "icons") {
+          Array.prototype.forEach.call(icons, function (o) { o.classList.remove("selected"); });
+        }
+      });
+
+      var SIDE = [["projects", "images/os/folder-dev.webp"], ["videos", "images/os/folder-video.webp"], ["music", "images/os/player.webp"], ["guestbook", "images/os/notes.webp"], ["recycle", "images/os/trash-full.webp"]];
+      Array.prototype.forEach.call(document.querySelectorAll(".ex-side"), function (nav) {
+        var here = nav.closest(".win").dataset.app, h = document.createElement("h3");
+        h.innerHTML = '<img src="images/os/computer.webp" alt="">shibe';
+        nav.appendChild(h);
+        SIDE.forEach(function (s) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = s[0] === here ? "here" : "";
+          b.innerHTML = '<img src="' + s[1] + '" alt="">';
+          b.append(s[0] === "recycle" ? "recycle bin" : s[0] === "music" ? "media player" : s[0]);
+          b.addEventListener("click", function () { wm.open(s[0]); });
+          nav.appendChild(b);
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-filter]"), function (input) {
+        input.addEventListener("input", function () {
+          var q = input.value.trim().toLowerCase();
+          Array.prototype.forEach.call(document.querySelectorAll(input.dataset.filter + " > *"), function (el) {
+            el.hidden = q && el.textContent.toLowerCase().indexOf(q) === -1;
+          });
+        });
+      });
+
+      // tab to sheet loads the first time its window opens
+      var tts = document.getElementById("tts-frame");
+      wm.el("tabtosheet").addEventListener("win-open", function () { if (!tts.src) tts.src = tts.dataset.src; });
+    })();
+
+    // Projects folder: pick something to see it in the details pane. GitHub adds anything new.
+    (function () {
+      var USER = "shibeeee", HOME_REPO = "shibeeee.github.io";
+      var FEATURED = { "songsterr-to-sheet-music": "tab to sheet", "remap-with-ahk": "remap" };
+      var HIDDEN = ["pidgeon-pal"]; // repos to leave off the site entirely
+      var files = document.getElementById("project-files"), details = document.getElementById("project-details");
+
+      function day(iso) {
+        return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+      }
+      function show(f) {
+        Array.prototype.forEach.call(files.children, function (o) { o.classList.toggle("selected", o === f); });
+        var icon = f.firstElementChild.cloneNode(true), info = document.createElement("div"), acts = document.createElement("div");
+        info.className = "info"; acts.className = "acts";
+        var name = document.createElement("b"), desc = document.createElement("p");
+        name.textContent = f.dataset.name;
+        desc.textContent = f.dataset.desc;
+        if (f.dataset.open) {
+          var o = document.createElement("button");
+          o.className = "btn7 default"; o.type = "button"; o.textContent = "open";
+          o.addEventListener("click", function () { wm.open(f.dataset.open); });
+          acts.appendChild(o);
+        } else if (f.dataset.href) {
+          var a = document.createElement("a");
+          a.className = "btn7 default"; a.href = f.dataset.href; a.textContent = f.dataset.kind === "windows app" ? "download" : "open";
+          acts.appendChild(a);
+        }
+        if (f.dataset.src) {
+          var s = document.createElement("a");
+          s.className = "btn7"; s.href = f.dataset.src; s.textContent = "source code";
+          acts.appendChild(s);
+        }
+        info.append(name, desc, acts);
+        details.replaceChildren(icon, info);
+      }
+      files.addEventListener("click", function (e) {
+        var f = e.target.closest(".file");
+        if (f) show(f);
+      });
+      files.addEventListener("dblclick", function (e) {
+        var f = e.target.closest(".file");
+        if (!f) return;
+        if (f.dataset.open) wm.open(f.dataset.open);
+        else if (f.dataset.href) location.href = f.dataset.href;
+      });
+      show(files.firstElementChild);
+
+      // Repo list from GitHub: new projects show up in the folder, and the feed gadget shows recent work
+      function render(repos) {
+        repos = repos.filter(function (r) { return !r.fork && !r.archived && r.size > 0 && HIDDEN.indexOf(r.name.toLowerCase()) < 0; });
+        repos.sort(function (a, b) { return b.pushed_at.localeCompare(a.pushed_at); });
+        var feed = document.getElementById("feed");
+        feed.replaceChildren.apply(feed, repos.slice(0, 4).map(function (r) {
+          var li = document.createElement("li"), t = document.createElement("time"), key = r.name.toLowerCase();
+          t.dateTime = r.pushed_at; t.textContent = day(r.pushed_at);
+          li.appendChild(t);
+          if (key === HOME_REPO) li.append("this homepage");
+          else {
+            var a = document.createElement("a");
+            a.href = r.has_pages ? "https://" + USER + ".github.io/" + r.name + "/" : r.html_url;
+            a.textContent = FEATURED[key] || key.replace(/[-_]+/g, " ");
+            li.appendChild(a);
+          }
+          return li;
+        }));
+        repos.forEach(function (r) {
+          var key = r.name.toLowerCase();
+          if (FEATURED[key] || key === HOME_REPO || files.querySelector('[data-repo="' + key + '"]')) return;
+          var b = document.createElement("button"), img = document.createElement("img"), text = document.createElement("span"),
+              name = document.createElement("b"), kind = document.createElement("small");
+          b.className = "file"; b.type = "button";
+          b.dataset.repo = key;
+          b.dataset.name = key.replace(/[-_]+/g, " ");
+          b.dataset.kind = (r.language || "code").toLowerCase();
+          b.dataset.desc = (r.description || "no description yet") + " (updated " + day(r.pushed_at) + ")";
+          if (r.has_pages) b.dataset.href = "https://" + USER + ".github.io/" + r.name + "/";
+          b.dataset.src = r.html_url;
+          img.src = "images/os/folder.webp"; img.alt = "";
+          name.textContent = b.dataset.name; kind.textContent = b.dataset.kind;
+          text.append(name, kind);
+          b.append(img, text);
+          files.appendChild(b);
+        });
+      }
+      var CACHE = "gh-repos", cached = null;
+      try { cached = JSON.parse(localStorage.getItem(CACHE)); } catch (e) {}
+      if (cached && Date.now() - cached.time < 30 * 60 * 1000) { render(cached.repos); return; }
+      fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=pushed")
+        .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(function (repos) {
+          try { localStorage.setItem(CACHE, JSON.stringify({ time: Date.now(), repos: repos })); } catch (e) {}
+          render(repos);
+        })
+        .catch(function () { if (cached) render(cached.repos); });
+    })();
+
+    // Background music, played by the media player window. The log on click starts it.
     // Volume is the song's own volume, except on iPhones, which ignore audio.volume; there it
     // goes through a Web Audio gain node instead.
     window.music = (function () {
       var tracks = [
-        { title: "bossa antigua", file: "music/bossa-antigua.mp3" },
-        { title: "local forecast – elevator", file: "music/local-forecast-elevator.mp3" },
-        { title: "lobby time", file: "music/lobby-time.mp3" }
+        { title: "bossa antigua", file: "music/bossa-antigua.mp3", length: "4:43" },
+        { title: "local forecast – elevator", file: "music/local-forecast-elevator.mp3", length: "3:09" },
+        { title: "lobby time", file: "music/lobby-time.mp3", length: "3:13" }
       ];
       var audio = new Audio(), index = 0, wanted = true, volume = 0.2, muted = false, gain = null, fadeTimer, volTimer, current = 0;
       var volumeWorks = (function () { var a = new Audio(); a.volume = 0.5; return a.volume === 0.5; })();
@@ -1254,17 +1354,28 @@
       }
 
       var playBtn = document.getElementById("play"), name = document.getElementById("track-name"),
-          lcd = document.getElementById("lcd"), slider = document.getElementById("volume"),
-          bar = document.getElementById("track-progress");
+          wmp = document.getElementById("wmp"), slider = document.getElementById("volume"),
+          bar = document.getElementById("track-progress"), list = document.getElementById("playlist");
       slider.value = volume;
+      var items = tracks.map(function (t, i) {
+        var li = document.createElement("li"), b = document.createElement("button"), small = document.createElement("small");
+        b.type = "button";
+        b.textContent = t.title;
+        small.textContent = "kevin macleod · " + t.length;
+        b.appendChild(small);
+        b.addEventListener("click", function () { load(i); remember(true); play(); });
+        li.appendChild(b);
+        list.appendChild(li);
+        return b;
+      });
 
       function show() {
-        name.textContent = "♪ " + tracks[index].title + " – kevin macleod";
-        lcd.classList.remove("scroll");
-        if (name.scrollWidth > lcd.clientWidth - 12) lcd.classList.add("scroll");
+        name.textContent = tracks[index].title;
+        items.forEach(function (b, i) { b.classList.toggle("current", i === index); });
       }
       function setButton(playing) {
         playBtn.classList.toggle("playing", playing);
+        wmp.classList.toggle("playing", playing);
         playBtn.setAttribute("aria-label", playing ? "pause music" : "play music");
       }
       function load(n) {
@@ -1297,15 +1408,7 @@
       audio.addEventListener("timeupdate", function () {
         if (audio.duration) bar.style.width = (100 * audio.currentTime / audio.duration) + "%";
       });
-
-      // A finished click (not just a touch-down) is what iPhones accept as permission to play sound
-      function firstTouch(e) {
-        document.removeEventListener("click", firstTouch, true);
-        document.removeEventListener("keydown", firstTouch, true);
-        if (wanted && audio.paused && !e.target.closest("#player, #splash")) play(3);
-      }
-      document.addEventListener("click", firstTouch, true);
-      document.addEventListener("keydown", firstTouch, true);
+      show();
 
       // Get the first song ready in the background so it starts the moment you click
       window.addEventListener("load", function () {
@@ -1315,14 +1418,11 @@
         audio.load();
       });
 
-      // The song title scrolls only when it doesn't fit (re-checked when the player is resized or shown)
-      if ("ResizeObserver" in window) new ResizeObserver(function () { if (audio.getAttribute("src")) show(); }).observe(lcd);
-
       return {
         setMuted: function (m) { muted = m; audio.muted = m; level(1, 0.1); },
-        // the "click to enter" button starts the first song, fading in softly
+        // logging on starts the first song, fading in softly, unless you paused it last time
         start: function () { load(0); if (wanted) play(3); },
-        // fade out for "shut down", then pick back up for "welcome back"
+        // fade out (for shut down or a video), then pick back up after
         fadeOut: function () {
           if (audio.paused) return false;
           level(0, 0.8);
@@ -1340,28 +1440,21 @@
     (function () {
       var odo = document.getElementById("odometer"), note = document.getElementById("counter-note");
       function show(n) {
-        var text = String(n).padStart(6, "0");
         odo.replaceChildren();
-        text.split("").forEach(function (ch) {
+        String(n).padStart(6, "0").split("").forEach(function (ch) {
           var digit = document.createElement("div"), col = document.createElement("span");
           digit.className = "digit";
           digit.setAttribute("aria-hidden", "true");
           col.textContent = "0123456789".split("").join("\n");
-          col.style.whiteSpace = "pre";
           digit.appendChild(col);
           odo.appendChild(digit);
           requestAnimationFrame(function () { requestAnimationFrame(function () {
             col.style.transform = "translateY(" + (-26 * Number(ch)) + "px)";
           }); });
         });
-        note.textContent = "since oct 2026";
         odo.setAttribute("aria-label", Number(n).toLocaleString() + " visitors");
-        document.getElementById("visitor-no").textContent = Number(n).toLocaleString();
-        document.getElementById("visitor-line").hidden = false;
       }
       show(0);
-      note.textContent = "counting...";
-      document.getElementById("visitor-line").hidden = true;
 
       // Count each browser once per visit, not every refresh
       var counted = false;
@@ -1371,26 +1464,24 @@
         .then(function (d) {
           try { sessionStorage.setItem("counted", "1"); } catch (e) {}
           show(d.visits);
+          note.textContent = "since oct 2026";
+          document.getElementById("visitor-no").textContent = Number(d.visits).toLocaleString();
+          document.getElementById("visitor-line").hidden = false;
         })
         .catch(function () { note.textContent = "couldn't load the count"; });
     })();
 
+    // Guestbook: every message is a sticky note
     (function () {
       var form = document.getElementById("gb-form"), status = document.getElementById("gb-status"),
-          list = document.getElementById("gb-list"), more = document.getElementById("gb-more"), oldest = 0;
+          list = document.getElementById("gb-list"), more = document.getElementById("gb-more"), oldest = 0, loaded = false;
 
-      function entry(e, isNew) {
-        var box = document.createElement("div"), head = document.createElement("div"),
-            name = document.createElement("strong"), when = document.createElement("time"), msg = document.createElement("p");
-        box.className = "gb-entry" + (isNew ? " new" : "");
-        head.className = "gb-head";
-        msg.className = "gb-msg";
-        name.textContent = e.name;
-        when.dateTime = new Date(e.time).toISOString();
-        when.textContent = new Date(e.time).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+      function note(e, isNew) {
+        var box = document.createElement("div"), msg = document.createElement("p"), foot = document.createElement("footer");
+        box.className = "note" + (isNew ? " new" : "");
         msg.textContent = e.message;
-        head.append(name, when);
-        box.append(head, msg);
+        foot.textContent = "- " + e.name + ", " + new Date(e.time).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+        box.append(msg, foot);
         return box;
       }
       function load() {
@@ -1398,8 +1489,8 @@
         fetch(API + "/guestbook" + (oldest ? "?before=" + oldest : ""))
           .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
           .then(function (d) {
-            d.entries.forEach(function (e) { list.appendChild(entry(e)); oldest = e.id; });
-            if (!oldest) status.textContent = "nobody's signed it yet";
+            d.entries.forEach(function (e) { list.appendChild(note(e)); oldest = e.id; });
+            if (!oldest) status.textContent = "nobody's left a note yet";
             more.hidden = !d.more;
             more.disabled = false;
           })
@@ -1410,6 +1501,8 @@
           });
       }
       more.addEventListener("click", load);
+      // load the notes the first time the guestbook opens
+      wm.el("guestbook").addEventListener("win-open", function () { if (!loaded) { loaded = true; load(); } });
 
       // Remember the name for next time, and count characters as you type
       var nameField = form.elements.namedItem("name"), msgField = form.elements.namedItem("message"),
@@ -1428,56 +1521,62 @@
         fetch(API + "/guestbook", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: form.elements.namedItem("name").value, message: form.elements.namedItem("message").value, website: form.elements.namedItem("website").value })
+          body: JSON.stringify({ name: nameField.value, message: msgField.value, website: form.elements.namedItem("website").value })
         })
           .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (res) {
             if (!res.ok) { status.textContent = res.d.error || "something went wrong, try again"; sfx("oops"); return; }
             sfx("ding");
-            if (res.d.entry) list.prepend(entry(res.d.entry, true));
+            if (res.d.entry) form.after(note(res.d.entry, true));
             msgField.value = "";
             count.textContent = "0/500";
             count.classList.remove("full");
             try { localStorage.setItem("gb-name", nameField.value); } catch (e) {}
-            status.textContent = "thanks for signing! :)";
+            status.textContent = "stuck it on! thanks :)";
           })
           .catch(function () { status.textContent = "couldn't reach the guestbook, try again in a bit"; sfx("oops"); })
           .then(function () { button.disabled = false; });
       });
-      load();
     })();
 
-    // Latest youtube uploads, read from the channel by the worker. The list in the page is the fallback.
+    // Videos: the latest uploads, read from the channel by the worker. Clicking one plays it here.
     (function () {
-      var list = document.getElementById("video-list");
+      var list = document.getElementById("video-list"), frame = document.getElementById("video-frame"), pausedMusic = false;
+
+      function play(id, title) {
+        wm.setTitle("video", title + " - Windows Media Player");
+        frame.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+        pausedMusic = window.music.fadeOut() || pausedMusic;
+        wm.open("video");
+      }
+      list.addEventListener("click", function (e) {
+        var t = e.target.closest(".thumb");
+        if (!t) return;
+        e.preventDefault();
+        play(t.dataset.id, t.querySelector(".t").textContent);
+      });
+      wm.el("video").addEventListener("win-close", function () {
+        frame.removeAttribute("src");
+        if (pausedMusic) { window.music.resume(); pausedMusic = false; }
+      });
+
       function render(data) {
         if (!data || !data.videos || !data.videos.length) return;
         list.replaceChildren.apply(list, data.videos.map(function (v) {
-          var url = "https://www.youtube.com/watch?v=" + v.id;
-          var li = document.createElement("li"), shot = document.createElement("a"), img = document.createElement("img");
-          var title = document.createElement("a"), meta = document.createElement("span");
-          li.className = "video";
-          shot.className = "shot"; shot.href = url;
-          img.src = "https://i.ytimg.com/vi/" + v.id + "/mqdefault.jpg";
-          img.width = 320; img.height = 180; img.alt = ""; img.loading = "lazy";
-          shot.appendChild(img);
-          if (v.length) {
-            var len = document.createElement("span");
-            len.className = "video-len"; len.textContent = v.length;
-            shot.appendChild(len);
-          }
-          title.className = "video-title"; title.href = url; title.textContent = v.title;
-          meta.className = "video-meta"; meta.textContent = v.ago || "";
-          li.append(shot, title, meta);
-          return li;
+          var a = document.createElement("a"), pic = document.createElement("span"), img = document.createElement("img"),
+              t = document.createElement("span"), when = document.createElement("small");
+          a.className = "thumb"; a.href = "https://www.youtube.com/watch?v=" + v.id; a.dataset.id = v.id;
+          pic.className = "pic";
+          img.src = "https://i.ytimg.com/vi/" + v.id + "/mqdefault.jpg"; img.alt = ""; img.loading = "lazy"; img.width = 320; img.height = 180;
+          pic.appendChild(img);
+          if (v.length) { var len = document.createElement("span"); len.className = "len"; len.textContent = v.length; pic.appendChild(len); }
+          t.className = "t"; t.textContent = v.title;
+          when.textContent = v.ago || "";
+          a.append(pic, t, when);
+          return a;
         }));
         if (data.subscribers) document.getElementById("yt-subs").textContent = data.subscribers;
-        var latest = data.videos[0], side = document.getElementById("side-video");
-        side.href = "https://www.youtube.com/watch?v=" + latest.id;
-        side.querySelector("img").src = "https://i.ytimg.com/vi/" + latest.id + "/mqdefault.jpg";
-        side.querySelector("span").textContent = latest.title;
       }
-
       var CACHE = "yt-videos", cached = null;
       try { cached = JSON.parse(localStorage.getItem(CACHE)); } catch (e) {}
       if (cached && Date.now() - cached.time < 30 * 60 * 1000) { render(cached.data); return; }
@@ -1490,13 +1589,11 @@
         .catch(function () { if (cached) render(cached.data); });
     })();
 
-    // Discord profile, live from Lanyard (https://github.com/Phineas/lanyard). It needs the
-    // numeric user id, and that account has to be in Lanyard's server. Until then the card
-    // shows the username with a copy button.
+    // Messenger: my discord status, live from Lanyard (https://github.com/Phineas/lanyard)
     (function () {
       var DISCORD_ID = "589584488519172123", NAME = "shibereal";
       var $ = function (id) { return document.getElementById(id); };
-      var copy = $("dc-copy"), timer;
+      var copy = $("wlm-copy"), timer;
 
       copy.addEventListener("click", function () {
         function done(copied) {
@@ -1511,9 +1608,7 @@
         else done(false);
       });
 
-      if (!DISCORD_ID) return;
-
-      var STATUS = { online: "online", idle: "idle", dnd: "do not disturb", offline: "offline" };
+      var STATUS = { online: "online", idle: "away", dnd: "busy", offline: "offline" };
       var VERB = { 0: "playing", 1: "streaming", 2: "listening to", 3: "watching", 5: "competing in" };
       var presence = null, tick = null, said = false;
 
@@ -1524,8 +1619,6 @@
         if (img.indexOf("spotify:") === 0) return "https://i.scdn.co/image/" + img.slice(8);
         return act.application_id ? "https://cdn.discordapp.com/app-assets/" + act.application_id + "/" + img + ".png" : "";
       }
-      // passthrough=true keeps animated decorations animated
-      function decoUrl(deco) { return "https://cdn.discordapp.com/avatar-decoration-presets/" + deco.asset + ".png?size=160&passthrough=true"; }
       function since(ms) {
         var min = Math.floor((Date.now() - ms) / 60000);
         if (min < 1) return "just started";
@@ -1537,60 +1630,34 @@
         var s = Math.max(0, Math.floor(ms / 1000));
         return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
       }
-      // What the card says they're up to: spotify first, then any game or app
+      // What I'm up to: spotify first, then any game or app
       function activity(p) {
         if (p.listening_to_spotify && p.spotify) return { spotify: p.spotify };
         return (p.activities || []).filter(function (a) { return a.type !== 4; })[0] || null;
       }
 
-      $("dc-act-img").onerror = $("dc-deco").onerror = $("dc-tag-img").onerror = function () { this.hidden = true; };
+      $("wlm-act-img").onerror = function () { this.hidden = true; };
 
       function render(p) {
         presence = p;
         var user = p.discord_user, status = p.discord_status || "offline";
-        $("dc-avatar").src = user.avatar
-          ? "https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + (user.avatar.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=160"
-          : "https://cdn.discordapp.com/embed/avatars/" + (window.BigInt ? Number(BigInt(user.id) / BigInt(4194304) % BigInt(6)) : 0) + ".png";
-        $("dc-name").textContent = user.global_name || user.display_name || user.username;
-        var deco = user.avatar_decoration_data, guild = user.primary_guild;
-        $("dc-deco").hidden = !deco;
-        if (deco && $("dc-deco").getAttribute("src") !== decoUrl(deco)) $("dc-deco").src = decoUrl(deco);
-        $("dc-tag").hidden = !(guild && guild.identity_enabled && guild.tag);
-        if (!$("dc-tag").hidden) {
-          $("dc-tag-text").textContent = guild.tag;
-          $("dc-tag-img").src = "https://cdn.discordapp.com/clan-badges/" + guild.identity_guild_id + "/" + guild.badge + ".png?size=32";
-        }
-        $("dc-user").textContent = "@" + user.username;
-        var dot = $("dc-dot");
-        dot.hidden = false; dot.className = "dc-dot " + status; dot.title = STATUS[status] || status;
-        var where = p.active_on_discord_desktop ? " on desktop" : p.active_on_discord_mobile ? " on phone" : p.active_on_discord_web ? " in a browser" : "";
-        $("dc-status").textContent = " · " + (STATUS[status] || status) + (status === "offline" ? "" : where);
-
-        var custom = (p.activities || []).filter(function (a) { return a.type === 4; })[0];
-        $("dc-custom").textContent = custom
-          ? ((custom.emoji && !custom.emoji.id ? custom.emoji.name + " " : "") + (custom.state || "")).trim()
-          : status === "offline" ? "offline right now, but you can still add me" : "add me if you want.";
-        $("dc-custom").hidden = !$("dc-custom").textContent;
-
-        var open = $("dc-open");
-        open.href = "https://discord.com/users/" + user.id; open.hidden = false;
+        if (user.avatar) $("wlm-avatar").src = "https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + (user.avatar.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=160";
+        $("wlm-name").textContent = user.global_name || user.display_name || user.username;
+        $("wlm-user").textContent = user.username;
+        $("wlm-pic").className = "wlm-pic " + status;
+        $("wlm-status").textContent = "(" + (STATUS[status] || status) + ")";
         update();
       }
 
       // Redrawn every second so times and the song bar keep moving
-      // The little "right now" box in the sidebar
-      function sidebar(p, act) {
-        var status = p.discord_status || "offline";
-        $("now-box").hidden = false;
-        $("now-dot").className = "now-dot " + status;
-        $("now-text").textContent = act
-          ? (act.spotify ? "listening to " + act.spotify.song + " by " + act.spotify.artist : (VERB[act.type] || "playing") + " " + act.name)
-          : status === "offline" ? "offline" : status === "idle" ? "away" : status === "dnd" ? "busy" : "online, not doing much";
-      }
-
       function update() {
-        var act = presence && activity(presence), box = $("dc-activity"), img = $("dc-act-img"), bar = $("dc-bar");
-        if (presence) sidebar(presence, act);
+        var p = presence, act = activity(p), box = $("wlm-act"), img = $("wlm-act-img"), bar = $("wlm-bar");
+        // the personal message, like messenger's "what i'm listening to"
+        var custom = (p.activities || []).filter(function (a) { return a.type === 4; })[0];
+        $("wlm-pm").textContent = act && act.spotify ? "♫ " + act.spotify.artist + " - " + act.spotify.song
+          : custom ? ((custom.emoji && !custom.emoji.id ? custom.emoji.name + " " : "") + (custom.state || "")).trim()
+          : act ? (VERB[act.type] || "playing") + " " + act.name
+          : p.discord_status === "offline" ? "offline right now, but you can still add me" : "add me if you want";
         box.hidden = !act;
         clearTimeout(tick);
         if (!act) return;
@@ -1613,20 +1680,17 @@
           img.hidden = !art;
           if (art) img.src = art; else img.removeAttribute("src");
         }
-        ["dc-act-head", "dc-act-name", "dc-act-1", "dc-act-2"].forEach(function (id, i) { $(id).textContent = lines[i] || ""; });
+        ["wlm-act-head", "wlm-act-name", "wlm-act-1", "wlm-act-2"].forEach(function (id, i) { $(id).textContent = lines[i] || ""; });
         tick = setTimeout(update, 1000);
       }
 
-      // Nanami mentions it the first time you scroll to the card
-      if ("IntersectionObserver" in window) {
-        new IntersectionObserver(function (entries, obs) {
-          if (!entries[0].isIntersecting || said || !presence || !window.nanami) return;
-          var act = activity(presence);
-          if (!act) return;
-          said = true; obs.disconnect();
-          window.nanami.say(act.spotify ? "shibe is listening to " + act.spotify.song + " right now. good taste?" : "shibe is " + (VERB[act.type] || "playing") + " " + act.name + " right now!");
-        }, { threshold: 0.6 }).observe($("dc-activity").parentNode.parentNode);
-      }
+      // Nanami mentions it the first time you open messenger
+      wm.el("messenger").addEventListener("win-open", function () {
+        var act = presence && activity(presence);
+        if (said || !act || !window.nanami) return;
+        said = true;
+        window.nanami.say(act.spotify ? "shibe is listening to " + act.spotify.song + " right now. good taste?" : "shibe is " + (VERB[act.type] || "playing") + " " + act.name + " right now!");
+      });
 
       // Live updates over Lanyard's socket, reconnecting with a growing delay if it drops
       var wait = 2000;
@@ -1652,7 +1716,7 @@
         fetch("https://api.lanyard.rest/v1/users/" + DISCORD_ID)
           .then(function (res) { return res.json(); })
           .then(function (json) {
-            if (!json.success) return; // not in Lanyard's server yet; the fallback card stays
+            if (!json.success) return;
             render(json.data);
             if ("WebSocket" in window) connect();
           })
@@ -1660,30 +1724,29 @@
       });
     })();
 
-    // Taskbar, start menu and the welcome screen
+    // Start menu, taskbar, log on and shut down
     (function () {
       var orb = document.getElementById("start-orb"), menu = document.getElementById("start"),
-          splash = document.getElementById("splash"), splashText = document.getElementById("splash-text");
+          splash = document.getElementById("splash"), splashText = document.getElementById("splash-text"),
+          themeColor = document.getElementById("theme-color");
 
       var search = document.getElementById("start-search"), empty = menu.querySelector(".start-empty");
       var SECRETS = {
-        "solitaire": "solitaire isn't installed. the music player is still fun though",
+        "solitaire": "solitaire isn't installed. the media player is still fun though",
         "minesweeper": "minesweeper isn't installed. the guestbook is less explosive",
         "pinball": "space cadet pinball was in xp, not 7. nice try",
         "vista": "we don't talk about vista",
-        "secret": "you won't find secrets by searching for them... probably",
         "nanami": "that's me! hi from nanami",
         "clippy": "wrong windows, buddy",
         "rm -rf /": "nice try"
       };
-      var items = Array.prototype.slice.call(menu.querySelectorAll(".prog, .place"));
+      var items = Array.prototype.slice.call(menu.querySelectorAll(".prog"));
       function filter() {
         var q = search.value.trim().toLowerCase(), any = false;
         items.forEach(function (el) {
           var hit = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
           el.hidden = !hit; any = any || hit;
         });
-        menu.querySelector(".start-sep").hidden = !!q;
         empty.textContent = SECRETS[q] || "nothing found :(";
         empty.hidden = any;
       }
@@ -1704,14 +1767,17 @@
         if (open && matchMedia("(pointer: fine)").matches) search.focus();
       }
       orb.addEventListener("click", function (e) { e.stopPropagation(); setMenu(menu.hidden); });
-      menu.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); e.stopPropagation(); });
-      document.addEventListener("click", function () { setMenu(false); });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
-      document.getElementById("show-desktop").addEventListener("click", function () { window.scrollTo({ top: 0 }); });
+      menu.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-open]");
+        if (b) wm.open(b.dataset.open);
+        if (b || e.target.closest("a")) setMenu(false);
+        e.stopPropagation();
+      });
+      document.addEventListener("click", function () { if (!menu.hidden) setMenu(false); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) setMenu(false); });
+      document.getElementById("show-desktop").addEventListener("click", function () { wm.minimizeAll(); });
 
-      var site = document.getElementById("site"), themeColor = document.getElementById("theme-color");
-      // No rubber-band scrolling on the welcome screen (iPhone shows the page around it otherwise)
-      splash.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+      // Log on screen
       var hideTimer;
       function hideSplash() {
         if (!splash.classList.contains("show") && !document.documentElement.classList.contains("splash")) return;
@@ -1721,9 +1787,6 @@
           splash.classList.remove("show", "out");
           document.documentElement.classList.remove("splash");
           themeColor.content = "#1f3a12";
-          site.style.animation = "none";
-          void site.offsetWidth; // restart the window-open animation
-          site.style.animation = "";
         }, 300);
       }
       var gateOpen = document.documentElement.classList.contains("splash");
@@ -1738,18 +1801,19 @@
           hideSplash();
           setTimeout(function () {
             splash.classList.remove("entering");
-            // keyboard users carry on from the top of the page
-            document.getElementById("welcome").focus({ preventScroll: true });
+            // open whatever the link pointed at, or the about file
+            if (!wm.fromHash()) wm.open("about");
             window.dispatchEvent(new Event("site-entered"));
           }, 300);
         }, 500);
       }
       splash.addEventListener("click", function () { if (gateOpen) enter(); else hideSplash(); });
+      splash.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
       document.addEventListener("keydown", function (e) {
         if (gateOpen && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); enter(); }
       });
-      // Everything behind the gate is out of reach until you enter
-      var behind = ["site", "taskbar", "buddy", "start"].map(function (id) { return document.getElementById(id); });
+      // Everything behind the log on screen is out of reach until you enter
+      var behind = ["desktop", "taskbar", "buddy", "start"].map(function (id) { return document.getElementById(id); });
       function setInert(on) { behind.forEach(function (el) { if (on) el.setAttribute("inert", ""); else el.removeAttribute("inert"); }); }
       if (gateOpen) { setInert(true); document.getElementById("enter-btn").focus(); }
 
@@ -1757,9 +1821,9 @@
       document.getElementById("shutdown").addEventListener("click", function () {
         setMenu(false);
         shutdowns++;
-        splashText.textContent = shutdowns >= 3 ? "you know this isn't a real computer, right?" : "see you later!";
+        splashText.textContent = shutdowns >= 3 ? "you know this isn't a real computer, right?" : "shutting down...";
         sfx("bye");
-        // Shutting down again before the last one finished starts the timing over
+        // shutting down again before the last one finished starts the timing over
         shutdownTimers.forEach(clearTimeout);
         clearTimeout(hideTimer);
         resumeMusic = window.music.fadeOut() || resumeMusic;
@@ -1770,38 +1834,28 @@
           setTimeout(function () { splashText.textContent = "welcome back"; }, 1600),
           setTimeout(function () { sfx("hello"); }, 1700),
           setTimeout(hideSplash, 2600),
-          setTimeout(function () { if (resumeMusic) window.music.resume(); resumeMusic = false; }, 2700),
+          setTimeout(function () { if (resumeMusic) window.music.resume(); resumeMusic = false; }, 2700)
         ];
       });
     })();
 
-    // Mascot in the corner: says hi, and a new line each time you click her.
-    // Set this to { name, src, alt } to switch her on.
-    var MASCOT = { name: "nanami madobe", src: "images/nanami.webp", alt: "nanami madobe waving hello" };
+    // Nanami in the corner: says hi, and something new each time you click her
     (function () {
-      if (!MASCOT) return;
       var buddy = document.getElementById("buddy"), fig = document.getElementById("buddy-figure"),
-          bubble = document.getElementById("buddy-bubble"), text = document.getElementById("buddy-text");
-      document.getElementById("buddy-name").textContent = MASCOT.name;
-      var img = document.getElementById("buddy-img");
-      img.alt = MASCOT.alt;
+          bubble = document.getElementById("buddy-bubble"), text = document.getElementById("buddy-text"),
+          img = document.getElementById("buddy-img");
       // Fetch her picture after the rest of the page so she never slows it down
-      if (document.readyState === "complete") img.src = MASCOT.src;
-      else window.addEventListener("load", function () { img.src = MASCOT.src; });
-
-      // Duck out of the way while you're typing in a form
-      var typingIn = function (el) { return el && el.matches && el.matches("#content input, #content textarea"); };
-      document.addEventListener("focusin", function (e) { if (typingIn(e.target)) buddy.classList.add("shy"); });
-      document.addEventListener("focusout", function (e) { if (typingIn(e.target)) buddy.classList.remove("shy"); });
+      if (document.readyState === "complete") img.src = "images/nanami.webp";
+      else window.addEventListener("load", function () { img.src = "images/nanami.webp"; });
 
       var hour = new Date().getHours();
-      var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi hi! " : "good evening! ")
-        + "i'm nanami. welcome to shibe's homepage!";
+      var hello = (hour < 5 ? "up late? me too! " : hour < 12 ? "good morning! " : hour < 18 ? "hi! " : "good evening! ")
+        + "i'm nanami. click an icon to open it";
       var lines = [
-        "the start button down there works, go ahead and click it",
+        "you can drag windows around by the top bar. drag one to the very top to make it big",
+        "the start button down there works too",
         "windows 7 was the best one. i might be biased though",
-        "tab to sheet can export guitar pro files, not just pdfs",
-        "sign the guestbook before you go?",
+        "leave a sticky note in the guestbook before you go?",
         "too loud? the speaker by the clock mutes everything",
         "the music is by kevin macleod. bossa antigua is my favorite"
       ];
@@ -1813,9 +1867,9 @@
         clearTimeout(timer);
         timer = setTimeout(function () { bubble.hidden = true; }, 9000);
       }
-      fig.addEventListener("click", function (e) {
-        fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop");
-        sfx("pop");
+      function hop() { fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop"); sfx("pop"); }
+      fig.addEventListener("click", function () {
+        hop();
         var visitors = !document.getElementById("visitor-line").hidden && document.getElementById("visitor-no").textContent;
         var msg = lines[next % lines.length];
         if (next === 2 && visitors) msg = "fun fact: you're visitor #" + visitors + "!";
@@ -1823,16 +1877,10 @@
         say(msg);
       });
       fig.addEventListener("animationend", function () { fig.classList.remove("hop"); });
+      document.getElementById("buddy-close").addEventListener("click", function () { clearTimeout(timer); bubble.hidden = true; });
 
-      // Point out the guestbook the first time it scrolls into view
-      if ("IntersectionObserver" in window) {
-        var gbSeen = new IntersectionObserver(function (entries) {
-          if (!entries[0].isIntersecting || document.documentElement.classList.contains("splash")) return;
-          gbSeen.disconnect();
-          say("oh, the guestbook! leave a message if you want");
-        }, { threshold: 1 });
-        gbSeen.observe(document.getElementById("guestbook"));
-      }
+      // Point out the guestbook the first time it opens
+      wm.el("guestbook").addEventListener("win-open", function () { say("leave a note if you want! it sticks right on the board"); }, { once: true });
       // Check in once if you've been away for a while
       var idle, checkedIn = false;
       function resetIdle() {
@@ -1843,25 +1891,12 @@
           say("still there? i'll keep the music going");
         }, 90000);
       }
-      ["scroll", "click", "keydown", "pointermove"].forEach(function (ev) { window.addEventListener(ev, resetIdle, { passive: true }); });
+      ["click", "keydown", "pointermove"].forEach(function (ev) { window.addEventListener(ev, resetIdle, { passive: true }); });
       resetIdle();
-      document.getElementById("buddy-close").addEventListener("click", function () {
-        clearTimeout(timer);
-        bubble.hidden = true;
-      });
 
-      window.nanami = {
-        say: say,
-        hop: function () { fig.classList.remove("hop"); void fig.offsetWidth; fig.classList.add("hop"); sfx("pop"); }
-      };
-
+      window.nanami = { say: say, hop: hop };
       buddy.hidden = false;
-      // Wait for the welcome screen to finish before saying hi
-      if (document.documentElement.classList.contains("splash")) {
-        window.addEventListener("site-entered", function () { setTimeout(function () { say(hello); }, 500); }, { once: true });
-      } else {
-        setTimeout(function () { say(hello); }, 900);
-      }
+      window.addEventListener("site-entered", function () { setTimeout(function () { say(hello); }, 600); }, { once: true });
     })();
 
     // Easter eggs
@@ -1870,10 +1905,8 @@
       var hop = function () { if (window.nanami) window.nanami.hop(); };
       var typing = function (e) { return e.target.closest && e.target.closest("input, textarea, [contenteditable]"); };
 
-      // Konami code flips the page (below)
-      var konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"], pos = 0;
-      // typing "nanami" makes her answer
-      var word = "";
+      // Konami code turns the screen upside down for a few seconds; typing "nanami" makes her answer
+      var konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"], pos = 0, word = "";
       document.addEventListener("keydown", function (e) {
         if (typing(e) || document.documentElement.classList.contains("splash")) return;
         var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
@@ -1884,39 +1917,19 @@
           if (word === "nanami") { hop(); setTimeout(hop, 450); talk("you called? ...oh, you just typed my name"); }
         }
       });
-      // Konami code: turn the whole page upside down for a few seconds
-      // The page is held in place while flipped, so the taskbar and nanami turn over with it
-      var flipTimer, flipY = 0, flipping = false;
+      var flipTimer;
       function flip() {
         var root = document.documentElement;
-        if (flipping) return;
-        if (root.classList.contains("flipped")) { unflip(); return; }
-        flipY = window.scrollY;
-        document.body.style.top = -flipY + "px";
-        root.classList.add("flip-hold");
-        void root.offsetWidth;
+        clearTimeout(flipTimer);
+        if (root.classList.contains("flipped")) { root.classList.remove("flipped"); sfx("close"); return; }
         root.classList.add("flipped");
         sfx("open");
         talk("konami code! everything's upside down now. it flips back in a few seconds");
-        flipTimer = setTimeout(unflip, 8000);
-      }
-      function unflip() {
-        var root = document.documentElement;
-        clearTimeout(flipTimer);
-        flipping = true;
-        root.classList.remove("flipped");
-        sfx("close");
-        setTimeout(function () {
-          root.classList.remove("flip-hold");
-          document.body.style.top = "";
-          window.scrollTo({ top: flipY, behavior: "instant" });
-          flipping = false;
-        }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 950);
+        flipTimer = setTimeout(function () { root.classList.remove("flipped"); sfx("close"); }, 8000);
       }
 
-      // Bubbles float up when you enter the site
-      window.addEventListener("site-entered", function () { bubbles(); });
-      function bubbles() {
+      // Bubbles float up when you log on
+      window.addEventListener("site-entered", function () {
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         for (var i = 0; i < 24; i++) {
           var b = document.createElement("span"), size = 16 + Math.random() * 60;
@@ -1926,51 +1939,30 @@
           b.addEventListener("animationend", function () { this.remove(); });
           document.body.appendChild(b);
         }
-      }
-
-      // Click the earth logo five times: it spins
-      var logo = document.getElementById("logo"), clicks = 0, clickTimer;
-      logo.addEventListener("click", function () {
-        clicks++;
-        clearTimeout(clickTimer);
-        clickTimer = setTimeout(function () { clicks = 0; }, 1200);
-        if (clicks === 5) {
-          clicks = 0;
-          logo.classList.remove("spin"); void logo.offsetWidth; logo.classList.add("spin");
-          talk("you're making the whole world dizzy");
-        }
       });
 
       // Click the clock three times: time flies
-      var clock = document.querySelector(".gadget svg"), ticks = 0, tickTimer;
-      clock.addEventListener("click", function () {
+      var ticks = 0, tickTimer;
+      document.querySelector(".clock svg").addEventListener("click", function () {
         ticks++;
         clearTimeout(tickTimer);
         tickTimer = setTimeout(function () { ticks = 0; }, 1000);
         if (ticks === 3) { ticks = 0; window.clockSpin(); talk("time flies when you're having fun"); }
       });
 
-      // A hello for anyone who opens the developer console
+      // The recycle bin
+      document.getElementById("bin-files").addEventListener("click", function (e) {
+        var f = e.target.closest(".file");
+        if (!f) return;
+        Array.prototype.forEach.call(this.children, function (o) { o.classList.toggle("selected", o === f); });
+        talk(f.dataset.say);
+      });
+      document.getElementById("empty-bin").addEventListener("click", function () { sfx("oops"); talk("nope, those stay in there"); });
+
       try {
         console.log("%cshibe's homepage", "font: 600 16px Segoe UI, sans-serif; color: #3cda56");
         console.log("the code for this site is here: https://github.com/shibeeee/shibeeee.github.io");
       } catch (e) {}
-    })();
-
-    // Phones: the sidebar folds away behind a "menu" button
-    (function () {
-      var btn = document.getElementById("menu-toggle"), side = document.getElementById("menu");
-      btn.addEventListener("click", function () {
-        var open = !side.classList.contains("open");
-        side.classList.toggle("open", open);
-        btn.setAttribute("aria-expanded", String(open));
-      });
-      side.addEventListener("click", function (e) {
-        if (e.target.closest("a") && side.classList.contains("open")) {
-          side.classList.remove("open");
-          btn.setAttribute("aria-expanded", "false");
-        }
-      });
     })();
 
     // Old-web trick: the earth in the tab spins, and when you switch tabs the title calls you back
@@ -2011,22 +2003,6 @@
       document.addEventListener("visibilitychange", function () {
         document.title = document.hidden ? "come back!!" : title;
       });
-    })();
-
-    // Light up the menu button for the section on screen
-    (function () {
-      function update() {
-        var links = Array.prototype.slice.call(document.querySelectorAll('#menu a[href^="#"]:not([hidden])'));
-        var sections = links.map(function (a) { return a.hash === "#top" ? null : document.querySelector(a.hash); });
-        var current = 0;
-        sections.forEach(function (el, i) { if (el && el.getBoundingClientRect().top < 140) current = i; });
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = links.length - 1;
-        links.forEach(function (a, i) { a.classList.toggle("active", i === current); });
-      }
-      window.addEventListener("scroll", update, { passive: true });
-      window.addEventListener("repos-loaded", update);
-      window.addEventListener("site-entered", update);
-      update();
     })();
   </script>
 </body>
